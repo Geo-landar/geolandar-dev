@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geolandar — Élections Mondiales</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Geolandar [TEST] — Élections Mondiales</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+#geolandar-dev-banner{position:fixed;top:0;left:0;right:0;z-index:99999;background:#f97316;color:#0a0e1a;font-family:sans-serif;font-weight:700;font-size:13px;text-align:center;padding:6px 10px;letter-spacing:.3px;}
+body{padding-top:28px !important;}
 :root{
   --mode-dark:1;
 }
@@ -444,6 +447,7 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
 </style>
 </head>
 <body>
+<div id="geolandar-dev-banner">🚧 VERSION DE TEST — non indexée, non destinée au public</div>
 <nav>
   <div class="logo">⚡ Geolandar</div>
   <div class="nav-c">
@@ -2243,24 +2247,28 @@ function renderInstitutions(pays){
 }
 
 /* ══ ÉCHELON RÉGIONAL — zoom + subdivisions (Phase 3, échantillon) ══
-   Géométries des subdivisions administratives chargées à la volée depuis des
-   jeux de données publics (CORS ouvert) :
-   - France : gregoiredavid/france-geojson (13 régions actuelles, post-2016)
-   - Autres : codeforgermany/click_that_hood (subdivisions de 1er niveau)
-   Le mécanisme (zoom, découpage, clic région) fonctionne pour les 10 pays de
-   l'échantillon ; seules les données de dirigeants régionaux pour la France
-   sont renseignées pour l'instant — à étendre pays par pays une fois validé. */
+   Géométries auto-hébergées dans /regions/ du même dépôt (chemins relatifs
+   → fonctionne tel quel sur geolandar-dev comme sur geolandar, sans rien
+   changer au code). Simplifiées avec mapshaper (topologie préservée, pas de
+   trou entre régions voisines) : la France est passée de 1,4 Mo à 108 Ko,
+   l'Italie de 2,9 Mo à 118 Ko, la Russie de 3,4 Mo à 165 Ko — c'était la
+   cause principale des ralentissements au déplacement du globe une fois
+   zoomé sur un pays. Sources d'origine : gregoiredavid/france-geojson (13
+   régions post-2016) et codeforgermany/click_that_hood pour les 9 autres.
+   Le mécanisme fonctionne pour les 10 pays de l'échantillon ; seules les
+   données de dirigeants régionaux pour la France sont renseignées pour
+   l'instant — à étendre pays par pays une fois validé. */
 var REGIONS_SOURCE={
-  "France":{url:"https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson",nameProp:"nom",type:"Région"},
-  "Allemagne":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/germany.geojson",nameProp:"name",type:"Land"},
-  "Italie":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/italy-regions.geojson",nameProp:"name",type:"Région"},
-  "Espagne":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-communities.geojson",nameProp:"name",type:"Communauté autonome"},
-  "Suisse":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/switzerland.geojson",nameProp:"name",type:"Canton"},
-  "Pologne":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/poland.geojson",nameProp:"name",type:"Voïvodie"},
-  "Suede":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/sweden-counties.geojson",nameProp:"name",type:"Comté (Län)"},
-  "Royaume-Uni":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/united-kingdom-regions.geojson",nameProp:"name",type:"Région"},
-  "Hongrie":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/hungary.geojson",nameProp:"name",type:"Comté (megye)"},
-  "Russie":{url:"https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/russia.geojson",nameProp:"name_latin",type:"Sujet fédéral"}
+  "France":{url:"regions/france.geojson",nameProp:"nom",type:"Région"},
+  "Allemagne":{url:"regions/germany.geojson",nameProp:"name",type:"Land"},
+  "Italie":{url:"regions/italy-regions.geojson",nameProp:"name",type:"Région"},
+  "Espagne":{url:"regions/spain-communities.geojson",nameProp:"name",type:"Communauté autonome"},
+  "Suisse":{url:"regions/switzerland.geojson",nameProp:"name",type:"Canton"},
+  "Pologne":{url:"regions/poland.geojson",nameProp:"name",type:"Voïvodie"},
+  "Suede":{url:"regions/sweden-counties.geojson",nameProp:"name",type:"Comté (Län)"},
+  "Royaume-Uni":{url:"regions/united-kingdom-regions.geojson",nameProp:"name",type:"Région"},
+  "Hongrie":{url:"regions/hungary.geojson",nameProp:"name",type:"Comté (megye)"},
+  "Russie":{url:"regions/russia.geojson",nameProp:"name_latin",type:"Sujet fédéral"}
 };
 /* Dirigeants régionaux — UNIQUEMENT la France est renseignée pour l'instant.
    Élus lors des régionales de 2021 (mandat jusqu'en 2028) — à reconfirmer
@@ -2339,8 +2347,20 @@ function zoomResetGlobeView(){
     };
   });
 }
+/* Masque (ou restaure) la couleur nationale (échéance électorale) du pays
+   sous les régions affichées — sinon le rouge/violet/bleu de la légende
+   nationale reste visible en transparence sous le découpage régional et
+   brouille la lecture de la couleur politique des régions. */
+function setCountryDim(pays,on){
+  if(!gCountriesG||!pays) return;
+  gCountriesG.selectAll('.cp').each(function(d){
+    var p=ISO3[String(d.id).padStart(3,'0')];
+    if(p===pays) d3.select(this).attr('fill-opacity',on?0.04:1);
+  });
+}
 function clearRegionsOnGlobe(){
   if(gRegionsG) gRegionsG.selectAll('.rp').remove();
+  if(gDimmedPays){ setCountryDim(gDimmedPays,false); gDimmedPays=null; }
 }
 var REGION_PALETTE=['#f97316','#3b82f6','#10b981','#8b5cf6','#eab308','#ef4444','#14b8a6','#f472b6','#84cc16','#0ea5e9','#a855f7','#fb7185','#22d3ee','#facc15','#38bdf8','#c084fc'];
 function renderRegionsOnGlobe(pays,geo){
@@ -2349,6 +2369,8 @@ function renderRegionsOnGlobe(pays,geo){
   var src=REGIONS_SOURCE[pays];
   if(!src) return;
   var rl=REGIONS_LEADERS[pays];
+  setCountryDim(pays,true);
+  gDimmedPays=pays;
   gRegionsG.selectAll('.rp')
     .data(geo.features)
     .enter().append('path')
@@ -2359,22 +2381,22 @@ function renderRegionsOnGlobe(pays,geo){
       var info=rl&&rl.liste[nom];
       return regionPosColor(info?info.pos:null);
     })
-    .attr('fill-opacity',0.38)
+    .attr('fill-opacity',0.75)
     .attr('stroke','#fff')
     .attr('stroke-width',0.8)
     .attr('stroke-opacity',0.7)
     .style('cursor','pointer')
     .on('mouseover',function(){
-      if(d3.select(this).attr('data-sel')!=='1') d3.select(this).attr('fill-opacity',0.6);
+      if(d3.select(this).attr('data-sel')!=='1') d3.select(this).attr('fill-opacity',0.9);
     })
     .on('mouseout',function(){
-      if(d3.select(this).attr('data-sel')!=='1') d3.select(this).attr('fill-opacity',0.38);
+      if(d3.select(this).attr('data-sel')!=='1') d3.select(this).attr('fill-opacity',0.75);
     })
     .on('click',function(event,d){
       event.stopPropagation();
       var nom=d.properties[src.nameProp];
-      gRegionsG.selectAll('.rp').attr('data-sel',null).attr('fill-opacity',0.38).attr('stroke-width',0.8);
-      d3.select(this).attr('data-sel','1').attr('fill-opacity',0.65).attr('stroke-width',1.8);
+      gRegionsG.selectAll('.rp').attr('data-sel',null).attr('fill-opacity',0.75).attr('stroke-width',0.8);
+      d3.select(this).attr('data-sel','1').attr('fill-opacity',0.92).attr('stroke-width',1.8);
       showRegion(pays,nom);
     });
 }
@@ -3056,7 +3078,7 @@ var gSvg=null, gProj=null, gPathFn=null, gTimer=null, gSphPath=null;
 var gGratPath=null, gMarkersG=null, gCountriesG=null;
 
 /* ══ VARIABLES ZOOM RÉGIONAL — Phase 3 (échantillon) ══ */
-var gRegionsG=null, gBaseScale=null, gZoomedPays=null, gSelectedRegionName=null;
+var gRegionsG=null, gBaseScale=null, gZoomedPays=null, gSelectedRegionName=null, gDimmedPays=null;
 var gRegionsCache={};
 
 /* Couleur de fond du globe selon le thème actif */
@@ -3333,7 +3355,10 @@ function initGlobe(){
     }
     startRotation();
 
-    /* Drag pour rotation manuelle */
+    /* Drag pour rotation manuelle — le recalcul des tracés (redraw) est
+       coûteux ; on le limite à une fois par frame d'affichage (au lieu
+       d'une fois par évènement de glissement, qui peut être bien plus
+       fréquent sur écran tactile) pour éviter les saccades. */
     ds.call(d3.drag()
       .on('start',function(){
         if(gTimer){gTimer.stop();gTimer=null;}
@@ -3341,7 +3366,7 @@ function initGlobe(){
       .on('drag',function(event){
         var r=proj.rotate();
         proj.rotate([r[0]+event.dx*.35,r[1]-event.dy*.35]);
-        redraw();
+        throttledRedraw('drag');
       })
       .on('end',function(){
         /* Reprendre si aucun panneau ouvert */
@@ -3384,6 +3409,16 @@ function initGlobe(){
       redraw();
     };
 
+    /* Petit utilitaire : n'exécute redraw() qu'une fois par frame d'affichage
+       même si l'évènement source (pincement, glissement tactile) se déclenche
+       plus souvent — élimine les saccades sur écran tactile. */
+    var _rafPending={};
+    function throttledRedraw(key){
+      if(_rafPending[key]) return;
+      _rafPending[key]=true;
+      requestAnimationFrame(function(){ redraw(); _rafPending[key]=false; });
+    }
+
     /* Pinch zoom iPad — gesture events (Safari natif) */
     var pinchScale0=proj.scale();
     ds.node().addEventListener('gesturestart',function(e){
@@ -3394,7 +3429,7 @@ function initGlobe(){
     ds.node().addEventListener('gesturechange',function(e){
       e.preventDefault();
       proj.scale(Math.max(80,Math.min(Math.min(W,H)*5,pinchScale0*e.scale)));
-      redraw();
+      throttledRedraw('gesture');
     },{passive:false});
     ds.node().addEventListener('gestureend',function(e){
       e.preventDefault();
@@ -3425,7 +3460,7 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         proj.scale(Math.max(80,Math.min(Math.min(W,H)*5,lastScalePinch*(dist/lastDist))));
-        redraw();
+        throttledRedraw('touch');
       }
     },{passive:false});
     ds.node().addEventListener('touchend',function(e){
