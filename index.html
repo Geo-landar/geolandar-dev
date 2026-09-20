@@ -2247,32 +2247,29 @@ function renderInstitutions(pays){
 }
 
 /* ══ ÉCHELON RÉGIONAL — zoom + subdivisions (Phase 3, échantillon) ══
-   Géométries hébergées dans un dépôt GitHub dédié et séparé du code —
-   "geolandar-data" — servies via jsDelivr (CDN qui mire les dépôts GitHub,
-   plus rapide et plus fiable qu'un accès direct à raw.githubusercontent.com,
-   avec CORS ouvert). Simplifiées avec mapshaper (topologie préservée, pas de
-   trou entre régions voisines) : la France est passée de 1,4 Mo à 108 Ko,
-   l'Italie de 2,9 Mo à 118 Ko, la Russie de 3,4 Mo à 165 Ko — c'était la
-   cause principale des ralentissements au déplacement du globe une fois
-   zoomé sur un pays. Sources d'origine : gregoiredavid/france-geojson (13
-   régions post-2016) et codeforgermany/click_that_hood pour les 9 autres.
-   Le mécanisme fonctionne pour les 10 pays de l'échantillon ; seules les
-   données de dirigeants régionaux pour la France sont renseignées pour
-   l'instant.
-   IMPORTANT : si le nom du compte/dépôt change, remplacer "Geo-landar" et/ou
-   "geolandar-data" ci-dessous par les bonnes valeurs. */
-var REGIONS_DATA_BASE="https://cdn.jsdelivr.net/gh/Geo-landar/geolandar-data@main/";
+   Géométries dans un dossier /regions/ du MÊME dépôt que ce fichier (chemin
+   relatif) — un dépôt séparé (essayé un temps) ajoutait des risques évitables
+   (casse du nom, délai de cache du CDN tiers) pour un bénéfice minime tant
+   que ces fichiers ne changent pas souvent. Simplifiées avec mapshaper
+   (topologie préservée, pas de trou entre régions voisines) : la France est
+   passée de 1,4 Mo à 108 Ko, l'Italie de 2,9 Mo à 118 Ko, la Russie de
+   3,4 Mo à 165 Ko — c'était la cause principale des ralentissements au
+   déplacement du globe une fois zoomé sur un pays. Sources d'origine :
+   gregoiredavid/france-geojson (13 régions post-2016) et
+   codeforgermany/click_that_hood pour les 9 autres. Le mécanisme fonctionne
+   pour les 10 pays de l'échantillon ; seules les données de dirigeants
+   régionaux pour la France sont renseignées pour l'instant. */
 var REGIONS_SOURCE={
-  "France":{url:REGIONS_DATA_BASE+"france.geojson",nameProp:"nom",type:"Région"},
-  "Allemagne":{url:REGIONS_DATA_BASE+"germany.geojson",nameProp:"name",type:"Land"},
-  "Italie":{url:REGIONS_DATA_BASE+"italy-regions.geojson",nameProp:"name",type:"Région"},
-  "Espagne":{url:REGIONS_DATA_BASE+"spain-communities.geojson",nameProp:"name",type:"Communauté autonome"},
-  "Suisse":{url:REGIONS_DATA_BASE+"switzerland.geojson",nameProp:"name",type:"Canton"},
-  "Pologne":{url:REGIONS_DATA_BASE+"poland.geojson",nameProp:"name",type:"Voïvodie"},
-  "Suede":{url:REGIONS_DATA_BASE+"sweden-counties.geojson",nameProp:"name",type:"Comté (Län)"},
-  "Royaume-Uni":{url:REGIONS_DATA_BASE+"united-kingdom-regions.geojson",nameProp:"name",type:"Région"},
-  "Hongrie":{url:REGIONS_DATA_BASE+"hungary.geojson",nameProp:"name",type:"Comté (megye)"},
-  "Russie":{url:REGIONS_DATA_BASE+"russia.geojson",nameProp:"name_latin",type:"Sujet fédéral"}
+  "France":{url:"regions/france.geojson",nameProp:"nom",type:"Région"},
+  "Allemagne":{url:"regions/germany.geojson",nameProp:"name",type:"Land"},
+  "Italie":{url:"regions/italy-regions.geojson",nameProp:"name",type:"Région"},
+  "Espagne":{url:"regions/spain-communities.geojson",nameProp:"name",type:"Communauté autonome"},
+  "Suisse":{url:"regions/switzerland.geojson",nameProp:"name",type:"Canton"},
+  "Pologne":{url:"regions/poland.geojson",nameProp:"name",type:"Voïvodie"},
+  "Suede":{url:"regions/sweden-counties.geojson",nameProp:"name",type:"Comté (Län)"},
+  "Royaume-Uni":{url:"regions/united-kingdom-regions.geojson",nameProp:"name",type:"Région"},
+  "Hongrie":{url:"regions/hungary.geojson",nameProp:"name",type:"Comté (megye)"},
+  "Russie":{url:"regions/russia.geojson",nameProp:"name_latin",type:"Sujet fédéral"}
 };
 /* Dirigeants régionaux — UNIQUEMENT la France est renseignée pour l'instant.
    Élus lors des régionales de 2021 (mandat jusqu'en 2028) — à reconfirmer
