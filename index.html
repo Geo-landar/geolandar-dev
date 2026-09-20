@@ -2332,17 +2332,64 @@ function regionPosColor(pos){
   return d3.interpolateRgb('#60a5fa','#7c3aed')(t2);
 }
 
+/* Bornes géographiques réelles (lon min, lat min, lon max, lat max) de
+   chaque pays test — sert de garde-fou : si les données chargées débordent
+   très largement de cette zone, quelque chose s'est mal passé (fichier
+   corrompu, mauvaises données) et on affiche une erreur visible plutôt que
+   de dessiner n'importe quoi à l'écran. La Russie est un cas particulier
+   (traverse l'antiméridien, -180/+180) et n'est pas vérifiée en longitude. */
+var REGIONS_EXPECTED_BBOX={
+  "France":[-5.5,41.0,10.0,51.5],
+  "Allemagne":[5.5,47.0,15.5,55.5],
+  "Italie":[6.0,35.0,19.0,47.5],
+  "Espagne":[-18.5,27.0,4.8,44.5],
+  "Suisse":[5.5,45.5,11.0,48.3],
+  "Pologne":[13.5,48.5,24.7,55.3],
+  "Suede":[10.5,55.0,24.6,69.5],
+  "Royaume-Uni":[-6.0,49.5,2.3,56.3],
+  "Hongrie":[15.5,45.2,23.4,49.1],
+  "Russie":null
+};
+function regionsGeoLooksValid(pays,geo){
+  var box=REGIONS_EXPECTED_BBOX[pays];
+  if(box===undefined) return true; // pays non vérifié, on laisse passer
+  if(box===null) return true; // cas particulier (ex. Russie) — pas de vérif
+  if(!geo||!geo.features||!geo.features.length) return false;
+  var minLon=1e9,minLat=1e9,maxLon=-1e9,maxLat=-1e9;
+  function walk(c){
+    if(typeof c[0]==='number'){
+      if(c[0]<minLon)minLon=c[0]; if(c[0]>maxLon)maxLon=c[0];
+      if(c[1]<minLat)minLat=c[1]; if(c[1]>maxLat)maxLat=c[1];
+    } else { for(var i=0;i<c.length;i++) walk(c[i]); }
+  }
+  geo.features.forEach(function(f){ if(f.geometry&&f.geometry.coordinates) walk(f.geometry.coordinates); });
+  var marge=2; // degrés de tolérance
+  return minLon>=box[0]-marge && minLat>=box[1]-marge && maxLon<=box[2]+marge && maxLat<=box[3]+marge;
+}
 function loadRegions(pays,cb){
   if(gRegionsCache[pays]){ cb(gRegionsCache[pays]); return; }
   if(typeof REGIONS_GEOJSON_EMBEDDED!=='undefined'&&REGIONS_GEOJSON_EMBEDDED[pays]){
-    gRegionsCache[pays]=REGIONS_GEOJSON_EMBEDDED[pays];
-    cb(REGIONS_GEOJSON_EMBEDDED[pays]);
+    var embedded=REGIONS_GEOJSON_EMBEDDED[pays];
+    if(!regionsGeoLooksValid(pays,embedded)){
+      console.warn('Données régionales invalides (hors zone géographique attendue) pour '+pays);
+      cb(null);
+      return;
+    }
+    gRegionsCache[pays]=embedded;
+    cb(embedded);
     return;
   }
   var src=REGIONS_SOURCE[pays];
   if(!src){ cb(null); return; }
   fetch(src.url).then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
-    .then(function(geo){ gRegionsCache[pays]=geo; cb(geo); })
+    .then(function(geo){
+      if(!regionsGeoLooksValid(pays,geo)){
+        console.warn('Données régionales invalides (hors zone géographique attendue) pour '+pays);
+        cb(null);
+        return;
+      }
+      gRegionsCache[pays]=geo; cb(geo);
+    })
     .catch(function(err){ console.warn('Régions indisponibles pour '+pays+' ('+src.url+') :',err); cb(null); });
 }
 
@@ -2354,7 +2401,7 @@ function zoomToCountry(target,zoomScale,onEnd){
   else { return; }
   var r0=gProj.rotate(), s0=gProj.scale();
   var r1=[-center[0],-center[1]];
-  var s1=zoomScale||(gBaseScale*2.6);
+  var s1=zoomScale||(gBaseScale*1.5);
   var ir=d3.interpolate(r0,r1), is=d3.interpolate(s0,s1);
   var tr=d3.transition().duration(850).ease(d3.easeCubicInOut).tween('geolandar-zoomto',function(){
     return function(t){
