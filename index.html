@@ -2505,20 +2505,27 @@ function renderRegionsOnGlobe(pays,geo){
      toute façon recalculée à chaque frame pendant un déplacement du globe,
      ce qui cause le ralentissement. getBBox() donne la taille RÉELLEMENT
      dessinée, contrairement à la simple vérification des coordonnées de
-     départ qui ne détecte pas ce type de bug de projection. */
+     départ qui ne détecte pas ce type de bug de projection.
+     Diagnostic complet toujours affiché (pas seulement en cas de retrait) —
+     pour voir directement les tailles mesurées sans avoir à coller de script. */
   if(gSvg&&gSvg.node){
     var svgEl=gSvg.node();
     var vw=svgEl.clientWidth||window.innerWidth;
     var vh=svgEl.clientHeight||window.innerHeight;
     var retirees=0;
-    gRegionsG.selectAll('.rp').each(function(){
+    var diagnostic=[];
+    gRegionsG.selectAll('.rp').each(function(d){
       var bb;
-      try{ bb=this.getBBox(); }catch(e){ return; }
+      try{ bb=this.getBBox(); }catch(e){ diagnostic.push({region:'?',largeur:'erreur',hauteur:'erreur'}); return; }
+      var nom=(d&&d.properties)?(d.properties[src.nameProp]||'?'):'?';
+      diagnostic.push({region:nom,largeur:Math.round(bb.width),hauteur:Math.round(bb.height)});
       if(bb.width>vw*1.2||bb.height>vh*1.2){
         retirees++;
         this.remove();
       }
     });
+    console.log('Diagnostic régions '+pays+' — taille écran (svg) : '+Math.round(vw)+'x'+Math.round(vh)+' px');
+    console.table(diagnostic);
     if(retirees>0){
       console.warn(retirees+' région(s) retirée(s) pour '+pays+' — tracé anormalement grand détecté (bug de rendu).');
       var slot=document.getElementById('gpbRegional');
