@@ -2393,10 +2393,27 @@ function loadRegions(pays,cb){
     .catch(function(err){ console.warn('Régions indisponibles pour '+pays+' ('+src.url+') :',err); cb(null); });
 }
 
+/* Pour un pays fragmenté (territoires d'outre-mer très éloignés, ex. la
+   France avec la Guyane), le centroïde de TOUTE la géométrie peut tomber
+   en pleine mer, loin de la partie principale. On centre plutôt sur le plus
+   grand fragment (par aire), qui correspond presque toujours au territoire
+   principal — la France pointe ainsi sur la métropole, pas sur l'Atlantique. */
+function bestCentroid(feature){
+  if(!feature||!feature.geometry) return d3.geoCentroid(feature);
+  var geom=feature.geometry;
+  if(geom.type!=='MultiPolygon'||geom.coordinates.length<=1) return d3.geoCentroid(feature);
+  var best=null,bestArea=-1;
+  geom.coordinates.forEach(function(poly){
+    var f={type:'Feature',geometry:{type:'Polygon',coordinates:poly}};
+    var area=Math.abs(d3.geoArea(f));
+    if(area>bestArea){ bestArea=area; best=f; }
+  });
+  return d3.geoCentroid(best);
+}
 function zoomToCountry(target,zoomScale,onEnd){
   if(!gProj||!gBaseScale) return;
   var center;
-  if(target&&target.type){ center=d3.geoCentroid(target); }
+  if(target&&target.type){ center=bestCentroid(target); }
   else if(target&&typeof target.lon==='number'){ center=[target.lon,target.lat]; }
   else { return; }
   var r0=gProj.rotate(), s0=gProj.scale();
@@ -2437,7 +2454,12 @@ function clearRegionsOnGlobe(){
   if(gRegionsG) gRegionsG.selectAll('.rp').remove();
   if(gDimmedPays){ setCountryDim(gDimmedPays,false); gDimmedPays=null; }
 }
-var REGION_PALETTE=['#f97316','#3b82f6','#10b981','#8b5cf6','#eab308','#ef4444','#14b8a6','#f472b6','#84cc16','#0ea5e9','#a855f7','#fb7185','#22d3ee','#facc15','#38bdf8','#c084fc'];
+/* Palette neutre (nuances de gris-bleu) pour les régions sans dirigeant
+   connu — chaque région reste visuellement distincte de ses voisines, sans
+   pour autant suggérer une couleur politique qu'on n'a pas. Avant ce
+   correctif, toutes ces régions recevaient la même couleur grise unique et
+   se fondaient en un seul bloc indistinct. */
+var REGION_PALETTE_NEUTRE=['#64748b','#475569','#71809a','#5b6b85','#8a97ab','#3f4c61','#93a1b8','#57667e'];
 function renderRegionsOnGlobe(pays,geo){
   if(!gRegionsG||!gPathFn) return;
   clearRegionsOnGlobe();
@@ -2451,15 +2473,16 @@ function renderRegionsOnGlobe(pays,geo){
     .enter().append('path')
     .attr('class','rp')
     .attr('d',gPathFn)
-    .attr('fill',function(d){
+    .attr('fill',function(d,i){
       var nom=d.properties[src.nameProp];
       var info=rl&&rl.liste[nom];
-      return regionPosColor(info?info.pos:null);
+      if(info) return regionPosColor(info.pos);
+      return REGION_PALETTE_NEUTRE[i%REGION_PALETTE_NEUTRE.length];
     })
     .attr('fill-opacity',0.75)
     .attr('stroke','#fff')
-    .attr('stroke-width',0.8)
-    .attr('stroke-opacity',0.7)
+    .attr('stroke-width',1.1)
+    .attr('stroke-opacity',0.85)
     .style('cursor','pointer')
     .on('mouseover',function(){
       if(d3.select(this).attr('data-sel')!=='1') d3.select(this).attr('fill-opacity',0.9);
@@ -2470,10 +2493,43 @@ function renderRegionsOnGlobe(pays,geo){
     .on('click',function(event,d){
       event.stopPropagation();
       var nom=d.properties[src.nameProp];
-      gRegionsG.selectAll('.rp').attr('data-sel',null).attr('fill-opacity',0.75).attr('stroke-width',0.8);
+      gRegionsG.selectAll('.rp').attr('data-sel',null).attr('fill-opacity',0.75).attr('stroke-width',1.1);
       d3.select(this).attr('data-sel','1').attr('fill-opacity',0.92).attr('stroke-width',1.8);
       showRegion(pays,nom);
     });
+
+  /* Filet de sécurité mesuré par le navigateur lui-même : si le rendu d'une
+     géométrie produit un tracé anormalement immense (bien plus grand que
+     l'écran), c'est le signe d'un bug de rendu (forme dégénérée, anneau mal
+     interprété) plutôt qu'une vraie région. On la retire — elle serait de
+     toute façon recalculée à chaque frame pendant un déplacement du globe,
+     ce qui cause le ralentissement. getBBox() donne la taille RÉELLEMENT
+     dessinée, contrairement à la simple vérification des coordonnées de
+     départ qui ne détecte pas ce type de bug de projection. */
+  if(gSvg&&gSvg.node){
+    var svgEl=gSvg.node();
+    var vw=svgEl.clientWidth||window.innerWidth;
+    var vh=svgEl.clientHeight||window.innerHeight;
+    var retirees=0;
+    gRegionsG.selectAll('.rp').each(function(){
+      var bb;
+      try{ bb=this.getBBox(); }catch(e){ return; }
+      if(bb.width>vw*1.2||bb.height>vh*1.2){
+        retirees++;
+        this.remove();
+      }
+    });
+    if(retirees>0){
+      console.warn(retirees+' région(s) retirée(s) pour '+pays+' — tracé anormalement grand détecté (bug de rendu).');
+      var slot=document.getElementById('gpbRegional');
+      if(slot){
+        var note=document.createElement('div');
+        note.style.cssText='color:#eab308;font-size:.7rem;padding:6px 0;font-style:italic';
+        note.textContent='⚠️ '+(lang==='fr'?retirees+' région(s) non affichée(s) suite à une anomalie de tracé détectée automatiquement.':retirees+' region(s) hidden due to an automatically detected rendering anomaly.');
+        slot.insertBefore(note,slot.firstChild);
+      }
+    }
+  }
 }
 
 /* Bascule le panneau droit du dirigeant national vers le dirigeant régional,
