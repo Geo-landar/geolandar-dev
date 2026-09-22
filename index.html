@@ -2170,7 +2170,7 @@ function institBox(titre,sous,tone,dashed){
   return '<div class="'+cls+'"'+(dashed?' style="border-style:dashed"':'')+'><b>'+titre+'</b>'+(sous?'<div style="color:var(--mu);margin-top:2px">'+sous+'</div>':'')+'</div>';
 }
 function institArrow(label){
-  return '<div class="gpb-arrow">↓'+(label?'<br>'+label:'')+'</div>';
+  return '<div class="gpb-arrow">↑'+(label?'<br>'+label:'')+'</div>';
 }
 function institGroup(boxesHtml){
   return '<div class="gpb-group">'+boxesHtml.join('<div class="gpb-plus">+</div>')+'</div>';
@@ -2178,34 +2178,38 @@ function institGroup(boxesHtml){
 function institSide(boxHtml,note){
   return '<div class="gpb-side"><div class="gpb-side-label">'+note+'</div>'+boxHtml+'</div>';
 }
+/* Schéma reconstruit à la demande de l'utilisateur, sur le modèle des
+   schémas institutionnels officiels (vie-publique.fr) : le corps électoral
+   (citoyens) est à la base, avec des flèches qui remontent vers les
+   institutions qu'il désigne — pas un flux descendant. */
 function institSchema(c){
   var fr=lang==='fr';
   var citoyens=fr?'Citoyens':'Citizens';
   var vote=fr?'vote':'vote';
   var html='';
   if(c.archetype==='parlementaire'){
-    html+=institBox(citoyens,'',"citizen");
-    html+=institArrow(vote);
+    if(c.chefEtat)html+=institSide(institBox(c.chefEtat.titre,fr?'Rôle cérémoniel':'Ceremonial role',"symbolic",true),fr?'En parallèle (non issu de ce vote)':'In parallel (not derived from this vote)');
+    html+=institBox(c.chefGouv.titre,fr?'Pouvoir exécutif réel':'Real executive power',"power");
+    html+=institArrow(fr?'désigne / soutient':'appoints / supports');
     var chambresBoxes=c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");});
     html+=chambresBoxes.length>1?institGroup(chambresBoxes):chambresBoxes[0];
-    html+=institArrow(fr?'désigne / soutient':'appoints / supports');
-    html+=institBox(c.chefGouv.titre,fr?'Pouvoir exécutif réel':'Real executive power',"power");
-    if(c.chefEtat)html+=institSide(institBox(c.chefEtat.titre,fr?'Rôle cérémoniel':'Ceremonial role',"symbolic",true),fr?'En parallèle (non issu de ce vote)':'In parallel (not derived from this vote)');
-  } else if(c.archetype==='semipresidentiel'){
+    html+=institArrow(vote);
     html+=institBox(citoyens,'',"citizen");
-    html+=institArrow(fr?'vote direct + vote législatif':'direct + legislative vote');
+  } else if(c.archetype==='semipresidentiel'){
+    if(c.chambreNonElue)html+=institSide(institBox(c.chambreNonElue.nom,c.chambreNonElue.sieges+(fr?' sièges':' seats'),"symbolic",true),fr?'Non élue directement':'Not directly elected');
+    html+=institBox(c.chefGouv.titre,fr?'Nommé par le président, soutenu par le Parlement':'Appointed by the president, backed by Parliament',"default");
+    html+=institArrow(fr?'nomme / doit composer avec':'appoints / must work with');
     var boxesSP=[institBox(c.chefEtat.titre,fr?'Élu au suffrage direct':'Directly elected',"power")]
       .concat(c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");}));
     html+=institGroup(boxesSP);
-    html+=institArrow(fr?'nomme / doit composer avec':'appoints / must work with');
-    html+=institBox(c.chefGouv.titre,fr?'Nommé par le président, soutenu par le Parlement':'Appointed by the president, backed by Parliament',"default");
-    if(c.chambreNonElue)html+=institSide(institBox(c.chambreNonElue.nom,c.chambreNonElue.sieges+(fr?' sièges':' seats'),"symbolic",true),fr?'Non élue directement':'Not directly elected');
-  } else if(c.archetype==='directorial'){
+    html+=institArrow(fr?'vote direct + vote législatif':'direct + legislative vote');
     html+=institBox(citoyens,'',"citizen");
-    html+=institArrow(vote);
-    html+=institGroup(c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");}));
-    html+=institArrow(fr?'élisent individuellement':'individually elect');
+  } else if(c.archetype==='directorial'){
     html+=institBox(c.conseilFederal.titre+' — '+c.conseilFederal.membres+(fr?' membres':' members'),fr?'Présidence tournante 1 an':'1-year rotating presidency',"power");
+    html+=institArrow(fr?'élisent individuellement':'individually elect');
+    html+=institGroup(c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");}));
+    html+=institArrow(vote);
+    html+=institBox(citoyens,'',"citizen");
   }
   return html;
 }
@@ -2426,6 +2430,72 @@ function showRegion(pays,nomRegion){
 }
 
 
+/* ══ COMPOSITION DES CHAMBRES — répartition des sièges par parti ══
+   Données vérifiées auprès des sources officielles (pas de mémoire seule,
+   ce type de donnée change à chaque scrutin). Seule la France est
+   renseignée pour l'instant — à étendre pays par pays, avec la même
+   automatisation Supabase que pour les dirigeants une fois ce format validé. */
+var CHAMBRES_COMPOSITION={
+  "France":{
+    verifie:"22 septembre 2026",
+    chambres:{
+      "Assemblée nationale":{
+        total:577,
+        groupes:[
+          {n:"Rassemblement National",s:122,c:"#1e3a5f"},
+          {n:"Ensemble pour la République",s:90,c:"#f2c200"},
+          {n:"LFI - Nouveau Front Populaire",s:71,c:"#a3123a"},
+          {n:"Socialistes et apparentés",s:67,c:"#f472b6"},
+          {n:"Droite Républicaine",s:48,c:"#1e5ba8"},
+          {n:"Écologiste et Social",s:38,c:"#2f9e44"},
+          {n:"Les Démocrates",s:37,c:"#ff8200"},
+          {n:"Horizons & Indépendants",s:36,c:"#38bdf8"},
+          {n:"LIOT",s:22,c:"#94a3b8"},
+          {n:"Gauche Démocrate et Républicaine",s:17,c:"#dc2626"},
+          {n:"Union des droites pour la République",s:17,c:"#0f172a"},
+          {n:"Non inscrits",s:12,c:"#64748b"}
+        ]
+      },
+      "Sénat":{
+        total:348,
+        perime:true,
+        groupes:[
+          {n:"Les Républicains",s:130,c:"#1e5ba8"},
+          {n:"Socialistes",s:65,c:"#f472b6"},
+          {n:"Union Centriste",s:59,c:"#38bdf8"},
+          {n:"Les Indépendants",s:20,c:"#94a3b8"},
+          {n:"RDPI (Renaissance)",s:19,c:"#f2c200"},
+          {n:"Communiste républicain citoyen",s:18,c:"#dc2626"},
+          {n:"RDSE",s:17,c:"#a855f7"},
+          {n:"Écologiste",s:16,c:"#2f9e44"}
+        ]
+      }
+    }
+  }
+};
+function renderComposition(pays){
+  var fr=lang==='fr';
+  var comp=CHAMBRES_COMPOSITION[pays];
+  if(!comp) return '';
+  var b='<div style="margin-top:10px"><div class="l" style="font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;font-weight:700">'+(fr?'Composition des chambres':'Chamber composition')+'</div>';
+  Object.keys(comp.chambres).forEach(function(nomChambre){
+    var ch=comp.chambres[nomChambre];
+    b+='<div style="margin-bottom:10px"><div style="font-family:Syne,sans-serif;font-size:.78rem;font-weight:700;color:var(--tx);margin-bottom:5px">'+nomChambre+(ch.perime?' <span style="color:#eab308;font-weight:400;font-size:.68rem">⚠️ '+(fr?'renouvellement en cours':'renewal underway')+'</span>':'')+'</div>';
+    ch.groupes.forEach(function(g){
+      var pct=(g.s/ch.total*100).toFixed(1);
+      b+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;font-size:.72rem">';
+      b+='<div style="width:11px;height:11px;border-radius:3px;background:'+g.c+';flex-shrink:0"></div>';
+      b+='<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx)">'+g.n+'</div>';
+      b+='<div style="flex-shrink:0;color:var(--mu);font-weight:600">'+g.s+' <span style="opacity:.6">('+pct+'%)</span></div>';
+      b+='</div>';
+      b+='<div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:5px"><div style="height:100%;width:'+pct+'%;background:'+g.c+'"></div></div>';
+    });
+    b+='</div>';
+  });
+  b+='<div style="font-size:.64rem;color:var(--mu);font-style:italic">'+(fr?'Vérifié le ':'Verified on ')+comp.verifie+(fr?' — à reconfirmer après tout scrutin ou changement de groupe.':' — to reconfirm after any election or group change.')+'</div>';
+  b+='</div>';
+  return b;
+}
 function renderInstitutions(pays){
   var fr=lang==='fr';
   var data=INSTITUTIONS[pays];
@@ -2449,6 +2519,7 @@ function renderInstitutions(pays){
   if(data.chefEtat)b+=institInfoRow(data.chefEtat.titre,data.chefEtat.mode+' · '+(fr?'Mandat : ':'Term: ')+data.chefEtat.mandat+' · '+data.chefEtat.pouvoirs);
   if(data.chefGouv)b+=institInfoRow(data.chefGouv.titre,data.chefGouv.mode+' · '+(fr?'Mandat : ':'Term: ')+data.chefGouv.mandat+' · '+data.chefGouv.pouvoirs);
   if(data.conseilFederal)b+=institInfoRow(data.conseilFederal.titre,data.conseilFederal.mode+' · '+(fr?'Mandat : ':'Term: ')+data.conseilFederal.mandat+' · '+data.conseilFederal.pouvoirs);
+  b+=renderComposition(pays);
   b+='<div class="gpb-particularite"><div class="l">'+(fr?'Particularité':'Distinctive feature')+'</div><div class="v">'+data.particularite+'</div></div>';
   b+='</div>';
   if(data.echelons&&data.echelons.length){
