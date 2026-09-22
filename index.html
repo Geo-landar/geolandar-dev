@@ -193,22 +193,38 @@ h1 em{font-style:normal;background:linear-gradient(135deg,var(--a),var(--a2));-w
 .gpb-title{font-family:Syne,sans-serif;font-weight:700;font-size:.9rem;}
 .gpb-sub{font-size:.72rem;color:var(--mu);margin-top:1px;}
 .gpb-body{flex:1;overflow-y:auto;padding:16px;display:flex;gap:24px;flex-wrap:wrap;}
-.gpb-schema{flex:0 0 auto;min-width:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:10px;padding:16px;}
+.gpb-schema{flex:0 0 auto;width:340px;}
 .gpb-info{flex:1 1 260px;min-width:240px;}
-.gpb-box{border-radius:9px;padding:9px 14px;text-align:center;min-width:110px;font-size:.8rem;}
-.gpb-box b{font-size:.84rem;display:block;}
-.gpb-box-citizen{background:rgba(59,130,246,.08);border:1.5px solid rgba(59,130,246,.3);}
-.gpb-box-parliament{background:rgba(139,92,246,.08);border:1.5px solid rgba(139,92,246,.32);}
-.gpb-box-power{background:rgba(249,115,22,.1);border:1.5px solid rgba(249,115,22,.35);}
-.gpb-box-symbolic{background:rgba(148,163,184,.06);border:1.5px dashed rgba(148,163,184,.25);}
-.gpb-arrow{text-align:center;color:var(--mu);font-size:.74rem;margin:3px 0;line-height:1.35;}
-.gpb-group{display:flex;flex-direction:column;align-items:center;gap:3px;}
-.gpb-plus{font-size:.76rem;color:var(--mu);line-height:1;margin:2px 0;}
-.gpb-side{margin-top:9px;padding-top:8px;border-top:1px dashed var(--bd);display:flex;flex-direction:column;align-items:center;gap:4px;}
-.gpb-side-label{font-size:.65rem;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;text-align:center;max-width:170px;}
+.gpb-diagram{position:relative;width:100%;height:340px;background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:10px;}
+.gpb-diagram-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.gpb-edge{stroke:var(--mu);stroke-width:.5;opacity:.75;}
+.gpb-edge-arrowhead{fill:var(--mu);opacity:.85;}
+.gpb-edge-label{font-size:2.6px;fill:var(--mu);text-anchor:middle;font-family:DM Sans,sans-serif;paint-order:stroke;stroke:var(--bg2);stroke-width:2.2px;stroke-linejoin:round;}
+.gpb-node{position:absolute;transform:translate(-50%,-50%);border-radius:9px;padding:7px 11px;text-align:center;font-size:.72rem;max-width:130px;line-height:1.3;}
+.gpb-node-wide{max-width:200px;}
+.gpb-node b{font-size:.76rem;display:block;}
+.gpb-node div{color:var(--mu);margin-top:2px;font-size:.94em;}
+.gpb-box-citizen{background:rgba(59,130,246,.14);border:1.5px solid rgba(59,130,246,.4);}
+.gpb-box-parliament{background:rgba(139,92,246,.14);border:1.5px solid rgba(139,92,246,.42);}
+.gpb-box-power{background:rgba(249,115,22,.16);border:1.5px solid rgba(249,115,22,.45);}
+.gpb-box-symbolic{background:rgba(148,163,184,.1);border:1.5px dashed rgba(148,163,184,.35);}
+.gpb-box-default{background:rgba(255,255,255,.05);border:1.5px solid var(--bd);}
 .gpb-infrow{margin-bottom:9px;}
 .gpb-infrow .l{font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;}
 .gpb-infrow .v{font-size:.86rem;color:var(--tx);line-height:1.55;margin-top:2px;}
+.gpb-composition{margin-top:10px;}
+.gpb-composition>.l{font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:700;}
+.gpb-hemi-block{margin-bottom:14px;}
+.gpb-hemi-title{font-family:Syne,sans-serif;font-size:.8rem;font-weight:700;color:var(--tx);margin-bottom:5px;}
+.gpb-hemi-warn{color:#eab308;font-weight:400;font-size:.68rem;}
+.gpb-hemi-wrap{position:relative;max-width:340px;}
+.gpb-hemi-svg{width:100%;height:auto;display:block;}
+.gpb-hemi-total{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);text-align:center;font-family:Syne,sans-serif;font-weight:800;font-size:.95rem;color:var(--tx);line-height:1.15;}
+.gpb-hemi-legend{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:8px;}
+.gpb-hemi-leg-item{font-size:.68rem;color:var(--mu);display:flex;align-items:center;gap:4px;}
+.gpb-hemi-leg-item b{color:var(--tx);font-weight:700;}
+.gpb-hemi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.gpb-hemi-note{font-size:.64rem;color:var(--mu);font-style:italic;margin-top:4px;}
 .gpb-particularite{margin-top:9px;background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.18);border-radius:9px;padding:9px 12px;}
 .gpb-particularite .l{font-size:.66rem;color:#fb923c;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
 .gpb-particularite .v{font-size:.83rem;color:var(--tx);line-height:1.6;}
@@ -230,7 +246,7 @@ h1 em{font-style:normal;background:linear-gradient(135deg,var(--a),var(--a2));-w
 .gpb-region-leader{font-size:.77rem;color:var(--tx);margin-top:2px;}
 .gpb-region-titre{font-size:.68rem;color:var(--mu);margin-top:1px;}
 .gpb-regions-empty{color:var(--mu);font-size:.78rem;padding:8px 0;font-style:italic;}
-@media(max-width:640px){.gpanel-bottom{left:6px;right:6px;height:62vh;max-height:none;}.gpb-body{flex-direction:column;}}
+@media(max-width:640px){.gpanel-bottom{left:6px;right:6px;height:62vh;max-height:none;}.gpb-body{flex-direction:column;}.gpb-schema{width:100%;}.gpb-diagram{height:300px;}}
 .gphdr{display:flex;align-items:center;gap:8px;padding:11px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,14,26,.98);z-index:1;}
 .gpfl img,.gpfl .nfl{width:30px;height:22px;border-radius:2px;display:block;}
 .gpfl .nfl{background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:var(--mu);}
@@ -2165,53 +2181,90 @@ var INSTITUTIONS_ARCHETYPE_LABEL={
   parlementaire:{fr:"Régime parlementaire",en:"Parliamentary system"},
   directorial:{fr:"Régime directorial collégial",en:"Collegial directorial system"}
 };
-function institBox(titre,sous,tone,dashed){
-  var cls='gpb-box gpb-box-'+tone;
-  return '<div class="'+cls+'"'+(dashed?' style="border-style:dashed"':'')+'><b>'+titre+'</b>'+(sous?'<div style="color:var(--mu);margin-top:2px">'+sous+'</div>':'')+'</div>';
+/* ══ SCHÉMA INSTITUTIONNEL — diagramme libre (nœuds + flèches SVG) ══
+   Remplace l'ancien schéma en colonne stricte : chaque institution est
+   positionnée où elle a du sens, et les flèches peuvent partir des côtés et
+   converger vers une même case (ex : le Premier ministre nommé par le
+   Président ET responsable devant l'Assemblée — deux flèches distinctes,
+   pas une chaîne à sens unique). */
+function institNode(id,titre,sous,tone,x,y,dashed,wide){
+  return {id:id,titre:titre,sous:sous,tone:tone,x:x,y:y,dashed:!!dashed,wide:!!wide};
 }
-function institArrow(label){
-  return '<div class="gpb-arrow">↑'+(label?'<br>'+label:'')+'</div>';
+function institDiagramRender(nodes,edges){
+  var boxesHtml=nodes.map(function(n){
+    var cls='gpb-node gpb-box-'+n.tone+(n.wide?' gpb-node-wide':'');
+    return '<div class="'+cls+'" style="left:'+n.x+'%;top:'+n.y+'%'+(n.dashed?';border-style:dashed':'')+'"><b>'+n.titre+'</b>'+(n.sous?'<div>'+n.sous+'</div>':'')+'</div>';
+  }).join('');
+  var byId={}; nodes.forEach(function(n){byId[n.id]=n;});
+  var svgLines='';
+  edges.forEach(function(e){
+    var a=byId[e.from],b=byId[e.to];
+    if(!a||!b)return;
+    // Raccourcit legerement le trait pour ne pas plonger sous les cases
+    var dx=b.x-a.x, dy=b.y-a.y;
+    var len=Math.sqrt(dx*dx+dy*dy)||1;
+    var pull=6; // % de retrait de chaque cote
+    var x1=a.x+dx/len*pull, y1=a.y+dy/len*pull;
+    var x2=b.x-dx/len*pull, y2=b.y-dy/len*pull;
+    var mx=(x1+x2)/2, my=(y1+y2)/2;
+    svgLines+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" class="gpb-edge" marker-end="url(#gpbArrow)"/>';
+    if(e.label)svgLines+='<text x="'+mx+'" y="'+my+'" class="gpb-edge-label">'+e.label+'</text>';
+  });
+  var svg='<svg class="gpb-diagram-svg" viewBox="0 0 100 100" preserveAspectRatio="none">'
+    +'<defs><marker id="gpbArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" class="gpb-edge-arrowhead"/></marker></defs>'
+    +svgLines+'</svg>';
+  return '<div class="gpb-diagram">'+svg+boxesHtml+'</div>';
 }
-function institGroup(boxesHtml){
-  return '<div class="gpb-group">'+boxesHtml.join('<div class="gpb-plus">+</div>')+'</div>';
-}
-function institSide(boxHtml,note){
-  return '<div class="gpb-side"><div class="gpb-side-label">'+note+'</div>'+boxHtml+'</div>';
-}
-/* Schéma reconstruit à la demande de l'utilisateur, sur le modèle des
-   schémas institutionnels officiels (vie-publique.fr) : le corps électoral
-   (citoyens) est à la base, avec des flèches qui remontent vers les
-   institutions qu'il désigne — pas un flux descendant. */
 function institSchema(c){
   var fr=lang==='fr';
   var citoyens=fr?'Citoyens':'Citizens';
   var vote=fr?'vote':'vote';
-  var html='';
+  var nodes=[],edges=[];
   if(c.archetype==='parlementaire'){
-    if(c.chefEtat)html+=institSide(institBox(c.chefEtat.titre,fr?'Rôle cérémoniel':'Ceremonial role',"symbolic",true),fr?'En parallèle (non issu de ce vote)':'In parallel (not derived from this vote)');
-    html+=institBox(c.chefGouv.titre,fr?'Pouvoir exécutif réel':'Real executive power',"power");
-    html+=institArrow(fr?'désigne / soutient':'appoints / supports');
-    var chambresBoxes=c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");});
-    html+=chambresBoxes.length>1?institGroup(chambresBoxes):chambresBoxes[0];
-    html+=institArrow(vote);
-    html+=institBox(citoyens,'',"citizen");
+    nodes.push(institNode('cit',citoyens,'',"citizen",50,90,false,true));
+    if(c.chambres.length>1){
+      nodes.push(institNode('ch0',c.chambres[0].nom,c.chambres[0].sieges+(fr?' sièges':' seats'),"parliament",30,58));
+      nodes.push(institNode('ch1',c.chambres[1].nom,c.chambres[1].sieges+(fr?' sièges':' seats'),"parliament",70,58));
+      edges.push({from:'cit',to:'ch0',label:vote});
+      edges.push({from:'cit',to:'ch1'});
+    } else {
+      nodes.push(institNode('ch0',c.chambres[0].nom,c.chambres[0].sieges+(fr?' sièges':' seats'),"parliament",50,58));
+      edges.push({from:'cit',to:'ch0',label:vote});
+    }
+    nodes.push(institNode('gouv',c.chefGouv.titre,fr?'Pouvoir exécutif réel':'Real executive power',"power",42,20));
+    edges.push({from:'ch0',to:'gouv',label:fr?'désigne / soutient':'appoints / supports'});
+    if(c.chambres.length>1)edges.push({from:'ch1',to:'gouv'});
+    if(c.chefEtat){
+      nodes.push(institNode('etat',c.chefEtat.titre,fr?'Rôle cérémoniel':'Ceremonial role',"symbolic",82,20,true));
+      edges.push({from:'ch0',to:'etat',label:fr?'élit (indirect)':'elects (indirect)'});
+    }
   } else if(c.archetype==='semipresidentiel'){
-    if(c.chambreNonElue)html+=institSide(institBox(c.chambreNonElue.nom,c.chambreNonElue.sieges+(fr?' sièges':' seats'),"symbolic",true),fr?'Non élue directement':'Not directly elected');
-    html+=institBox(c.chefGouv.titre,fr?'Nommé par le président, soutenu par le Parlement':'Appointed by the president, backed by Parliament',"default");
-    html+=institArrow(fr?'nomme / doit composer avec':'appoints / must work with');
-    var boxesSP=[institBox(c.chefEtat.titre,fr?'Élu au suffrage direct':'Directly elected',"power")]
-      .concat(c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");}));
-    html+=institGroup(boxesSP);
-    html+=institArrow(fr?'vote direct + vote législatif':'direct + legislative vote');
-    html+=institBox(citoyens,'',"citizen");
+    nodes.push(institNode('cit',citoyens,'',"citizen",50,90,false,true));
+    nodes.push(institNode('pres',c.chefEtat.titre,fr?'Suffrage direct':'Direct vote',"power",20,55));
+    edges.push({from:'cit',to:'pres',label:fr?'vote direct':'direct vote'});
+    var chamX=c.chambres.length>1?[55,82]:[62];
+    c.chambres.forEach(function(ch,i){
+      var id='ch'+i;
+      nodes.push(institNode(id,ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament",chamX[i],55));
+      edges.push({from:'cit',to:id,label:i===0?(fr?'vote législatif':'legislative vote'):undefined});
+    });
+    nodes.push(institNode('gouv',c.chefGouv.titre,fr?'Nommé par le président':'Appointed by the president',"default",42,18));
+    edges.push({from:'pres',to:'gouv',label:fr?'nomme':'appoints'});
+    edges.push({from:'ch0',to:'gouv',label:fr?'responsable devant':'accountable to'});
+    if(c.chambreNonElue){
+      nodes.push(institNode('nonelu',c.chambreNonElue.nom,c.chambreNonElue.sieges+(fr?' sièges':' seats'),"symbolic",85,18,true));
+    }
   } else if(c.archetype==='directorial'){
-    html+=institBox(c.conseilFederal.titre+' — '+c.conseilFederal.membres+(fr?' membres':' members'),fr?'Présidence tournante 1 an':'1-year rotating presidency',"power");
-    html+=institArrow(fr?'élisent individuellement':'individually elect');
-    html+=institGroup(c.chambres.map(function(ch){return institBox(ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament");}));
-    html+=institArrow(vote);
-    html+=institBox(citoyens,'',"citizen");
+    nodes.push(institNode('cit',citoyens,'',"citizen",50,90,false,true));
+    nodes.push(institNode('ch0',c.chambres[0].nom,c.chambres[0].sieges+(fr?' sièges':' seats'),"parliament",30,55));
+    nodes.push(institNode('ch1',c.chambres[1].nom,c.chambres[1].sieges+(fr?' sièges':' seats'),"parliament",70,55));
+    edges.push({from:'cit',to:'ch0',label:vote});
+    edges.push({from:'cit',to:'ch1'});
+    nodes.push(institNode('cf',c.conseilFederal.titre+' ('+c.conseilFederal.membres+(fr?' membres)':' members)'),fr?'Présidence tournante 1 an':'1-year rotating presidency',"power",50,18,false,true));
+    edges.push({from:'ch0',to:'cf',label:fr?'élisent':'elect'});
+    edges.push({from:'ch1',to:'cf'});
   }
-  return html;
+  return institDiagramRender(nodes,edges);
 }
 function institInfoRow(label,value){
   if(!value)return '';
@@ -2442,17 +2495,17 @@ var CHAMBRES_COMPOSITION={
       "Assemblée nationale":{
         total:577,
         groupes:[
-          {n:"Rassemblement National",s:122,c:"#1e3a5f"},
-          {n:"Ensemble pour la République",s:90,c:"#f2c200"},
+          {n:"Gauche Démocrate et Républicaine",s:17,c:"#dc2626"},
           {n:"LFI - Nouveau Front Populaire",s:71,c:"#a3123a"},
-          {n:"Socialistes et apparentés",s:67,c:"#f472b6"},
-          {n:"Droite Républicaine",s:48,c:"#1e5ba8"},
           {n:"Écologiste et Social",s:38,c:"#2f9e44"},
+          {n:"Socialistes et apparentés",s:67,c:"#f472b6"},
           {n:"Les Démocrates",s:37,c:"#ff8200"},
+          {n:"Ensemble pour la République",s:90,c:"#f2c200"},
           {n:"Horizons & Indépendants",s:36,c:"#38bdf8"},
           {n:"LIOT",s:22,c:"#94a3b8"},
-          {n:"Gauche Démocrate et Républicaine",s:17,c:"#dc2626"},
+          {n:"Droite Républicaine",s:48,c:"#1e5ba8"},
           {n:"Union des droites pour la République",s:17,c:"#0f172a"},
+          {n:"Rassemblement National",s:122,c:"#1e3a5f"},
           {n:"Non inscrits",s:12,c:"#64748b"}
         ]
       },
@@ -2460,39 +2513,69 @@ var CHAMBRES_COMPOSITION={
         total:348,
         perime:true,
         groupes:[
-          {n:"Les Républicains",s:130,c:"#1e5ba8"},
+          {n:"Communiste républicain citoyen",s:18,c:"#dc2626"},
+          {n:"Écologiste",s:16,c:"#2f9e44"},
           {n:"Socialistes",s:65,c:"#f472b6"},
+          {n:"RDSE",s:17,c:"#a855f7"},
+          {n:"RDPI (Renaissance)",s:19,c:"#f2c200"},
           {n:"Union Centriste",s:59,c:"#38bdf8"},
           {n:"Les Indépendants",s:20,c:"#94a3b8"},
-          {n:"RDPI (Renaissance)",s:19,c:"#f2c200"},
-          {n:"Communiste républicain citoyen",s:18,c:"#dc2626"},
-          {n:"RDSE",s:17,c:"#a855f7"},
-          {n:"Écologiste",s:16,c:"#2f9e44"}
+          {n:"Les Républicains",s:130,c:"#1e5ba8"}
         ]
       }
     }
   }
 };
+/* Hémicycle — points disposés en arcs concentriques, balayés de gauche à
+   droite (angle décroissant) puis colorés dans l'ordre des groupes fournis
+   (qui doit donc déjà être trié gauche→droite). Approche standard des
+   diagrammes parlementaires : un parti occupe une zone angulaire continue
+   sur plusieurs arcs plutôt que d'être dispersé aléatoirement. */
+function hemicycleDots(groupes,total){
+  var rInner=18,rOuter=96,dotR=2,rowGap=5;
+  var rows=[];
+  for(var r=rInner;r<=rOuter;r+=rowGap)rows.push(r);
+  var slots=[];
+  rows.forEach(function(rad){
+    var n=Math.max(1,Math.floor(Math.PI*rad/(dotR*2.15)));
+    for(var j=0;j<n;j++){
+      var t=n>1?j/(n-1):0.5;
+      slots.push({angle:Math.PI*(1-t),r:rad});
+    }
+  });
+  slots.sort(function(a,b){return b.angle-a.angle;}); // gauche (angle proche de PI) -> droite (angle proche de 0)
+  if(slots.length>total){
+    var keep=[],ratio=slots.length/total;
+    for(var k=0;k<total;k++)keep.push(slots[Math.min(slots.length-1,Math.floor(k*ratio))]);
+    slots=keep;
+  }
+  var colorSeq=[];
+  groupes.forEach(function(g){for(var k2=0;k2<g.s;k2++)colorSeq.push(g.c);});
+  var cx=100,cy=102;
+  return slots.map(function(s,i){
+    return {x:cx+s.r*Math.cos(s.angle),y:cy-s.r*Math.sin(s.angle),color:colorSeq[i]||'#64748b',r:dotR};
+  });
+}
 function renderComposition(pays){
   var fr=lang==='fr';
   var comp=CHAMBRES_COMPOSITION[pays];
   if(!comp) return '';
-  var b='<div style="margin-top:10px"><div class="l" style="font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;font-weight:700">'+(fr?'Composition des chambres':'Chamber composition')+'</div>';
+  var b='<div class="gpb-composition"><div class="l">'+(fr?'Composition des chambres':'Chamber composition')+'</div>';
   Object.keys(comp.chambres).forEach(function(nomChambre){
     var ch=comp.chambres[nomChambre];
-    b+='<div style="margin-bottom:10px"><div style="font-family:Syne,sans-serif;font-size:.78rem;font-weight:700;color:var(--tx);margin-bottom:5px">'+nomChambre+(ch.perime?' <span style="color:#eab308;font-weight:400;font-size:.68rem">⚠️ '+(fr?'renouvellement en cours':'renewal underway')+'</span>':'')+'</div>';
+    var dots=hemicycleDots(ch.groupes,ch.total);
+    var circles=dots.map(function(d){return '<circle cx="'+d.x.toFixed(1)+'" cy="'+d.y.toFixed(1)+'" r="'+d.r+'" fill="'+d.color+'"/>';}).join('');
+    b+='<div class="gpb-hemi-block">';
+    b+='<div class="gpb-hemi-title">'+nomChambre+(ch.perime?' <span class="gpb-hemi-warn">⚠️ '+(fr?'renouvellement en cours':'renewal underway')+'</span>':'')+'</div>';
+    b+='<div class="gpb-hemi-wrap"><svg viewBox="0 0 200 108" class="gpb-hemi-svg">'+circles+'</svg>';
+    b+='<div class="gpb-hemi-total">'+ch.total+(fr?'<br>sièges':'<br>seats')+'</div></div>';
+    b+='<div class="gpb-hemi-legend">';
     ch.groupes.forEach(function(g){
-      var pct=(g.s/ch.total*100).toFixed(1);
-      b+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;font-size:.72rem">';
-      b+='<div style="width:11px;height:11px;border-radius:3px;background:'+g.c+';flex-shrink:0"></div>';
-      b+='<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx)">'+g.n+'</div>';
-      b+='<div style="flex-shrink:0;color:var(--mu);font-weight:600">'+g.s+' <span style="opacity:.6">('+pct+'%)</span></div>';
-      b+='</div>';
-      b+='<div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:5px"><div style="height:100%;width:'+pct+'%;background:'+g.c+'"></div></div>';
+      b+='<div class="gpb-hemi-leg-item"><span class="gpb-hemi-dot" style="background:'+g.c+'"></span>'+g.n+' <b>'+g.s+'</b></div>';
     });
-    b+='</div>';
+    b+='</div></div>';
   });
-  b+='<div style="font-size:.64rem;color:var(--mu);font-style:italic">'+(fr?'Vérifié le ':'Verified on ')+comp.verifie+(fr?' — à reconfirmer après tout scrutin ou changement de groupe.':' — to reconfirm after any election or group change.')+'</div>';
+  b+='<div class="gpb-hemi-note">'+(fr?'Vérifié le ':'Verified on ')+comp.verifie+(fr?' — à reconfirmer après tout scrutin ou changement de groupe.':' — to reconfirm after any election or group change.')+'</div>';
   b+='</div>';
   return b;
 }
