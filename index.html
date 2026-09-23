@@ -171,6 +171,7 @@ h1 em{font-style:normal;background:linear-gradient(135deg,var(--a),var(--a2));-w
 .empty{color:var(--mu);padding:28px;text-align:center;font-size:.85rem;grid-column:1/-1;}
 /* GLOBE */
 #globe-svg{width:100%;height:100%;cursor:grab;}
+.rg{transition:opacity .15s ease;}
 #globe-svg:active{cursor:grabbing;}
 .country-path{fill:#1a3055;stroke:#2a4a6a;stroke-width:.5;cursor:pointer;transition:fill .15s;}
 .country-path:hover{fill:#2a4a7a;stroke:#4a7aaa;stroke-width:.8;}
@@ -3711,9 +3712,20 @@ function initGlobe(){
       _rafPending[key]=true;
       requestAnimationFrame(function(){ redraw(); _rafPending[key]=false; });
     }
+    /* Masquer les régions pendant un déplacement actif du globe — avec de
+       nombreuses petites formes à recalculer en même temps que le contour du
+       pays, le navigateur peut afficher une frame intermédiaire où les deux
+       ne sont pas encore parfaitement synchronisés (régions qui débordent
+       brièvement des frontières). Le calcul de leur position continue en
+       arrière-plan pendant ce temps ; on les cache simplement à l'écran, et
+       elles réapparaissent déjà correctement placées dès l'arrêt du geste. */
+    function setRegionsHiddenDuringMove(hidden){
+      if(regionsG) regionsG.style('opacity',hidden?0:1);
+    }
     ds.call(d3.drag()
       .on('start',function(){
         if(gTimer){gTimer.stop();gTimer=null;}
+        setRegionsHiddenDuringMove(true);
       })
       .on('drag',function(event){
         var r=proj.rotate();
@@ -3721,6 +3733,8 @@ function initGlobe(){
         throttledRedraw('drag');
       })
       .on('end',function(){
+        setRegionsHiddenDuringMove(false);
+        redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
@@ -3767,6 +3781,7 @@ function initGlobe(){
       e.preventDefault();
       if(gTimer){gTimer.stop();gTimer=null;}
       pinchScale0=proj.scale();
+      setRegionsHiddenDuringMove(true);
     },{passive:false});
     ds.node().addEventListener('gesturechange',function(e){
       e.preventDefault();
@@ -3776,6 +3791,8 @@ function initGlobe(){
     ds.node().addEventListener('gestureend',function(e){
       e.preventDefault();
       pinchScale0=proj.scale();
+      setRegionsHiddenDuringMove(false);
+      redraw();
       var open=document.getElementById('panL').classList.contains('open');
       if(!open) startRotation();
     },{passive:false});
@@ -3791,6 +3808,7 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         lastScalePinch=proj.scale();
+        setRegionsHiddenDuringMove(true);
         e.preventDefault();
       }
     },{passive:false});
@@ -3808,6 +3826,8 @@ function initGlobe(){
     ds.node().addEventListener('touchend',function(e){
       if(e.touches.length<2){
         lastDist=null;
+        setRegionsHiddenDuringMove(false);
+        redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
       }
