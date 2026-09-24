@@ -2256,6 +2256,86 @@ var INSTITUTIONS={
     {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, gestion de la dette publique."},
     {niveau:"Régional",instance:"Périphérie (13 régions)",competences:"Développement régional, une partie des transports et de la santé — décentralisation limitée, l'État central garde l'essentiel des leviers budgétaires."},
     {niveau:"Local",instance:"Dimarchos / Municipalité",competences:"Urbanisme local, services de proximité, propreté."}
+  ]},
+"Danemark":{archetype:"parlementaire",
+  chambres:[{nom:"Folketing",sieges:179,mandat:"4 ans maximum",mode:"Scrutin proportionnel (175 au Danemark + 2 Groenland + 2 Féroé)"}],
+  chefEtat:{titre:"Roi",mode:"Héréditaire",mandat:"À vie",pouvoirs:"Rôle cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire au Folketing",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Le Royaume du Danemark inclut le Groenland et les îles Féroé, chacun avec 2 sièges réservés au Folketing et une très large autonomie interne (le Groenland a son propre gouvernement, l'Inatsisartut, avec des compétences proches d'un État quasi-indépendant sauf défense et politique étrangère).",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité nationale, politique du Royaume (Groenland, Féroé inclus)."},
+    {niveau:"Régional",instance:"Region (5 régions depuis 2007)",competences:"Santé — quasi-exclusivement (hôpitaux, soins), les régions danoises n'ont presque pas d'autre compétence et pas de pouvoir de lever l'impôt, contrairement à la Suède voisine."},
+    {niveau:"Local",instance:"Borgmester / Commune (98 communes)",competences:"Écoles, action sociale, urbanisme, emploi — compétences très étendues, parmi les plus larges d'Europe."}
+  ]},
+"Tchequie":{archetype:"parlementaire",
+  chambres:[{nom:"Poslanecká sněmovna",sieges:200,mandat:"4 ans",mode:"Scrutin proportionnel (14 régions électorales)"},{nom:"Senát",sieges:81,mandat:"6 ans (renouvelé par tiers tous les 2 ans)",mode:"Scrutin majoritaire à 2 tours par circonscription"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct depuis 2013",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Nomme le Premier ministre, droit de veto suspensif, chef des armées — pouvoirs réels mais qui dépendent beaucoup de la personnalité du titulaire"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le Président en fonction des résultats électoraux",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement au quotidien"},
+  particularite:"Avant 2013, le Président était élu par le Parlement — le passage au suffrage universel direct a renforcé sa légitimité sans changer formellement ses pouvoirs constitutionnels, créant une ambiguïté persistante sur l'équilibre réel avec le Premier ministre.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Kraj (14 régions depuis 2000)",competences:"Santé (hôpitaux régionaux), lycées, routes régionales, transports — échelon encore relativement jeune, créé pour se rapprocher du modèle ouest-européen après 1989."},
+    {niveau:"Local",instance:"Starosta / Commune",competences:"Urbanisme local, écoles primaires, services municipaux."}
+  ]},
+"Slovaquie":{archetype:"parlementaire",
+  chambres:[{nom:"Národná rada",sieges:150,mandat:"4 ans",mode:"Scrutin proportionnel (1 circonscription nationale)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Peut renvoyer le gouvernement dans des cas limités, droit de veto suspensif, chef des armées"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Parlement monocaméral avec un seuil électoral parmi les plus élevés d'Europe pour les coalitions (7% pour une alliance de 2-3 partis, 10% pour 4 partis ou plus) — conçu pour limiter la fragmentation parlementaire.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Kraj (8 régions autonomes depuis 2001)",competences:"Santé, routes régionales, une partie de l'éducation secondaire — dirigées par un président de région élu au suffrage direct (unique parmi les pays d'Europe centrale nouvellement décentralisés)."},
+    {niveau:"Local",instance:"Starosta / Commune",competences:"Urbanisme local, écoles primaires, services municipaux."}
+  ]},
+"Roumanie":{archetype:"semipresidentiel",
+  chambres:[{nom:"Camera Deputaților",sieges:331,mandat:"4 ans",mode:"Scrutin proportionnel"},{nom:"Senat",sieges:134,mandat:"4 ans",mode:"Scrutin proportionnel"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Politique étrangère et défense, peut dissoudre le Parlement dans certains cas, désigne le Premier ministre"},
+  chefGouv:{titre:"Premier ministre",mode:"Désigné par le Président en fonction de la majorité parlementaire",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure et économique"},
+  particularite:"L'élection présidentielle de novembre 2024 a été annulée par la Cour constitutionnelle pour soupçons d'ingérence étrangère — un épisode sans précédent dans l'UE qui a fortement fragilisé la confiance institutionnelle avant la reprise du scrutin.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Județ (41 départements + Bucarest)",competences:"Routes départementales, une partie de la santé et de l'éducation — la Roumanie reste un État assez centralisé malgré cet échelon, les județe n'ont pas de pouvoir législatif propre."},
+    {niveau:"Local",instance:"Primar / Commune",competences:"Urbanisme local, état civil, services municipaux."}
+  ]},
+"Luxembourg":{archetype:"parlementaire",
+  chambres:[{nom:"Chambre des députés",sieges:60,mandat:"5 ans",mode:"Scrutin proportionnel (4 circonscriptions)"}],
+  chefEtat:{titre:"Grand-Duc",mode:"Héréditaire",mandat:"À vie",pouvoirs:"Rôle cérémoniel depuis la révision constitutionnelle de 2008"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire à la Chambre",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Chambre unique sans seconde chambre, mais dotée d'un Conseil d'État consultatif (21 membres nommés) qui examine tout projet de loi avant son adoption — un mécanisme de relecture qui joue un rôle proche d'un sénat sans en avoir le pouvoir de blocage.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité (dont le statut de place financière), justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Le Luxembourg, comme l'Irlande, est un État unitaire de petite taille sans région dotée d'un gouvernement élu propre."},
+    {niveau:"Local",instance:"Bourgmestre / Commune (100 communes)",competences:"Urbanisme local, écoles primaires, services municipaux."}
+  ]},
+"Islande":{archetype:"parlementaire",
+  chambres:[{nom:"Althing",sieges:63,mandat:"4 ans",mode:"Scrutin proportionnel (6 circonscriptions)"}],
+  chefEtat:{titre:"Président d'Islande",mode:"Suffrage universel direct (rôle largement cérémoniel malgré l'élection directe)",mandat:"4 ans, sans limite",pouvoirs:"Représentation, signature des lois (droit de référendum rarement utilisé)"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire à l'Althing",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement"},
+  particularite:"L'Althing, fondé en 930, est considéré comme l'un des plus anciens parlements du monde encore en fonction. Comme en Autriche ou en Irlande, le Président est élu directement mais n'exerce dans les faits qu'un rôle cérémoniel.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense (pas d'armée propre, coopération OTAN), diplomatie, fiscalité, pêche (ressource stratégique majeure)."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"L'Islande, très peu peuplée (environ 400 000 habitants), n'a pas de région dotée d'un gouvernement élu propre — uniquement des zones statistiques."},
+    {niveau:"Local",instance:"Sveitarstjóri / Commune (64 municipalités)",competences:"Écoles, urbanisme local, services de proximité — compétences assez larges vu la faible population de chaque commune."}
+  ]},
+"Croatie":{archetype:"semipresidentiel",
+  chambres:[{nom:"Hrvatski sabor",sieges:150,mandat:"4 ans",mode:"Scrutin proportionnel (10 circonscriptions + diaspora + minorités)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Chef des armées, politique étrangère partagée avec le gouvernement, peut proposer la dissolution du Sabor"},
+  chefGouv:{titre:"Premier ministre",mode:"Désigné par le Président en fonction de la majorité parlementaire",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure et économique"},
+  particularite:"Cohabitation potentiellement conflictuelle : le Président (Zoran Milanović, opposition) et le gouvernement (majorité HDZ) sont de bords opposés depuis 2024, une tension institutionnelle allée jusqu'à la Cour constitutionnelle sur le rôle du Président dans la campagne électorale.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Županija (comté, 20 + Zagreb)",competences:"Éducation secondaire, santé partagée, routes régionales — décentralisation limitée, la Croatie reste un État assez centralisé."},
+    {niveau:"Local",instance:"Gradonačelnik / Commune",competences:"Urbanisme local, état civil, services municipaux."}
+  ]},
+"Slovenie":{archetype:"parlementaire",
+  chambres:[{nom:"Državni zbor",sieges:90,mandat:"4 ans",mode:"Scrutin proportionnel (8 circonscriptions + 2 sièges minorités)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct (rôle largement cérémoniel malgré l'élection directe)",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Représentation, propose le candidat Premier ministre à l'Assemblée"},
+  chefGouv:{titre:"Premier ministre",mode:"Élu par le Državni zbor sur proposition du Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"2 des 90 sièges sont réservés de droit aux minorités italienne et hongroise, élues selon un mode de scrutin distinct — une garantie constitutionnelle unique en Europe centrale pour ces deux communautés historiques.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"La Slovénie, malgré plusieurs tentatives de réforme depuis son indépendance, n'a toujours pas créé de région dotée d'un gouvernement élu — un projet régulièrement débattu mais jamais abouti."},
+    {niveau:"Local",instance:"Župan / Občina (212 communes)",competences:"Urbanisme local, écoles primaires, services municipaux."}
   ]}
 };
 var INSTITUTIONS_ARCHETYPE_LABEL={
@@ -2461,7 +2541,9 @@ var STRUCTURE_REGIONALE={
   "Italie":"federal","Royaume-Uni":"federal","Russie":"federal",
   "Pologne":"centralise","Suede":"centralise","Hongrie":"centralise",
   "Autriche":"federal","Belgique":"federal","Pays-Bas":"centralise","Portugal":"federal",
-  "Norvege":"centralise","Irlande":"centralise","Grece":"centralise"
+  "Norvege":"centralise","Irlande":"centralise","Grece":"centralise",
+  "Danemark":"centralise","Tchequie":"federal","Slovaquie":"federal","Roumanie":"centralise",
+  "Luxembourg":"centralise","Islande":"centralise","Croatie":"centralise","Slovenie":"centralise"
 };
 function renderRegionsList(pays){
   var fr=lang==='fr';
@@ -2921,6 +3003,146 @@ var CHAMBRES_COMPOSITION={
           {n:"Elliniki Lysi",s:12,c:"#1e3a5f"},
           {n:"Niki",s:10,c:"#0f172a"},
           {n:"Spartiates",s:12,c:"#000000"}
+        ]
+      }
+    }
+  },
+  "Danemark":{
+    verifie:"22 septembre 2026 (élection du 24 mars 2026, infobox Wikipédia complète)",
+    chambres:{
+      "Folketing":{
+        total:179,
+        groupes:[
+          {n:"Enhedslisten (Rouge-vert)",s:11,c:"#a3123a"},
+          {n:"SF (Green Left)",s:20,c:"#2f9e44"},
+          {n:"Socialdemokratiet",s:38,c:"#dc2626"},
+          {n:"Radikale Venstre",s:10,c:"#f472b6"},
+          {n:"Alternativet",s:5,c:"#84cc16"},
+          {n:"Moderaterne",s:14,c:"#f2c200"},
+          {n:"Groenland + Féroé",s:4,c:"#94a3b8"},
+          {n:"Venstre",s:18,c:"#38bdf8"},
+          {n:"Konservative",s:13,c:"#1e5ba8"},
+          {n:"Danmarksdemokraterne",s:10,c:"#7c3aed"},
+          {n:"Liberal Alliance",s:16,c:"#0d5c2e"},
+          {n:"Dansk Folkeparti",s:16,c:"#1e3a5f"},
+          {n:"Borgernes Parti",s:4,c:"#0f172a"}
+        ]
+      }
+    }
+  },
+  "Tchequie":{
+    verifie:"22 septembre 2026 (élection du 3-4 octobre 2025, source ČT24, coalition SPOLU détaillée)",
+    chambres:{
+      "Poslanecká sněmovna":{
+        total:200,
+        groupes:[
+          {n:"Piráti",s:18,c:"#000000"},
+          {n:"STAN",s:22,c:"#2f9e44"},
+          {n:"TOP 09",s:9,c:"#a855f7"},
+          {n:"KDU-ČSL",s:16,c:"#f2c200"},
+          {n:"ODS",s:27,c:"#1e5ba8"},
+          {n:"ANO 2011",s:80,c:"#1e3a5f"},
+          {n:"Motoristé sobě",s:13,c:"#dc2626"},
+          {n:"SPD",s:15,c:"#0f172a"}
+        ]
+      }
+    }
+  },
+  "Slovaquie":{
+    verifie:"22 septembre 2026 (élection du 30 septembre 2023)",
+    chambres:{
+      "Národná rada":{
+        total:150,
+        groupes:[
+          {n:"Progresívne Slovensko (PS)",s:32,c:"#38bdf8"},
+          {n:"SaS",s:11,c:"#f2c200"},
+          {n:"KDH",s:12,c:"#1e5ba8"},
+          {n:"OĽaNO",s:16,c:"#2f9e44"},
+          {n:"Hlas-SD",s:27,c:"#84cc16"},
+          {n:"Smer-SD",s:42,c:"#dc2626"},
+          {n:"SNS",s:10,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Roumanie":{
+    verifie:"22 septembre 2026 (composition actuelle, source officielle cdep.ro)",
+    chambres:{
+      "Camera Deputaților":{
+        total:329,
+        groupes:[
+          {n:"USR",s:39,c:"#38bdf8"},
+          {n:"PSD",s:108,c:"#dc2626"},
+          {n:"Minorités nationales",s:17,c:"#94a3b8"},
+          {n:"Non-affiliés",s:42,c:"#64748b"},
+          {n:"UDMR",s:20,c:"#2f9e44"},
+          {n:"PNL",s:77,c:"#1e5ba8"},
+          {n:"AUR",s:26,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Luxembourg":{
+    verifie:"22 septembre 2026 (élection du 8 octobre 2023)",
+    chambres:{
+      "Chambre des députés":{
+        total:60,
+        groupes:[
+          {n:"Déi Lénk",s:2,c:"#a3123a"},
+          {n:"Déi Gréng",s:4,c:"#2f9e44"},
+          {n:"LSAP",s:11,c:"#dc2626"},
+          {n:"Piraten",s:3,c:"#000000"},
+          {n:"DP",s:14,c:"#f2c200"},
+          {n:"CSV",s:21,c:"#1e5ba8"},
+          {n:"ADR",s:5,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Islande":{
+    verifie:"22 septembre 2026 (élection du 30 novembre 2024)",
+    chambres:{
+      "Althing":{
+        total:63,
+        groupes:[
+          {n:"Samfylkingin (Sociaux-démocrates)",s:15,c:"#dc2626"},
+          {n:"Flokkur fólksins",s:10,c:"#f472b6"},
+          {n:"Viðreisn",s:11,c:"#38bdf8"},
+          {n:"Framsóknarflokkurinn",s:5,c:"#84cc16"},
+          {n:"Sjálfstæðisflokkurinn",s:14,c:"#1e5ba8"},
+          {n:"Miðflokkurinn",s:8,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Croatie":{
+    verifie:"22 septembre 2026 (élection du 17 avril 2024, principaux groupes — composition complète des petits partis non détaillée)",
+    chambres:{
+      "Hrvatski sabor":{
+        total:150,
+        groupes:[
+          {n:"Rijeke pravde (coalition SDP)",s:42,c:"#dc2626"},
+          {n:"Autres partis, indépendants et minorités",s:33,c:"#94a3b8"},
+          {n:"HDZ",s:61,c:"#1e5ba8"},
+          {n:"Domovinski pokret",s:14,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Slovenie":{
+    verifie:"22 septembre 2026 (élection du 22 mars 2026 — toute récente)",
+    chambres:{
+      "Državni zbor":{
+        total:90,
+        groupes:[
+          {n:"Levica",s:5,c:"#dc2626"},
+          {n:"Socialni demokrati (SD)",s:6,c:"#f472b6"},
+          {n:"Minorités italienne et hongroise",s:2,c:"#94a3b8"},
+          {n:"Gibanje Svoboda",s:29,c:"#f2c200"},
+          {n:"NSi-SLS-FOKUS",s:9,c:"#38bdf8"},
+          {n:"SDS",s:28,c:"#1e3a5f"},
+          {n:"Demokrati (Logar)",s:6,c:"#7c3aed"},
+          {n:"Resni.ca",s:5,c:"#0f172a"}
         ]
       }
     }
