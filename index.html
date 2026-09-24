@@ -3667,12 +3667,18 @@ function initGlobe(){
     });
 
     /* Fonction de mise à jour de TOUT le globe */
+    function redrawLight(){
+      /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
+         déplacement actif : le contour des pays et celui des régions,
+         recalculés ensemble dans le même appel, avec la même projection. */
+      countriesG.selectAll('.cp').attr('d',pathFn);
+      regionsG.selectAll('.rp').attr('d',pathFn);
+    }
     function redraw(){
       sphBack.attr('d',pathFn({type:'Sphere'}));
       sphRing.attr('d',pathFn({type:'Sphere'}));
       gratPath.attr('d',pathFn(graticuleData));
-      countriesG.selectAll('.cp').attr('d',pathFn);
-      regionsG.selectAll('.rp').attr('d',pathFn);
+      redrawLight();
       /* Marqueurs : positionner et masquer si derrière */
       var rot=proj.rotate();
       var center=[-rot[0],-rot[1]];
@@ -3705,35 +3711,31 @@ function initGlobe(){
     }
     startRotation();
 
-    /* Drag pour rotation manuelle — throttlé à une frame d'affichage */
+    /* Drag pour rotation manuelle — throttlé à une frame d'affichage.
+       Pendant le geste actif, on ne recalcule QUE pays+régions ensemble
+       (redrawLight) — le graticule, la sphère et les marqueurs, qui n'ont
+       pas besoin d'être resynchronisés au pixel près avec les régions, sont
+       laissés de côté le temps du geste et remis à jour une fois le
+       mouvement terminé. Moins de travail par frame pendant le déplacement
+       = moins de risque que le navigateur peigne une frame où pays et
+       régions ne sont pas encore alignés. Rien n'est caché, rien ne change
+       de couleur. */
     var _rafPending={};
-    function throttledRedraw(key){
+    function throttledRedrawLight(key){
       if(_rafPending[key]) return;
       _rafPending[key]=true;
-      requestAnimationFrame(function(){ redraw(); _rafPending[key]=false; });
-    }
-    /* Masquer les régions pendant un déplacement actif du globe — avec de
-       nombreuses petites formes à recalculer en même temps que le contour du
-       pays, le navigateur peut afficher une frame intermédiaire où les deux
-       ne sont pas encore parfaitement synchronisés (régions qui débordent
-       brièvement des frontières). Le calcul de leur position continue en
-       arrière-plan pendant ce temps ; on les cache simplement à l'écran, et
-       elles réapparaissent déjà correctement placées dès l'arrêt du geste. */
-    function setRegionsHiddenDuringMove(hidden){
-      if(regionsG) regionsG.style('opacity',hidden?0:1);
+      requestAnimationFrame(function(){ redrawLight(); _rafPending[key]=false; });
     }
     ds.call(d3.drag()
       .on('start',function(){
         if(gTimer){gTimer.stop();gTimer=null;}
-        setRegionsHiddenDuringMove(true);
       })
       .on('drag',function(event){
         var r=proj.rotate();
         proj.rotate([r[0]+event.dx*.35,r[1]-event.dy*.35]);
-        throttledRedraw('drag');
+        throttledRedrawLight('drag');
       })
       .on('end',function(){
-        setRegionsHiddenDuringMove(false);
         redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
@@ -3781,17 +3783,15 @@ function initGlobe(){
       e.preventDefault();
       if(gTimer){gTimer.stop();gTimer=null;}
       pinchScale0=proj.scale();
-      setRegionsHiddenDuringMove(true);
     },{passive:false});
     ds.node().addEventListener('gesturechange',function(e){
       e.preventDefault();
       proj.scale(Math.max(80,Math.min(Math.min(W,H)*5,pinchScale0*e.scale)));
-      throttledRedraw('gesture');
+      throttledRedrawLight('gesture');
     },{passive:false});
     ds.node().addEventListener('gestureend',function(e){
       e.preventDefault();
       pinchScale0=proj.scale();
-      setRegionsHiddenDuringMove(false);
       redraw();
       var open=document.getElementById('panL').classList.contains('open');
       if(!open) startRotation();
@@ -3808,7 +3808,6 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         lastScalePinch=proj.scale();
-        setRegionsHiddenDuringMove(true);
         e.preventDefault();
       }
     },{passive:false});
@@ -3820,13 +3819,12 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         proj.scale(Math.max(80,Math.min(Math.min(W,H)*5,lastScalePinch*(dist/lastDist))));
-        throttledRedraw('touch');
+        throttledRedrawLight('touch');
       }
     },{passive:false});
     ds.node().addEventListener('touchend',function(e){
       if(e.touches.length<2){
         lastDist=null;
-        setRegionsHiddenDuringMove(false);
         redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
