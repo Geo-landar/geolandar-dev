@@ -247,6 +247,8 @@ h1 em{font-style:normal;background:linear-gradient(135deg,var(--a),var(--a2));-w
 .gpb-region-leader{font-size:.77rem;color:var(--tx);margin-top:2px;}
 .gpb-region-titre{font-size:.68rem;color:var(--mu);margin-top:1px;}
 .gpb-regions-empty{color:var(--mu);font-size:.78rem;padding:8px 0;font-style:italic;}
+.gpb-regions-neutre{color:var(--mu);font-size:.78rem;padding:9px 12px;font-style:italic;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.18);border-radius:9px;}
+.gpb-regions-alerte{color:#fca5a5;font-size:.78rem;padding:9px 12px;line-height:1.55;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.28);border-radius:9px;}
 @media(max-width:640px){.gpanel-bottom{left:6px;right:6px;height:62vh;max-height:none;}.gpb-body{flex-direction:column;}.gpb-schema{width:100%;}.gpb-diagram{height:300px;}}
 .gphdr{display:flex;align-items:center;gap:8px;padding:11px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,14,26,.98);z-index:1;}
 .gpfl img,.gpfl .nfl{width:30px;height:22px;border-radius:2px;display:block;}
@@ -2184,6 +2186,76 @@ var INSTITUTIONS={
     {niveau:"National",instance:"Fédération",competences:"Défense, diplomatie, fiscalité, contrôle politique central très fort."},
     {niveau:"Régional",instance:"Sujet fédéral (83)",competences:"En théorie éducation et santé régionale, mais forte recentralisation politique et dépendance budgétaire à Moscou — l'autonomie réelle est très limitée."},
     {niveau:"Local",instance:"Maire",competences:"Dans de nombreuses villes, les maires sont désormais nommés ou étroitement contrôlés plutôt qu'indépendants, depuis les réformes des années 2010-2020."}
+  ]},
+"Autriche":{archetype:"parlementaire",
+  chambres:[{nom:"Nationalrat",sieges:183,mandat:"5 ans",mode:"Scrutin proportionnel"},{nom:"Bundesrat",sieges:61,mandat:"Représentants des Länder",mode:"Désignés par les parlements régionaux"}],
+  chefEtat:{titre:"Président fédéral",mode:"Suffrage universel direct (rôle largement cérémoniel malgré l'élection directe)",mandat:"6 ans, renouvelable 1 fois",pouvoirs:"Représentation, nomination formelle du chancelier"},
+  chefGouv:{titre:"Chancelier fédéral",mode:"Chef du parti ou de la coalition majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige effectivement le gouvernement"},
+  particularite:"Comme en Irlande ou en Islande, le Président est élu directement par les citoyens mais n'exerce dans les faits qu'un rôle cérémoniel — le pouvoir réel appartient au Chancelier, désigné par la coalition majoritaire au Nationalrat.",
+  echelons:[
+    {niveau:"National",instance:"Bund",competences:"Défense, diplomatie, monnaie, fiscalité fédérale."},
+    {niveau:"Régional",instance:"Land (9 Länder)",competences:"Éducation (écoles primaires), police régionale, aménagement du territoire, part de la santé — chaque Land a son propre gouvernement et son Landeshauptmann (gouverneur élu par le parlement régional)."},
+    {niveau:"Local",instance:"Bürgermeister / Commune",competences:"Urbanisme local, services municipaux, écoles maternelles."}
+  ]},
+"Belgique":{archetype:"parlementaire",
+  chambres:[{nom:"Chambre des représentants",sieges:150,mandat:"5 ans",mode:"Scrutin proportionnel (2 groupes linguistiques)"},{nom:"Sénat",sieges:60,mandat:"Majoritairement désigné",mode:"50 sénateurs des Parlements régionaux + 10 cooptés"}],
+  chefEtat:{titre:"Roi des Belges",mode:"Héréditaire",mandat:"À vie",pouvoirs:"Rôle cérémoniel, signe les lois"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire à la Chambre",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement fédéral"},
+  particularite:"État fédéral unique en Europe, structuré par une double clé qui se superpose sans coïncider : 3 Régions (Flandre, Wallonie, Bruxelles) ET 3 Communautés linguistiques (flamande, française, germanophone). Le Sénat a perdu l'essentiel de son pouvoir législatif depuis la 6ᵉ réforme de l'État (2014) au profit de la Chambre.",
+  echelons:[
+    {niveau:"National",instance:"État fédéral",competences:"Défense, diplomatie, justice, sécurité sociale."},
+    {niveau:"Régional",instance:"Région (Flandre, Wallonie, Bruxelles) + Communauté (flamande, française, germanophone)",competences:"Les Régions gèrent l'économie, l'emploi, l'urbanisme ; les Communautés gèrent l'éducation, la culture et la santé — chacune avec son propre gouvernement et son ministre-président élu."},
+    {niveau:"Local",instance:"Bourgmestre / Commune",competences:"État civil, police locale, urbanisme communal."}
+  ]},
+"Pays-Bas":{archetype:"parlementaire",
+  chambres:[{nom:"Tweede Kamer",sieges:150,mandat:"4 ans",mode:"Scrutin proportionnel intégral (1 circonscription nationale)"},{nom:"Eerste Kamer",sieges:75,mandat:"4 ans",mode:"Élue par les États provinciaux"}],
+  chefEtat:{titre:"Roi",mode:"Héréditaire",mandat:"À vie",pouvoirs:"Rôle cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire à la Tweede Kamer",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, coordination des ministres"},
+  particularite:"Système proportionnel intégral quasiment sans seuil électoral (0,67% suffit à obtenir un siège) : le Parlement est structurellement très fragmenté — 15 groupes ou plus — ce qui rend les coalitions à 4 partis et les négociations de gouvernement longues fréquentes.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité nationale, sécurité sociale."},
+    {niveau:"Régional",instance:"Provincie (12 provinces)",competences:"Aménagement du territoire, environnement, infrastructures régionales — compétences plus limitées que dans un État fédéral ; le Commissaris van de Koning (gouverneur) est nommé par la Couronne, pas élu."},
+    {niveau:"Local",instance:"Burgemeester / Commune",competences:"Urbanisme local, services municipaux, ordre public local."}
+  ]},
+"Portugal":{archetype:"semipresidentiel",
+  chambres:[{nom:"Assembleia da República",sieges:230,mandat:"4 ans",mode:"Scrutin proportionnel"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Peut dissoudre l'Assemblée, nomme le Premier ministre, droit de veto, politique étrangère et défense"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le Président en fonction des résultats électoraux",mandat:"Sans durée fixe",pouvoirs:"Dirige l'action quotidienne du gouvernement"},
+  particularite:"Pouvoirs présidentiels réels mais mesurés : contrairement à la France, le Président portugais ne gouverne pas au quotidien, mais conserve un droit de dissolution et un droit de veto qui en font un vrai contre-pouvoir, pas une fonction cérémonielle.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Région autonome (Açores, Madère — 2 seulement)",competences:"Les Açores et Madère disposent chacune d'un gouvernement régional élu avec un président propre et une large autonomie fiscale. Le Portugal continental, en revanche, n'a pas d'échelon régional politique — seulement des districts administratifs sans dirigeant élu."},
+    {niveau:"Local",instance:"Presidente da Câmara / Commune",competences:"Urbanisme, services municipaux, voirie locale."}
+  ]},
+"Norvege":{archetype:"parlementaire",
+  chambres:[{nom:"Storting",sieges:169,mandat:"4 ans",mode:"Scrutin proportionnel (19 circonscriptions)"}],
+  chefEtat:{titre:"Roi",mode:"Héréditaire",mandat:"À vie",pouvoirs:"Rôle cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire au Storting",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Le Storting est structurellement monocaméral depuis 2009 (l'ancienne division Odelsting/Lagting a été supprimée). Pas de seconde chambre, contrairement au Danemark et à la Suède qui ont aussi aboli la leur historiquement, mais à des dates différentes.",
+  echelons:[
+    {niveau:"National",instance:"Staten",competences:"Défense, diplomatie, fiscalité nationale, fonds souverain pétrolier."},
+    {niveau:"Régional",instance:"Fylke (comté, 15 depuis la réforme de 2024)",competences:"Transports régionaux, lycées, développement économique régional — compétences plus limitées qu'en Suède voisine."},
+    {niveau:"Local",instance:"Ordfører / Commune",competences:"Écoles primaires, action sociale, urbanisme local — les communes norvégiennes ont des compétences très étendues."}
+  ]},
+"Irlande":{archetype:"parlementaire",
+  chambres:[{nom:"Dáil Éireann",sieges:174,mandat:"5 ans maximum",mode:"Vote unique transférable (proportionnel)"},{nom:"Seanad Éireann",sieges:60,mandat:"5 ans",mode:"Majoritairement désigné (universités, panels vocationnels), 11 nommés par le Taoiseach"}],
+  chefEtat:{titre:"Président d'Irlande",mode:"Suffrage universel direct",mandat:"7 ans, renouvelable 1 fois",pouvoirs:"Rôle très largement cérémoniel — gardien symbolique de la Constitution"},
+  chefGouv:{titre:"Taoiseach (Premier ministre)",mode:"Chef de la coalition majoritaire au Dáil",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Le Seanad (Sénat) est en grande partie non élu au suffrage universel — désigné par des collèges professionnels et universitaires, plus 11 membres nommés directement par le Taoiseach. Un référendum de 2013 visant à le supprimer a été rejeté de justesse.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité (dont le taux d'IS à 12,5%, pilier de son modèle économique), santé."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"L'Irlande est un État unitaire sans région dotée d'un gouvernement élu propre — une singularité en Europe de l'Ouest."},
+    {niveau:"Local",instance:"Council / Comté (31 autorités locales)",competences:"Logement social, routes locales, urbanisme, bibliothèques — compétences plus limitées que la moyenne européenne, beaucoup de services restent centralisés."}
+  ]},
+"Grece":{archetype:"parlementaire",
+  chambres:[{nom:"Vouli ton Ellinon",sieges:300,mandat:"4 ans",mode:"Scrutin proportionnel renforcé (primes de sièges au 1er parti)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par le Parlement",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Rôle très largement cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef du parti majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Système électoral \"proportionnel renforcé\" : le parti arrivé en tête reçoit des sièges bonus (jusqu'à 50 sur 300) pour favoriser une majorité stable — la Grèce a connu deux élections en 2023 (mai puis juin) car le premier scrutin, en proportionnelle simple, n'avait dégagé aucune majorité.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, gestion de la dette publique."},
+    {niveau:"Régional",instance:"Périphérie (13 régions)",competences:"Développement régional, une partie des transports et de la santé — décentralisation limitée, l'État central garde l'essentiel des leviers budgétaires."},
+    {niveau:"Local",instance:"Dimarchos / Municipalité",competences:"Urbanisme local, services de proximité, propreté."}
   ]}
 };
 var INSTITUTIONS_ARCHETYPE_LABEL={
@@ -2379,12 +2451,29 @@ function interpolHex(h1,h2,t){
   var r=Math.round(a[0]+(b[0]-a[0])*t),g=Math.round(a[1]+(b[1]-a[1])*t),bl=Math.round(a[2]+(b[2]-a[2])*t);
   return 'rgb('+r+','+g+','+bl+')';
 }
+/* Classification centralisé / fédéral-décentralisé — détermine le message
+   affiché quand aucun dirigeant régional n'est renseigné. Un pays unitaire
+   sans échelon régional politique n'est pas une lacune à combler (message
+   neutre) ; un pays fédéral ou fortement décentralisé sans données l'est
+   réellement (alerte rouge, à corriger en priorité). */
+var STRUCTURE_REGIONALE={
+  "France":"federal","Allemagne":"federal","Suisse":"federal","Espagne":"federal",
+  "Italie":"federal","Royaume-Uni":"federal","Russie":"federal",
+  "Pologne":"centralise","Suede":"centralise","Hongrie":"centralise",
+  "Autriche":"federal","Belgique":"federal","Pays-Bas":"centralise","Portugal":"federal",
+  "Norvege":"centralise","Irlande":"centralise","Grece":"centralise"
+};
 function renderRegionsList(pays){
   var fr=lang==='fr';
   var rl=REGIONS_LEADERS[pays];
   var b='<div class="gpb-regions"><div class="l">'+(fr?'Dirigeants régionaux':'Regional leaders')+(rl?' — '+rl.type+'s':'')+'</div>';
   if(!rl){
-    b+='<div class="gpb-regions-empty">'+(fr?"Données régionales pas encore vérifiées pour ce pays — affichées dès qu'elles auront été confirmées, sans approximation.":"Regional data not yet verified for this country — will appear once confirmed, without guesswork.")+'</div></div>';
+    var structure=STRUCTURE_REGIONALE[pays];
+    if(structure==='centralise'){
+      b+='<div class="gpb-regions-neutre">'+(fr?"État unitaire et centralisé — pas d'échelon régional disposant d'un dirigeant élu propre à afficher ici.":"Unitary, centralized state — no regional tier with its own elected leader to show here.")+'</div></div>';
+    } else {
+      b+='<div class="gpb-regions-alerte">⚠️ '+(fr?"Pays fédéral ou fortement décentralisé, mais les dirigeants régionaux n'ont pas encore été vérifiés individuellement pour ce pays — affichés dès que confirmés, sans approximation.":"Federal or highly decentralized country, but regional leaders have not yet been individually verified for this country — will appear once confirmed, without guesswork.")+'</div></div>';
+    }
     return b;
   }
   b+='<div class="gpb-region-grid">';
@@ -2695,6 +2784,146 @@ var CHAMBRES_COMPOSITION={
         ]
       }
     }
+  },
+  "Autriche":{
+    verifie:"22 septembre 2026 (élection du 29 septembre 2024)",
+    chambres:{
+      "Nationalrat":{
+        total:183,
+        groupes:[
+          {n:"Die Grünen",s:16,c:"#2f9e44"},
+          {n:"SPÖ",s:41,c:"#dc2626"},
+          {n:"NEOS",s:18,c:"#f2c200"},
+          {n:"ÖVP",s:51,c:"#1e5ba8"},
+          {n:"FPÖ",s:57,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Belgique":{
+    verifie:"22 septembre 2026 (élection fédérale du 9 juin 2024, résultats officiels SPF Intérieur)",
+    chambres:{
+      "Chambre des représentants":{
+        total:150,
+        groupes:[
+          {n:"PVDA-PTB",s:15,c:"#a3123a"},
+          {n:"Ecolo",s:3,c:"#2f9e44"},
+          {n:"Groen",s:6,c:"#2f9e44"},
+          {n:"PS",s:16,c:"#dc2626"},
+          {n:"Vooruit",s:13,c:"#f472b6"},
+          {n:"DéFI",s:1,c:"#a855f7"},
+          {n:"Les Engagés",s:14,c:"#ff8200"},
+          {n:"CD&V",s:11,c:"#f2c200"},
+          {n:"Open Vld",s:7,c:"#38bdf8"},
+          {n:"MR",s:20,c:"#1e5ba8"},
+          {n:"N-VA",s:24,c:"#f9c400"},
+          {n:"Vlaams Belang",s:20,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Pays-Bas":{
+    verifie:"22 septembre 2026 (élection du 29 octobre 2025, situation à mars 2026 après scission Groep Markuszower)",
+    chambres:{
+      "Tweede Kamer":{
+        total:150,
+        groupes:[
+          {n:"SP",s:3,c:"#dc2626"},
+          {n:"PvdD",s:3,c:"#2f9e44"},
+          {n:"GroenLinks-PvdA",s:20,c:"#a3123a"},
+          {n:"DENK",s:3,c:"#84cc16"},
+          {n:"D66",s:26,c:"#00a651"},
+          {n:"Volt",s:1,c:"#a855f7"},
+          {n:"ChristenUnie",s:3,c:"#38bdf8"},
+          {n:"50PLUS",s:2,c:"#94a3b8"},
+          {n:"CDA",s:18,c:"#1e5ba8"},
+          {n:"VVD",s:22,c:"#f2c200"},
+          {n:"SGP",s:3,c:"#0d5c2e"},
+          {n:"BBB",s:4,c:"#84a832"},
+          {n:"JA21",s:9,c:"#3d5a80"},
+          {n:"FVD",s:7,c:"#6b2737"},
+          {n:"PVV",s:19,c:"#1e3a5f"},
+          {n:"Groep Markuszower",s:7,c:"#0f172a"}
+        ]
+      }
+    }
+  },
+  "Portugal":{
+    verifie:"22 septembre 2026 (élection du 18 mai 2025)",
+    chambres:{
+      "Assembleia da República":{
+        total:230,
+        groupes:[
+          {n:"PCP",s:3,c:"#dc2626"},
+          {n:"BE",s:1,c:"#a3123a"},
+          {n:"LIVRE",s:6,c:"#2f9e44"},
+          {n:"PS",s:58,c:"#f472b6"},
+          {n:"PAN",s:1,c:"#84cc16"},
+          {n:"IL",s:9,c:"#38bdf8"},
+          {n:"PSD",s:89,c:"#1e5ba8"},
+          {n:"CDS-PP",s:2,c:"#0d5c2e"},
+          {n:"JPP",s:1,c:"#94a3b8"},
+          {n:"Chega",s:60,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Norvege":{
+    verifie:"22 septembre 2026 (élection du 8 septembre 2025, source Store norske leksikon)",
+    chambres:{
+      "Storting":{
+        total:169,
+        groupes:[
+          {n:"Rødt",s:9,c:"#a3123a"},
+          {n:"Sosialistisk Venstreparti (SV)",s:9,c:"#dc2626"},
+          {n:"Arbeiderpartiet (Ap)",s:53,c:"#f472b6"},
+          {n:"Miljøpartiet De Grønne (MDG)",s:8,c:"#2f9e44"},
+          {n:"Senterpartiet (Sp)",s:9,c:"#84cc16"},
+          {n:"Venstre (V)",s:3,c:"#f2c200"},
+          {n:"Kristelig Folkeparti (KrF)",s:7,c:"#38bdf8"},
+          {n:"Høyre (H)",s:24,c:"#1e5ba8"},
+          {n:"Fremskrittspartiet (FrP)",s:47,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Irlande":{
+    verifie:"22 septembre 2026 (élection du 29 novembre 2024, situation actuelle)",
+    chambres:{
+      "Dáil Éireann":{
+        total:174,
+        groupes:[
+          {n:"Sinn Féin",s:39,c:"#1e3a5f"},
+          {n:"People Before Profit-Solidarity",s:3,c:"#a3123a"},
+          {n:"Labour",s:11,c:"#dc2626"},
+          {n:"Social Democrats",s:12,c:"#f472b6"},
+          {n:"Green Party",s:1,c:"#2f9e44"},
+          {n:"Aontú",s:2,c:"#84cc16"},
+          {n:"Indépendants et divers",s:16,c:"#94a3b8"},
+          {n:"Independent Ireland",s:4,c:"#f2c200"},
+          {n:"Fianna Fáil",s:48,c:"#38bdf8"},
+          {n:"Fine Gael",s:38,c:"#1e5ba8"}
+        ]
+      }
+    }
+  },
+  "Grece":{
+    verifie:"22 septembre 2026 (élection du 25 juin 2023 — 2e scrutin de l'année, système à prime majoritaire)",
+    chambres:{
+      "Vouli ton Ellinon":{
+        total:300,
+        groupes:[
+          {n:"KKE (communiste)",s:20,c:"#dc2626"},
+          {n:"SYRIZA",s:48,c:"#a3123a"},
+          {n:"Plefsi Eleftherias",s:8,c:"#f472b6"},
+          {n:"PASOK-KINAL",s:32,c:"#84cc16"},
+          {n:"Nea Dimokratia",s:158,c:"#1e5ba8"},
+          {n:"Elliniki Lysi",s:12,c:"#1e3a5f"},
+          {n:"Niki",s:10,c:"#0f172a"},
+          {n:"Spartiates",s:12,c:"#000000"}
+        ]
+      }
+    }
   }
 };
 /* Hémicycle — points disposés en arcs concentriques, balayés de gauche à
@@ -2786,6 +3015,7 @@ function renderInstitutions(pays){
     });
     b+='</div>';
   }
+  b+=renderRegionsList(pays);
   b+='<div class="gpb-regional" id="gpbRegional"></div>';
   body.innerHTML=b;
   panel.classList.add('open');
