@@ -2336,6 +2336,145 @@ var INSTITUTIONS={
     {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
     {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"La Slovénie, malgré plusieurs tentatives de réforme depuis son indépendance, n'a toujours pas créé de région dotée d'un gouvernement élu — un projet régulièrement débattu mais jamais abouti."},
     {niveau:"Local",instance:"Župan / Občina (212 communes)",competences:"Urbanisme local, écoles primaires, services municipaux."}
+  ]},
+"Lituanie":{archetype:"semipresidentiel",
+  chambres:[{nom:"Seimas",sieges:141,mandat:"4 ans",mode:"Scrutin mixte (70 proportionnel + 71 majoritaire à 2 tours)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Politique étrangère et défense, peut opposer son veto aux lois, nomme le Premier ministre"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le Président, confirmé par le Seimas",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure"},
+  particularite:"Scrutin mixte original : la moitié des sièges est pourvue à la proportionnelle nationale, l'autre moitié par circonscriptions uninominales à deux tours — un système hybride qui combine représentation des partis et ancrage local des élus.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Apskritis (10 comtés)",competences:"Rôle presque uniquement administratif et statistique — les comtés lituaniens n'ont pas de gouvernement élu ni de budget propre, contrairement aux régions d'Europe occidentale."},
+    {niveau:"Local",instance:"Meras / Municipalité (60 municipalités)",competences:"Urbanisme local, écoles, action sociale — c'est le véritable échelon décentralisé du pays."}
+  ]},
+"Lettonie":{archetype:"parlementaire",
+  chambres:[{nom:"Saeima",sieges:100,mandat:"4 ans",mode:"Scrutin proportionnel (5 circonscriptions)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par la Saeima",mandat:"4 ans, renouvelable 1 fois",pouvoirs:"Représentation, peut proposer la dissolution de la Saeima (soumise à référendum)"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Mécanisme de dissolution unique : si le Président propose de dissoudre la Saeima, la proposition doit être validée par référendum populaire — et si les électeurs la rejettent, c'est le Président lui-même qui perd son mandat, un frein rare à l'usage de ce pouvoir.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"La Lettonie, comme la Lituanie et l'Estonie, n'a pas de région dotée d'un gouvernement élu propre."},
+    {niveau:"Local",instance:"Novada dome / Municipalité (43 municipalités depuis la réforme de 2021)",competences:"Urbanisme local, écoles, action sociale."}
+  ]},
+"Estonie":{archetype:"parlementaire",
+  chambres:[{nom:"Riigikogu",sieges:101,mandat:"4 ans",mode:"Scrutin proportionnel (12 circonscriptions)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par le Riigikogu (ou un collège électoral élargi en cas de blocage)",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Représentation, peut renvoyer une loi au Parlement pour un second examen"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"L'Estonie est pionnière du vote électronique : depuis 2005, les électeurs peuvent voter en ligne, et lors des élections de 2023 plus de la moitié des suffrages ont été exprimés par internet — une première mondiale à cette échelle.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, administration numérique (e-Estonia)."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Comme ses voisines baltes, l'Estonie n'a pas de région dotée d'un gouvernement élu — seulement des comtés à fonction essentiellement administrative."},
+    {niveau:"Local",instance:"Vallavanem / Municipalité (79 municipalités)",competences:"Urbanisme local, écoles, action sociale — largement dématérialisées grâce à l'administration numérique nationale."}
+  ]},
+"Malte":{archetype:"parlementaire",
+  chambres:[{nom:"Chambre des représentants",sieges:79,mandat:"5 ans",mode:"Vote unique transférable (proportionnel, seule avec l'Irlande en UE)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par la Chambre des représentants",mandat:"5 ans",pouvoirs:"Rôle très largement cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef du parti majoritaire à la Chambre",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Un mécanisme constitutionnel corrige automatiquement le nombre de sièges pour qu'aucun parti n'ait plus de sièges que sa part réelle des voix, et une clause de genre ajoute des sièges pour limiter la domination masculine — deux dispositifs rares en Europe.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Malte, très petit État insulaire, n'a pas de région dotée d'un gouvernement élu propre."},
+    {niveau:"Local",instance:"Sindku / Conseil local (68 conseils locaux)",competences:"Urbanisme local, propreté, embellissement — compétences limitées, l'essentiel reste centralisé à La Valette."}
+  ]},
+"Chypre":{archetype:"semipresidentiel",
+  chambres:[{nom:"Chambre des représentants",sieges:56,mandat:"5 ans",mode:"Scrutin proportionnel (56 sièges chypriotes-grecs pourvus sur 80 ; 24 sièges chypriotes-turcs vacants depuis 1974)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable sans limite",pouvoirs:"Cumule les fonctions de chef de l'État ET de chef du gouvernement — il n'y a pas de poste de Premier ministre distinct"},
+  particularite:"Système présidentiel unique en Europe : il n'existe pas de Premier ministre, le Président nomme directement son Conseil des ministres. Depuis la partition de l'île en 1974, les 24 sièges réservés à la communauté chypriote-turque restent vacants, celle-ci ayant sa propre administration au nord de l'île.",
+  echelons:[
+    {niveau:"National",instance:"État (partie chypriote-grecque, sud de l'île)",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Chypre n'a pas de région dotée d'un gouvernement élu — la question territoriale de l'île (partition nord-sud) domine largement l'organisation politique du pays."},
+    {niveau:"Local",instance:"Dimarchos / Municipalité",competences:"Urbanisme local, services de proximité."}
+  ]},
+"Serbie":{archetype:"semipresidentiel",
+  chambres:[{nom:"Narodna skupština",sieges:250,mandat:"4 ans",mode:"Scrutin proportionnel (1 circonscription nationale)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Politique étrangère et défense, propose le Premier ministre à l'Assemblée"},
+  chefGouv:{titre:"Premier ministre",mode:"Élu par l'Assemblée sur proposition du Président",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure et économique"},
+  particularite:"Le pays a connu d'importants mouvements de protestation depuis fin 2024 contestant la gouvernance du Président Vučić et de son parti SNS, sur fond d'accusations récurrentes de fraude électorale et de pression sur les médias documentées par des observateurs internationaux (OSCE/ODIHR).",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Vojvodina (province autonome) + reste du pays sans échelon régional",competences:"La Voïvodine dispose d'une assemblée provinciale élue avec des compétences culturelles et économiques ; le reste de la Serbie n'a pas d'équivalent régional."},
+    {niveau:"Local",instance:"Gradonačelnik / Commune",competences:"Urbanisme local, état civil, services municipaux."}
+  ]},
+"Bosnie":{archetype:"parlementaire",
+  chambres:[{nom:"Chambre des représentants",sieges:42,mandat:"4 ans",mode:"Scrutin proportionnel par entité (28 sièges Fédération + 14 Republika Srpska)"}],
+  chefEtat:{titre:"Présidence tripartite",mode:"3 membres élus séparément (1 bosniaque, 1 croate, 1 serbe), présidence tournante tous les 8 mois",mandat:"4 ans",pouvoirs:"Politique étrangère, chef des armées collégial"},
+  chefGouv:{titre:"Président du Conseil des ministres",mode:"Nommé par la Présidence, confirmé par la Chambre",mandat:"Sans durée fixe",pouvoirs:"Dirige l'administration fédérale, pouvoirs limités face aux entités"},
+  particularite:"Système de partage du pouvoir unique né des accords de Dayton (1995) : le pays est divisé en deux entités quasi autonomes (Fédération de Bosnie-Herzégovine et Republika Srpska) et la présidence tripartite reflète les trois communautés constitutives — un dirigeant de la Republika Srpska a réitéré à plusieurs reprises des velléités séparatistes.",
+  echelons:[
+    {niveau:"National",instance:"État central (compétences très limitées)",competences:"Diplomatie, politique monétaire — l'essentiel du pouvoir réel appartient aux entités, pas à l'État central."},
+    {niveau:"Régional (entités)",instance:"Fédération de Bosnie-Herzégovine (10 cantons) + Republika Srpska",competences:"Défense, police, justice, éducation, santé — chaque entité fonctionne quasiment comme un État séparé, avec son propre gouvernement et Premier ministre."},
+    {niveau:"Local",instance:"Načelnik / Commune",competences:"Urbanisme local, services municipaux."}
+  ]},
+"Albanie":{archetype:"parlementaire",
+  chambres:[{nom:"Kuvendi",sieges:140,mandat:"4 ans",mode:"Scrutin proportionnel (12 circonscriptions)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par le Kuvendi",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Rôle largement cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef du parti majoritaire, nommé par le Président",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Edi Rama a remporté un 4ᵉ mandat consécutif en 2025, du jamais vu depuis la chute du communisme — un scrutin marqué par des accusations d'achat de votes et l'arrestation, pendant le mandat précédent, de plusieurs maires socialistes pour corruption.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice — candidat à l'adhésion à l'UE."},
+    {niveau:"Régional",instance:"Qark (12 comtés)",competences:"Rôle presque uniquement administratif et de coordination — pas de gouvernement élu propre."},
+    {niveau:"Local",instance:"Kryetar bashkie / Municipalité (61 municipalités)",competences:"Urbanisme local, services municipaux — véritable échelon décentralisé du pays."}
+  ]},
+"Macedoine":{archetype:"parlementaire",
+  chambres:[{nom:"Sobranie",sieges:120,mandat:"4 ans",mode:"Scrutin proportionnel (6 circonscriptions + diaspora)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Rôle largement cérémoniel, chef des armées symbolique"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire, élu par le Sobranie",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"Pays profondément divisé entre bloc macédonien et bloc albanophone (environ 25% de la population) — presque tous les gouvernements depuis l'indépendance (1991) ont dû former une coalition entre un parti macédonien et un parti albanophone pour gouverner.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"La Macédoine du Nord n'a pas de région dotée d'un gouvernement élu — seulement 8 régions statistiques sans pouvoir propre."},
+    {niveau:"Local",instance:"Gradonačalnik / Commune (80 communes)",competences:"Urbanisme local, services municipaux — l'échelon local a gagné en compétences depuis la décentralisation de 2004, issue des accords d'Ohrid."}
+  ]},
+"Montenegro":{archetype:"parlementaire",
+  chambres:[{nom:"Skupština",sieges:81,mandat:"4 ans",mode:"Scrutin proportionnel (1 circonscription nationale)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Rôle largement cérémoniel"},
+  chefGouv:{titre:"Premier ministre",mode:"Chef de la coalition majoritaire, élu par la Skupština",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"En 2023, les élections ont mis fin à 30 ans de domination du DPS de Milo Đukanović — une alternance historique portée par le jeune parti pro-européen Europa sad, sur fond de tensions persistantes entre identités monténégrine et pro-serbe.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice — candidat le plus avancé des Balkans occidentaux pour l'adhésion à l'UE."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Petit pays (620 000 habitants), le Monténégro n'a pas de région dotée d'un gouvernement élu propre."},
+    {niveau:"Local",instance:"Gradonačelnik / Commune (25 municipalités)",competences:"Urbanisme local, services municipaux."}
+  ]},
+"Kosovo":{archetype:"parlementaire",
+  chambres:[{nom:"Kuvendi",sieges:120,mandat:"4 ans",mode:"Scrutin proportionnel (100 sièges généraux + 20 réservés aux minorités)"}],
+  chefEtat:{titre:"Président de la République",mode:"Élu par le Kuvendi",mandat:"5 ans",pouvoirs:"Rôle largement cérémoniel, représentation extérieure"},
+  chefGouv:{titre:"Premier ministre",mode:"Élu par le Kuvendi",mandat:"Sans durée fixe",pouvoirs:"Dirige le gouvernement, pouvoir exécutif réel"},
+  particularite:"L'élection de février 2025 n'avait dégagé aucune majorité, plongeant le pays dans une paralysie institutionnelle d'un an (le Kuvendi n'a même pas réussi à élire son président pendant des mois) — une nouvelle élection anticipée le 28 décembre 2025 a fini par donner une majorité nette à Albin Kurti.",
+  echelons:[
+    {niveau:"National",instance:"État (indépendance reconnue par une partie de la communauté internationale, pas par la Serbie ni par tous les membres de l'ONU)",competences:"Défense, diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Pas d'échelon régional politique",competences:"Le Kosovo n'a pas de région dotée d'un gouvernement élu — les municipalités à majorité serbe du nord du pays restent une zone de tension particulière."},
+    {niveau:"Local",instance:"Kryetar/Gradonačelnik / Municipalité (38 municipalités)",competences:"Urbanisme local, services municipaux."}
+  ]},
+"Ukraine":{archetype:"semipresidentiel",
+  chambres:[{nom:"Verkhovna Rada",sieges:450,mandat:"5 ans (mandat prolongé, élections suspendues)",mode:"Scrutin mixte (proportionnel + circonscriptions uninominales)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct (dernière élection 2019, reportée depuis à cause de la loi martiale)",mandat:"5 ans (mandat prolongé par la Constitution le temps de la loi martiale)",pouvoirs:"Chef des armées, politique étrangère et de défense, pouvoirs de guerre étendus"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par la Rada sur proposition du Président",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure et économique"},
+  particularite:"Aucune élection depuis 2019 : la Constitution ukrainienne interdit tout scrutin pendant la loi martiale, en vigueur sans interruption depuis l'invasion russe de février 2022 (prolongée pour la 20ᵉ fois en 2026). Le mandat du Président et de la Rada se prolonge automatiquement jusqu'à la fin de la loi martiale, conformément à l'article 83 de la Constitution.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense (effort de guerre), diplomatie, fiscalité, justice."},
+    {niveau:"Régional",instance:"Oblast (24 régions + Crimée, republique autonome)",competences:"Coordination administrative — plusieurs oblasts sont partiellement ou totalement occupés par la Russie depuis 2014 et 2022, rendant leur administration réelle très différente de la carte officielle."},
+    {niveau:"Local",instance:"Maire / Commune",competences:"Urbanisme local, services municipaux — nombre de conseils locaux ne fonctionnent plus normalement dans les zones de guerre ou occupées."}
+  ]},
+"Moldavie":{archetype:"parlementaire",
+  chambres:[{nom:"Parlament",sieges:101,mandat:"4 ans",mode:"Scrutin proportionnel (1 circonscription nationale)"}],
+  chefEtat:{titre:"Présidente de la République",mode:"Suffrage universel direct",mandat:"4 ans, renouvelable 1 fois",pouvoirs:"Politique étrangère, peut dissoudre le Parlement en cas de blocage prolongé"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par la Présidente, confirmé par le Parlement",mandat:"Sans durée fixe",pouvoirs:"Dirige la politique intérieure et économique"},
+  particularite:"Élection de septembre 2025 disputée sur un seul axe : le rapprochement avec l'Union européenne (objectif d'adhésion 2030 porté par la Présidente Maia Sandu) contre une opposition pro-russe qui a obtenu des scores écrasants en Gagaouzie et en Transnistrie, deux régions hors du contrôle plein de Chișinău.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice — candidat à l'adhésion à l'UE."},
+    {niveau:"Régional",instance:"Gagaouzie (région autonome) + Transnistrie (de facto hors contrôle de Chișinău)",competences:"La Gagaouzie a une assemblée et un gouverneur (Başkan) élus avec une large autonomie culturelle et fiscale ; la Transnistrie, séparatiste depuis 1992 et soutenue par la Russie, échappe en pratique totalement à l'autorité moldave."},
+    {niveau:"Local",instance:"Primar / Commune",competences:"Urbanisme local, services municipaux."}
+  ]},
+"Bielorussie":{archetype:"parlementaire",
+  chambres:[{nom:"Chambre des représentants",sieges:110,mandat:"4 ans",mode:"Scrutin majoritaire par circonscription"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct (élections jugées ni libres ni équitables par les observateurs internationaux)",mandat:"5 ans, sans limite depuis un référendum contesté de 2004",pouvoirs:"Concentre l'essentiel du pouvoir exécutif, chef des armées, peut dissoudre le Parlement"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé directement par le Président",mandat:"Sans durée fixe",pouvoirs:"Rôle d'exécution, sans autonomie politique réelle"},
+  particularite:"Aucun candidat d'opposition n'a été autorisé à se présenter à l'élection législative de 2024 — les 4 partis en lice sont tous pro-gouvernementaux, l'OSCE n'a pas été invitée à observer le scrutin, et l'opposition réelle est en exil depuis la répression des manifestations de 2020.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice — pouvoir très concentré autour du Président Loukachenko, au pouvoir depuis 1994."},
+    {niveau:"Régional",instance:"Voblasts (6 régions + Minsk)",competences:"Administration déconcentrée de l'État central plutôt que gouvernement autonome — les gouverneurs de région sont nommés par le Président, pas élus."},
+    {niveau:"Local",instance:"Conseil local",competences:"Compétences très limitées, sous contrôle étroit du pouvoir central."}
   ]}
 };
 var INSTITUTIONS_ARCHETYPE_LABEL={
@@ -2410,9 +2549,13 @@ function institSchema(c){
       nodes.push(institNode(id,ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament",chamX[i],55));
       edges.push({from:'cit',to:id,label:i===0?(fr?'vote législatif':'legislative vote'):undefined});
     });
-    nodes.push(institNode('gouv',c.chefGouv.titre,fr?'Nommé par le président':'Appointed by the president',"default",42,18));
-    edges.push({from:'pres',to:'gouv',label:fr?'nomme':'appoints'});
-    edges.push({from:'ch0',to:'gouv',label:fr?'responsable devant':'accountable to'});
+    /* Cas rare (ex. Chypre) : pas de Premier ministre distinct, le président
+       cumule les deux fonctions — on ne dessine alors pas de case séparée. */
+    if(c.chefGouv){
+      nodes.push(institNode('gouv',c.chefGouv.titre,fr?'Nommé par le président':'Appointed by the president',"default",42,18));
+      edges.push({from:'pres',to:'gouv',label:fr?'nomme':'appoints'});
+      edges.push({from:'ch0',to:'gouv',label:fr?'responsable devant':'accountable to'});
+    }
     if(c.chambreNonElue){
       nodes.push(institNode('nonelu',c.chambreNonElue.nom,c.chambreNonElue.sieges+(fr?' sièges':' seats'),"symbolic",85,18,true));
     }
@@ -2543,7 +2686,11 @@ var STRUCTURE_REGIONALE={
   "Autriche":"federal","Belgique":"federal","Pays-Bas":"centralise","Portugal":"federal",
   "Norvege":"centralise","Irlande":"centralise","Grece":"centralise",
   "Danemark":"centralise","Tchequie":"federal","Slovaquie":"federal","Roumanie":"centralise",
-  "Luxembourg":"centralise","Islande":"centralise","Croatie":"centralise","Slovenie":"centralise"
+  "Luxembourg":"centralise","Islande":"centralise","Croatie":"centralise","Slovenie":"centralise",
+  "Lituanie":"centralise","Lettonie":"centralise","Estonie":"centralise",
+  "Malte":"centralise","Chypre":"centralise","Serbie":"federal","Bosnie":"federal",
+  "Albanie":"centralise","Macedoine":"centralise","Montenegro":"centralise",
+  "Kosovo":"centralise","Ukraine":"centralise","Moldavie":"federal","Bielorussie":"centralise"
 };
 function renderRegionsList(pays){
   var fr=lang==='fr';
@@ -3143,6 +3290,237 @@ var CHAMBRES_COMPOSITION={
           {n:"SDS",s:28,c:"#1e3a5f"},
           {n:"Demokrati (Logar)",s:6,c:"#7c3aed"},
           {n:"Resni.ca",s:5,c:"#0f172a"}
+        ]
+      }
+    }
+  },
+  "Lituanie":{
+    verifie:"22 septembre 2026 (élection du 13-27 octobre 2024)",
+    chambres:{
+      "Seimas":{
+        total:141,
+        groupes:[
+          {n:"LSDP",s:52,c:"#dc2626"},
+          {n:"LVŽS",s:8,c:"#2f9e44"},
+          {n:"DSVL",s:14,c:"#84cc16"},
+          {n:"Liberalų sąjūdis",s:12,c:"#38bdf8"},
+          {n:"Indépendants",s:2,c:"#94a3b8"},
+          {n:"LLRA-KŠS",s:3,c:"#a855f7"},
+          {n:"TS-LKD",s:28,c:"#1e5ba8"},
+          {n:"NS",s:1,c:"#7c3aed"},
+          {n:"TTS",s:1,c:"#f2c200"},
+          {n:"Nemuno aušra",s:20,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Lettonie":{
+    verifie:"22 septembre 2026 (élection du 1er octobre 2022, source officielle CVK — nouvelle élection le 3 octobre 2026)",
+    chambres:{
+      "Saeima":{
+        total:100,
+        groupes:[
+          {n:"Progresīvie",s:10,c:"#dc2626"},
+          {n:"Latvija pirmajā vietā",s:9,c:"#f472b6"},
+          {n:"ZZS",s:16,c:"#84cc16"},
+          {n:"Apvienotais Saraksts",s:15,c:"#38bdf8"},
+          {n:"Jaunā Vienotība",s:26,c:"#1e5ba8"},
+          {n:"Stabilitātei!",s:11,c:"#a3123a"},
+          {n:"Nacionālā apvienība",s:13,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Estonie":{
+    verifie:"22 septembre 2026 (élection du 5 mars 2023)",
+    chambres:{
+      "Riigikogu":{
+        total:101,
+        groupes:[
+          {n:"Keskerakond",s:16,c:"#dc2626"},
+          {n:"Sotsiaaldemokraadid",s:9,c:"#f472b6"},
+          {n:"Eesti 200",s:14,c:"#38bdf8"},
+          {n:"Reformierakond",s:37,c:"#1e5ba8"},
+          {n:"Isamaa",s:8,c:"#7c3aed"},
+          {n:"EKRE",s:17,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Malte":{
+    verifie:"22 septembre 2026 (élection du 30 mai 2026)",
+    chambres:{
+      "Chambre des représentants":{
+        total:79,
+        groupes:[
+          {n:"Labour",s:42,c:"#dc2626"},
+          {n:"Nationalist Party",s:37,c:"#1e5ba8"}
+        ]
+      }
+    }
+  },
+  "Chypre":{
+    verifie:"22 septembre 2026 (élection du 24 mai 2026)",
+    chambres:{
+      "Chambre des représentants":{
+        total:56,
+        groupes:[
+          {n:"AKEL",s:15,c:"#dc2626"},
+          {n:"DIKO",s:8,c:"#f2c200"},
+          {n:"DISY",s:17,c:"#1e5ba8"},
+          {n:"ADK",s:4,c:"#94a3b8"},
+          {n:"ALMA",s:4,c:"#7c3aed"},
+          {n:"ELAM",s:8,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Serbie":{
+    verifie:"22 septembre 2026 (élection du 17 décembre 2023, source officielle RIK)",
+    chambres:{
+      "Narodna skupština":{
+        total:250,
+        groupes:[
+          {n:"Srbija protiv nasilja",s:65,c:"#dc2626"},
+          {n:"SPS",s:18,c:"#f472b6"},
+          {n:"Minorités et petits partis",s:6,c:"#94a3b8"},
+          {n:"NADA",s:13,c:"#38bdf8"},
+          {n:"SNS",s:129,c:"#1e3a5f"},
+          {n:"Mi-Glas iz naroda",s:13,c:"#7c3aed"},
+          {n:"SVM",s:6,c:"#f2c200"}
+        ]
+      }
+    }
+  },
+  "Bosnie":{
+    verifie:"22 septembre 2026 (élection du 2 octobre 2022, composition actuelle — Chambre des représentants d'État)",
+    chambres:{
+      "Chambre des représentants":{
+        total:42,
+        groupes:[
+          {n:"SDA",s:8,c:"#dc2626"},
+          {n:"DF-GS",s:3,c:"#f472b6"},
+          {n:"SDP BiH",s:5,c:"#a3123a"},
+          {n:"PDP",s:2,c:"#84cc16"},
+          {n:"NS",s:3,c:"#38bdf8"},
+          {n:"NiP",s:2,c:"#0ea5e9"},
+          {n:"Autres (NES, DEMOS, US, BHI, NPD)",s:6,c:"#94a3b8"},
+          {n:"HDZ BiH",s:4,c:"#1e5ba8"},
+          {n:"SDS",s:2,c:"#7c3aed"},
+          {n:"SNSD",s:6,c:"#1e3a5f"},
+          {n:"ZPR",s:1,c:"#0f172a"}
+        ]
+      }
+    }
+  },
+  "Albanie":{
+    verifie:"22 septembre 2026 (élection du 11 mai 2025)",
+    chambres:{
+      "Kuvendi":{
+        total:140,
+        groupes:[
+          {n:"PSD",s:3,c:"#dc2626"},
+          {n:"PS (Edi Rama)",s:82,c:"#f472b6"},
+          {n:"Autres/indépendants",s:6,c:"#94a3b8"},
+          {n:"PD-ASHM",s:49,c:"#1e5ba8"}
+        ]
+      }
+    }
+  },
+  "Macedoine":{
+    verifie:"22 septembre 2026 (élection du 8 mai 2024, estimation — répartition précise des petits partis non totalement vérifiée)",
+    chambres:{
+      "Sobranie":{
+        total:120,
+        groupes:[
+          {n:"Levica",s:6,c:"#dc2626"},
+          {n:"SDSM",s:18,c:"#f472b6"},
+          {n:"ZNAM",s:6,c:"#84cc16"},
+          {n:"Coalition Vredi (albanophone)",s:12,c:"#38bdf8"},
+          {n:"DUI",s:19,c:"#0ea5e9"},
+          {n:"Autres/minorités",s:1,c:"#94a3b8"},
+          {n:"VMRO-DPMNE",s:58,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Montenegro":{
+    verifie:"22 septembre 2026 (élection du 11 juin 2023)",
+    chambres:{
+      "Skupština":{
+        total:81,
+        groupes:[
+          {n:"DPS-Zajedno",s:21,c:"#dc2626"},
+          {n:"SNP-Demos",s:2,c:"#f472b6"},
+          {n:"Minorités et petits partis",s:4,c:"#94a3b8"},
+          {n:"Bošnjačka stranka",s:6,c:"#38bdf8"},
+          {n:"Evropa sad",s:24,c:"#f2c200"},
+          {n:"Demokrate-URA",s:11,c:"#0ea5e9"},
+          {n:"Za budućnost Crne Gore",s:13,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Kosovo":{
+    verifie:"22 septembre 2026 (élection du 28 décembre 2025, résultat certifié)",
+    chambres:{
+      "Kuvendi":{
+        total:120,
+        groupes:[
+          {n:"LDK",s:15,c:"#dc2626"},
+          {n:"Autres minorités (Rom, Ashkali, Bosniaque, Turc, Goran)",s:11,c:"#94a3b8"},
+          {n:"Vetëvendosje",s:57,c:"#f2c200"},
+          {n:"AAK",s:6,c:"#38bdf8"},
+          {n:"PDK",s:22,c:"#1e5ba8"},
+          {n:"Srpska Lista",s:9,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Ukraine":{
+    verifie:"22 septembre 2026 (situation actuelle — aucune élection depuis 2019, loi martiale)",
+    chambres:{
+      "Verkhovna Rada":{
+        total:424,
+        perime:true,
+        groupes:[
+          {n:"Batkivshchyna",s:24,c:"#dc2626"},
+          {n:"Holos",s:19,c:"#f472b6"},
+          {n:"Autres partis, indépendants, sièges vacants (territoires occupés)",s:111,c:"#94a3b8"},
+          {n:"Serviteur du Peuple",s:226,c:"#1e5ba8"},
+          {n:"Solidarité Européenne",s:26,c:"#38bdf8"},
+          {n:"Pour l'Avenir",s:18,c:"#7c3aed"}
+        ]
+      }
+    }
+  },
+  "Moldavie":{
+    verifie:"22 septembre 2026 (élection du 28 septembre 2025, résultat officiel CEC)",
+    chambres:{
+      "Parlament":{
+        total:101,
+        groupes:[
+          {n:"Bloc Patriotique (pro-russe)",s:26,c:"#dc2626"},
+          {n:"Partidul Nostru",s:6,c:"#f472b6"},
+          {n:"Democrația Acasă",s:6,c:"#94a3b8"},
+          {n:"PAS (Maia Sandu)",s:55,c:"#1e5ba8"},
+          {n:"Alternativa",s:8,c:"#38bdf8"}
+        ]
+      }
+    }
+  },
+  "Bielorussie":{
+    verifie:"22 septembre 2026 (élection du 25 février 2024 — scrutin non libre, aucun candidat d'opposition autorisé)",
+    chambres:{
+      "Chambre des représentants":{
+        total:110,
+        perime:true,
+        groupes:[
+          {n:"CPB (communiste, pro-gouvernemental)",s:7,c:"#dc2626"},
+          {n:"Indépendants (tous pro-gouvernementaux)",s:40,c:"#94a3b8"},
+          {n:"Belaya Rus (pro-Loukachenko)",s:51,c:"#1e3a5f"},
+          {n:"RPTS",s:8,c:"#f2c200"},
+          {n:"LDPB",s:4,c:"#7c3aed"}
         ]
       }
     }
