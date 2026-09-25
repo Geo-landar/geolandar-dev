@@ -2618,7 +2618,7 @@ var REGIONS_SOURCE={
   "Hongrie":{nameProp:"name",type:"Comté (megye)"},
   "Russie":{nameProp:"name_latin",type:"Sujet fédéral"},
   "Autriche":{nameProp:"name",type:"Land"},
-  "Portugal":{nameProp:"name",type:"Région autonome"},
+  "Portugal":{nameProp:"name",type:"Région autonome",noDim:true,noteEloignement:true},
   "Tchequie":{nameProp:"name",type:"Région (kraj)"},
   "Slovaquie":{nameProp:"name",type:"Région (kraj)"}
 };
@@ -2781,6 +2781,8 @@ function renderRegionsList(pays){
     b+='<div class="gpb-region-card"><div class="gpb-region-dot" style="background:'+regionPosColor(r.pos)+'"></div><div><div class="gpb-region-nom">'+nom+'</div><div class="gpb-region-leader">'+r.n+'</div><div class="gpb-region-titre">'+r.t+' · '+r.parti+'</div></div></div>';
   });
   b+='</div>';
+  var src=REGIONS_SOURCE[pays];
+  if(src&&src.noteEloignement)b+='<div style="font-size:.68rem;color:var(--mu);font-style:italic;margin-top:6px">🌍 '+(fr?"Ces régions sont des îles éloignées du continent — fais pivoter le globe pour les voir colorées sur la carte.":"These regions are islands far from the mainland — rotate the globe to see them colored on the map.")+'</div>';
   if(rl.prerogatives)b+='<div style="font-size:.78rem;color:var(--mu);line-height:1.6;margin-top:9px">'+(fr?'Compétences : ':'Powers: ')+rl.prerogatives+'</div>';
   if(rl.disclaimer)b+='<div style="font-size:.68rem;color:var(--mu);font-style:italic;margin-top:6px">⚠️ '+rl.disclaimer+'</div>';
   b+='</div>';
@@ -2815,8 +2817,17 @@ function renderRegionsOnGlobe(pays,geo){
   var src=REGIONS_SOURCE[pays];
   if(!src) return;
   var rl=REGIONS_LEADERS[pays];
-  setCountryDim(pays,true);
-  gDimmedPays=pays;
+  /* Certains pays n'ont des régions politiques que sur une partie de leur
+     territoire, parfois très éloignée du centre du pays (ex. le Portugal :
+     seules les Açores et Madère ont un dirigeant élu, à 800-1500 km du
+     continent, hors du cadre visible une fois zoomé sur le pays). Assombrir
+     tout le pays dans ce cas laisse un aplat noir là où aucune région ne
+     vient prendre le relais visuellement. On ne l'assombrit donc que si ses
+     régions couvrent bien le territoire visible depuis le zoom. */
+  if(!src.noDim){
+    setCountryDim(pays,true);
+    gDimmedPays=pays;
+  }
   gRegionsG.selectAll('.rp')
     .data(geo.features)
     .enter().append('path')
