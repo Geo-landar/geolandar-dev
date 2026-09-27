@@ -403,7 +403,8 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
 /* ══ NOUVELLE PAGE ACCUEIL ══ */
 .spotlight-wrap{padding:0;max-width:900px;margin:20px auto 0;}
 .spotlight-eyebrow{font-family:Syne,sans-serif;font-size:.78rem;font-weight:800;color:var(--a);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;}
-.spotlight-card{background:linear-gradient(135deg,rgba(249,115,22,.14),rgba(59,130,246,.1));border:1.5px solid rgba(249,115,22,.35);border-radius:22px;padding:32px 34px;box-shadow:0 12px 40px rgba(249,115,22,.1);}
+.spotlight-card{background:linear-gradient(135deg,rgba(249,115,22,.14),rgba(59,130,246,.1));border:1.5px solid rgba(249,115,22,.35);border-radius:22px;padding:32px 34px;box-shadow:0 12px 40px rgba(249,115,22,.1);min-height:340px;display:flex;flex-direction:column;justify-content:center;}
+.spotlight-ctx{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .spotlight-flag{flex-shrink:0;line-height:0;}
 .spotlight-flag img{box-shadow:0 2px 10px rgba(0,0,0,.35);border-radius:4px!important;}
 .spotlight-top{display:flex;align-items:center;gap:18px;margin-bottom:20px;}
@@ -5122,19 +5123,13 @@ function initGlobe(){
     });
 
     /* Fonction de mise à jour de TOUT le globe */
-    function redrawLight(){
-      /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
-         déplacement actif : le contour des pays et celui des régions,
-         recalculés ensemble dans le même appel, avec la même projection. */
-      countriesG.selectAll('.cp').attr('d',pathFn);
-      regionsG.selectAll('.rp').attr('d',pathFn);
-    }
-    function redraw(){
-      sphBack.attr('d',pathFn({type:'Sphere'}));
-      sphRing.attr('d',pathFn({type:'Sphere'}));
-      gratPath.attr('d',pathFn(graticuleData));
-      redrawLight();
-      /* Marqueurs : positionner et masquer si derrière */
+    function redrawMarkers(){
+      /* Repositionner les points des petites îles/micro-Etats et masquer
+         ceux passés de l'autre côté du globe. Appelée à la fois par le
+         redraw complet et par redrawLight, pour qu'ils restent synchronisés
+         avec le contour des pays même pendant un glissement actif — sinon
+         ils restent figés à l'écran puis "rattrapent" leur vraie position
+         d'un coup à la fin du geste, ce qui est le bug signalé. */
       var rot=proj.rotate();
       var center=[-rot[0],-rot[1]];
       markersG.selectAll('.mk').each(function(s){
@@ -5150,6 +5145,21 @@ function initGlobe(){
           }
         }
       });
+    }
+    function redrawLight(){
+      /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
+         déplacement actif : le contour des pays et celui des régions,
+         recalculés ensemble dans le même appel, avec la même projection —
+         plus les marqueurs de petites îles, pour la même raison. */
+      countriesG.selectAll('.cp').attr('d',pathFn);
+      regionsG.selectAll('.rp').attr('d',pathFn);
+      redrawMarkers();
+    }
+    function redraw(){
+      sphBack.attr('d',pathFn({type:'Sphere'}));
+      sphRing.attr('d',pathFn({type:'Sphere'}));
+      gratPath.attr('d',pathFn(graticuleData));
+      redrawLight();
     }
 
     /* Positionnement initial des marqueurs */
