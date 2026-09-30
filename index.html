@@ -4874,6 +4874,14 @@ function zoomToCountry(target,zoomScale,onEnd){
   var ir=d3.interpolate(r0,r1), is=d3.interpolate(s0,s1);
   var tr=d3.transition().duration(850).ease(d3.easeCubicInOut).tween('geolandar-zoomto',function(){
     return function(t){
+      /* CORRECTIF : si l'utilisateur commence à faire glisser le globe
+         pendant que cette animation de zoom (850ms) est encore en cours,
+         les deux se disputaient la même rotation — l'animation continuait
+         d'imposer sa propre valeur à chaque tick par-dessus le geste de
+         l'utilisateur, donnant l'impression que le pays sélectionné
+         "bouge tout seul" et échappe au contrôle de la souris. On arrête
+         net la tween dès qu'un glissement manuel démarre. */
+      if(window._globeUserDragging) return;
       gProj.rotate(ir(t)); gProj.scale(is(t));
       if(typeof window._globeRedraw==='function') window._globeRedraw();
     };
@@ -5052,6 +5060,7 @@ function initGlobe(){
         var pays=ISO3[String(d.id).padStart(3,'0')];
         if(!pays) return;
         if(gTimer){gTimer.stop();gTimer=null;}
+        gSel=this;
         showCountry(pays,d);
       });
 
@@ -5152,8 +5161,20 @@ function initGlobe(){
       /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
          déplacement actif : le contour des pays et celui des régions,
          recalculés ensemble dans le même appel, avec la même projection —
-         plus les marqueurs de petites îles, pour la même raison. */
-      countriesG.selectAll('.cp').attr('d',pathFn);
+         plus les marqueurs de petites îles, pour la même raison.
+         CORRECTIF PERFORMANCE : recalculer les ~195 tracés pays à chaque
+         frame coûte environ 19ms rien qu'en calcul (mesuré), avant même le
+         travail d'affichage du navigateur — au-delà du budget de 16ms pour
+         un rendu fluide à 60 im/s. Résultat : dès qu'un pays est zoomé, les
+         194 autres ne sont de toute façon plus visibles à l'écran, donc on
+         ne recalcule QUE le pays sélectionné (via gSel, capturé au clic)
+         plutôt que tous les tracés du monde. Sans sélection (on parcourt
+         le globe), on garde le comportement complet normal. */
+      if(gZoomedPays&&gSel){
+        d3.select(gSel).attr('d',pathFn);
+      } else {
+        countriesG.selectAll('.cp').attr('d',pathFn);
+      }
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
     }
@@ -5196,6 +5217,9 @@ function initGlobe(){
     ds.call(d3.drag()
       .on('start',function(){
         if(gTimer){gTimer.stop();gTimer=null;}
+        /* Signale à toute animation de zoom en cours (zoomToCountry) de
+           s'arrêter net — voir le correctif dans zoomToCountry. */
+        window._globeUserDragging=true;
       })
       .on('drag',function(event){
         /* CORRECTIF : la sensibilité était fixe (.35), alors que l'échelle
@@ -5212,6 +5236,7 @@ function initGlobe(){
         throttledRedrawLight('drag');
       })
       .on('end',function(){
+        window._globeUserDragging=false;
         redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
@@ -5258,6 +5283,7 @@ function initGlobe(){
     ds.node().addEventListener('gesturestart',function(e){
       e.preventDefault();
       if(gTimer){gTimer.stop();gTimer=null;}
+      window._globeUserDragging=true;
       pinchScale0=proj.scale();
     },{passive:false});
     ds.node().addEventListener('gesturechange',function(e){
@@ -5267,6 +5293,7 @@ function initGlobe(){
     },{passive:false});
     ds.node().addEventListener('gestureend',function(e){
       e.preventDefault();
+      window._globeUserDragging=false;
       pinchScale0=proj.scale();
       redraw();
       var open=document.getElementById('panL').classList.contains('open');
@@ -5279,6 +5306,7 @@ function initGlobe(){
     ds.node().addEventListener('touchstart',function(e){
       if(e.touches.length===2){
         if(gTimer){gTimer.stop();gTimer=null;}
+        window._globeUserDragging=true;
         lastDist=Math.hypot(
           e.touches[0].clientX-e.touches[1].clientX,
           e.touches[0].clientY-e.touches[1].clientY
@@ -5301,6 +5329,7 @@ function initGlobe(){
     ds.node().addEventListener('touchend',function(e){
       if(e.touches.length<2){
         lastDist=null;
+        window._globeUserDragging=false;
         redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
