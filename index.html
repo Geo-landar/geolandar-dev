@@ -5162,19 +5162,14 @@ function initGlobe(){
          déplacement actif : le contour des pays et celui des régions,
          recalculés ensemble dans le même appel, avec la même projection —
          plus les marqueurs de petites îles, pour la même raison.
-         CORRECTIF PERFORMANCE : recalculer les ~195 tracés pays à chaque
-         frame coûte environ 19ms rien qu'en calcul (mesuré), avant même le
-         travail d'affichage du navigateur — au-delà du budget de 16ms pour
-         un rendu fluide à 60 im/s. Résultat : dès qu'un pays est zoomé, les
-         194 autres ne sont de toute façon plus visibles à l'écran, donc on
-         ne recalcule QUE le pays sélectionné (via gSel, capturé au clic)
-         plutôt que tous les tracés du monde. Sans sélection (on parcourt
-         le globe), on garde le comportement complet normal. */
-      if(gZoomedPays&&gSel){
-        d3.select(gSel).attr('d',pathFn);
-      } else {
-        countriesG.selectAll('.cp').attr('d',pathFn);
-      }
+         (Une optimisation avait été tentée ici pour ne recalculer que le
+         pays sélectionné, en partant du principe que les 194 autres ne
+         sont plus visibles une fois zoomé — c'était faux : dès que
+         l'échelle ou la rotation change, TOUS les tracés déjà dessinés
+         deviennent invalides, pas seulement "en retard". Les pays non
+         recalculés s'affichaient alors comme des formes aberrantes, figées
+         à leur position d'avant le zoom. Retour au recalcul complet.) */
+      countriesG.selectAll('.cp').attr('d',pathFn);
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
     }
