@@ -523,7 +523,6 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
       Chargement du globe...
     </div>
     <svg id="globe-svg"></svg>
-    <div id="geoDiag" style="position:fixed;bottom:10px;left:10px;z-index:99998;background:rgba(10,14,26,.92);color:#4ade80;font-family:monospace;font-size:11px;padding:10px 14px;border-radius:8px;border:1px solid rgba(74,222,128,.4);white-space:pre;line-height:1.6;max-width:360px;pointer-events:none;">Diagnostic : sélectionne un pays et fais glisser le globe</div>
     <button id="gbtn" onclick="closePanels()">← <span id="gbtxt">Retour</span></button>
     <div id="gzoom">
       <button id="gzin" onclick="globeZoom(1)" title="Zoom +">+</button>
@@ -5160,23 +5159,28 @@ function initGlobe(){
     }
     function redrawLight(){
       /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
-         déplacement actif : le contour des pays et celui des régions,
-         recalculés ensemble dans le même appel, avec la même projection —
-         plus les marqueurs de petites îles, pour la même raison.
-         (Une optimisation avait été tentée ici pour ne recalculer que le
-         pays sélectionné, en partant du principe que les 194 autres ne
-         sont plus visibles une fois zoomé — c'était faux : dès que
-         l'échelle ou la rotation change, TOUS les tracés déjà dessinés
-         deviennent invalides, pas seulement "en retard". Les pays non
-         recalculés s'affichaient alors comme des formes aberrantes, figées
-         à leur position d'avant le zoom. Retour au recalcul complet.) */
-      countriesG.selectAll('.cp').attr('d',pathFn);
+         déplacement actif : le contour du pays sélectionné et celui des
+         régions, recalculés ensemble dans le même appel, avec la même
+         projection — plus les marqueurs de petites îles, pour la même
+         raison.
+         (Une première optimisation avait tenté de ne recalculer QUE le
+         pays sélectionné tout en laissant les 194 autres visibles —
+         mauvaise idée : dès que l'échelle ou la rotation change, leurs
+         tracés déjà dessinés deviennent faux, pas juste "en retard", et
+         s'affichaient comme des formes aberrantes. Cette fois, quand un
+         pays est zoomé, les 194 autres sont CACHÉS pendant le geste actif
+         (voir le gestionnaire de glissement plus bas, qui s'en charge au
+         début/à la fin du geste, pas ici) — donc on ne paie pas leur
+         recalcul (19ms mesurés) tant qu'ils ne sont de toute façon pas
+         visibles. Ils réapparaissent correctement positionnés via le
+         redraw complet dès que le geste se termine.) */
+      if(gZoomedPays&&gDragSelNode){
+        gDragSelNode.attr('d',pathFn);
+      } else {
+        countriesG.selectAll('.cp').attr('d',pathFn);
+      }
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
-      /* PANNEAU DE DIAGNOSTIC TEMPORAIRE — voir window._geoDiag plus bas.
-         N'affecte rien d'autre, lecture seule, à retirer une fois le bug
-         des régions résolu. */
-      if(typeof window._geoDiagUpdate==='function') window._geoDiagUpdate();
     }
     function redraw(){
       sphBack.attr('d',pathFn({type:'Sphere'}));
@@ -5214,12 +5218,40 @@ function initGlobe(){
       _rafPending[key]=true;
       requestAnimationFrame(function(){ redrawLight(); _rafPending[key]=false; });
     }
+    var gDragSelNode=null;
+    /* Si un pays est zoomé, cacher les 194 autres pour tout le temps du
+       geste actif (recherche fraîche à chaque fois, jamais de référence
+       mise en cache qui pourrait pointer sur le mauvais pays après un
+       changement de sélection) — eux seuls coûtaient ~19ms/frame à
+       recalculer, pour un résultat de toute façon invisible à cette
+       échelle. Masqués plutôt que laissés avec un tracé obsolète : jamais
+       de forme aberrante affichée, juste une absence le temps du geste.
+       Utilisé par le glissement souris ET les gestes tactiles. */
+    function hideOtherCountriesForGesture(){
+      gDragSelNode=null;
+      if(gZoomedPays){
+        countriesG.selectAll('.cp').each(function(d){
+          var iso=ISO3[String(d.id).padStart(3,'0')];
+          if(iso===gZoomedPays){
+            gDragSelNode=d3.select(this);
+            d3.select(this).style('display',null);
+          } else {
+            d3.select(this).style('display','none');
+          }
+        });
+      }
+    }
+    function restoreCountriesAfterGesture(){
+      countriesG.selectAll('.cp').style('display',null);
+      gDragSelNode=null;
+    }
     ds.call(d3.drag()
       .on('start',function(){
         if(gTimer){gTimer.stop();gTimer=null;}
         /* Signale à toute animation de zoom en cours (zoomToCountry) de
            s'arrêter net — voir le correctif dans zoomToCountry. */
         window._globeUserDragging=true;
+        hideOtherCountriesForGesture();
       })
       .on('drag',function(event){
         /* CORRECTIF : la sensibilité était fixe (.35), alors que l'échelle
@@ -5237,6 +5269,9 @@ function initGlobe(){
       })
       .on('end',function(){
         window._globeUserDragging=false;
+        /* Réafficher les pays cachés pendant le geste avant le redraw
+           complet, qui les repositionnera tous correctement. */
+        restoreCountriesAfterGesture();
         redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
@@ -5285,6 +5320,7 @@ function initGlobe(){
       if(gTimer){gTimer.stop();gTimer=null;}
       window._globeUserDragging=true;
       pinchScale0=proj.scale();
+      hideOtherCountriesForGesture();
     },{passive:false});
     ds.node().addEventListener('gesturechange',function(e){
       e.preventDefault();
@@ -5295,6 +5331,7 @@ function initGlobe(){
       e.preventDefault();
       window._globeUserDragging=false;
       pinchScale0=proj.scale();
+      restoreCountriesAfterGesture();
       redraw();
       var open=document.getElementById('panL').classList.contains('open');
       if(!open) startRotation();
@@ -5312,6 +5349,7 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         lastScalePinch=proj.scale();
+        hideOtherCountriesForGesture();
         e.preventDefault();
       }
     },{passive:false});
@@ -5330,6 +5368,7 @@ function initGlobe(){
       if(e.touches.length<2){
         lastDist=null;
         window._globeUserDragging=false;
+        restoreCountriesAfterGesture();
         redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
@@ -5346,48 +5385,6 @@ function initGlobe(){
     /* Exposer startRotation pour closePanels */
     window._globeStartRotation=startRotation;
     window._globeRedraw=redraw;
-
-    /* PANNEAU DE DIAGNOSTIC TEMPORAIRE — à retirer une fois le bug des
-       régions résolu. Calcule, à chaque frame, le centre réel (à l'écran)
-       du tracé du pays sélectionné (.cp) et celui d'une région test (.rp),
-       pour voir s'ils dérivent l'un par rapport à l'autre pendant un
-       glissement — ce qui confirmerait ou non un vrai décalage, plutôt que
-       de se fier à l'impression visuelle sur une photo. */
-    function bboxCenterOf(d){
-      if(!d) return null;
-      var nums=d.match(/-?\d+\.?\d*/g);
-      if(!nums) return null;
-      var n=nums.map(Number);
-      var xs=n.filter(function(_,i){return i%2===0;}), ys=n.filter(function(_,i){return i%2===1;});
-      return {x:(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2, y:(Math.min.apply(null,ys)+Math.max.apply(null,ys))/2};
-    }
-    window._geoDiagUpdate=function(){
-      var el=document.getElementById('geoDiag');
-      if(!el) return;
-      if(!gZoomedPays){ el.textContent='Diagnostic : sélectionne un pays et fais glisser le globe'; return; }
-      var cpNode=gSel;
-      var cpCenter=cpNode?bboxCenterOf(d3.select(cpNode).attr('d')):null;
-      var rpNodes=regionsG.selectAll('.rp').nodes();
-      var rpCenter=null;
-      if(rpNodes.length){
-        var sumX=0,sumY=0,cnt=0;
-        rpNodes.forEach(function(n){
-          var c=bboxCenterOf(d3.select(n).attr('d'));
-          if(c){ sumX+=c.x; sumY+=c.y; cnt++; }
-        });
-        if(cnt) rpCenter={x:sumX/cnt,y:sumY/cnt};
-      }
-      var rot=proj.rotate();
-      var txt='PAYS: '+gZoomedPays+'\n';
-      txt+='rotate: ['+rot[0].toFixed(2)+', '+rot[1].toFixed(2)+']  scale: '+proj.scale().toFixed(1)+'\n';
-      txt+='centre .cp (pays): '+(cpCenter?('x='+cpCenter.x.toFixed(1)+' y='+cpCenter.y.toFixed(1)):'(introuvable)')+'\n';
-      txt+='centre moyen .rp (régions, '+rpNodes.length+'): '+(rpCenter?('x='+rpCenter.x.toFixed(1)+' y='+rpCenter.y.toFixed(1)):'(aucune)')+'\n';
-      if(cpCenter&&rpCenter){
-        var dx=rpCenter.x-cpCenter.x, dy=rpCenter.y-cpCenter.y;
-        txt+='écart régions/pays: dx='+dx.toFixed(1)+' dy='+dy.toFixed(1)+' dist='+Math.hypot(dx,dy).toFixed(1)+'px';
-      }
-      el.textContent=txt;
-    };
 
   }).catch(function(){
     if(loadEl) loadEl.textContent='Erreur de chargement.';
