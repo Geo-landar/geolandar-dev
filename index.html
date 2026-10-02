@@ -313,9 +313,9 @@ h1 em{font-style:normal;background:linear-gradient(135deg,var(--a),var(--a2));-w
 /* PAYS */
 .pays-wrap{padding:0 28px 60px;}
 .rpills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
-.rp{padding:4px 12px;border-radius:18px;border:1px solid var(--bd);background:transparent;color:var(--mu);font-size:.76rem;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
-.rp:hover{border-color:var(--a2);color:var(--tx);}
-.rp.active{background:var(--a2);border-color:var(--a2);color:#fff;}
+.region-pill{padding:4px 12px;border-radius:18px;border:1px solid var(--bd);background:transparent;color:var(--mu);font-size:.76rem;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
+.region-pill:hover{border-color:var(--a2);color:var(--tx);}
+.region-pill.active{background:var(--a2);border-color:var(--a2);color:#fff;}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px;}
 .cc{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .2s;}
 .cc:hover{border-color:rgba(59,130,246,.35);transform:translateY(-1px);}
@@ -4660,7 +4660,7 @@ function findInd(pays){return PAYS.find(function(c){return c.p===pays;})||null;}
 /* ══ 196 PAYS ══ */
 var REGS=[{k:'',fr:'Toutes régions',en:'All regions'},{k:'EU',fr:'Europe',en:'Europe'},{k:'AM',fr:'Amérique',en:'Americas'},{k:'AF',fr:'Afrique',en:'Africa'},{k:'AS',fr:'Asie',en:'Asia'},{k:'OC',fr:'Océanie',en:'Oceania'}];
 function renderPills(){
-  var pillsEl=document.getElementById('rpills');pillsEl.innerHTML='';REGS.forEach(function(r){var btn=document.createElement('button');btn.className='rp'+(aReg===r.k?' active':'');btn.textContent=lang==='fr'?r.fr:r.en;btn.onclick=function(){setReg(r.k);};pillsEl.appendChild(btn);});
+  var pillsEl=document.getElementById('rpills');pillsEl.innerHTML='';REGS.forEach(function(r){var btn=document.createElement('button');btn.className='region-pill'+(aReg===r.k?' active':'');btn.textContent=lang==='fr'?r.fr:r.en;btn.onclick=function(){setReg(r.k);};pillsEl.appendChild(btn);});
 }
 function setReg(r){aReg=r;renderPills();renderPays();}
 function renderPays(){
