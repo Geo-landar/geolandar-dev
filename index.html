@@ -523,6 +523,7 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
       Chargement du globe...
     </div>
     <svg id="globe-svg"></svg>
+    <div id="geoDiag" style="position:fixed;bottom:10px;left:10px;z-index:99998;background:rgba(10,14,26,.92);color:#4ade80;font-family:monospace;font-size:11px;padding:10px 14px;border-radius:8px;border:1px solid rgba(74,222,128,.4);white-space:pre;line-height:1.6;max-width:380px;pointer-events:none;">Diagnostic : sélectionne un pays et fais glisser le globe</div>
     <button id="gbtn" onclick="closePanels()">← <span id="gbtxt">Retour</span></button>
     <div id="gzoom">
       <button id="gzin" onclick="globeZoom(1)" title="Zoom +">+</button>
@@ -5181,6 +5182,7 @@ function initGlobe(){
       }
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
+      if(typeof window._geoDiagUpdate==='function') window._geoDiagUpdate();
     }
     function redraw(){
       sphBack.attr('d',pathFn({type:'Sphere'}));
@@ -5375,6 +5377,45 @@ function initGlobe(){
     /* Exposer startRotation pour closePanels */
     window._globeStartRotation=startRotation;
     window._globeRedraw=redraw;
+
+    /* PANNEAU DE DIAGNOSTIC TEMPORAIRE — à retirer une fois le bug des
+       régions résolu. Cette fois, comparaison différente de la précédente :
+       pas pays vs régions entre eux, mais le pays sélectionné vs sa VRAIE
+       position calculée par la projection à l'instant présent — pour voir
+       s'il dérive de là où il devrait réellement être, pas seulement de
+       ses régions. */
+    function bboxCenterOf(d){
+      if(!d) return null;
+      var nums=d.match(/-?\d+\.?\d*/g);
+      if(!nums) return null;
+      var n=nums.map(Number);
+      var xs=n.filter(function(_,i){return i%2===0;}), ys=n.filter(function(_,i){return i%2===1;});
+      return {x:(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2, y:(Math.min.apply(null,ys)+Math.max.apply(null,ys))/2};
+    }
+    window._geoDiagUpdate=function(){
+      var el=document.getElementById('geoDiag');
+      if(!el) return;
+      if(!gZoomedPays){ el.textContent='Diagnostic : sélectionne un pays et fais glisser le globe'; return; }
+      var rot=proj.rotate();
+      var txt='PAYS: '+gZoomedPays+'  frame#'+gDragFrameCount+'\n';
+      txt+='rotate: ['+rot[0].toFixed(2)+', '+rot[1].toFixed(2)+']  scale: '+proj.scale().toFixed(1)+'\n';
+      if(gDragSelNode){
+        var datum=gDragSelNode.datum();
+        var realD=gDragSelNode.attr('d');
+        var actualCenter=bboxCenterOf(realD);
+        var trueCentroid=datum?bestCentroid(datum):null;
+        var expectedXY=trueCentroid?proj(trueCentroid):null;
+        txt+='centre RÉEL du tracé affiché: '+(actualCenter?('x='+actualCenter.x.toFixed(1)+' y='+actualCenter.y.toFixed(1)):'(introuvable)')+'\n';
+        txt+='position ATTENDUE (recalculée maintenant): '+(expectedXY?('x='+expectedXY[0].toFixed(1)+' y='+expectedXY[1].toFixed(1)):'(hors vue)')+'\n';
+        if(actualCenter&&expectedXY){
+          var dx=actualCenter.x-expectedXY[0], dy=actualCenter.y-expectedXY[1];
+          txt+='ÉCART réel vs attendu: dx='+dx.toFixed(1)+' dy='+dy.toFixed(1)+' dist='+Math.hypot(dx,dy).toFixed(1)+'px';
+        }
+      } else {
+        txt+='(gDragSelNode non trouvé — hors glissement actif)';
+      }
+      el.textContent=txt;
+    };
 
   }).catch(function(){
     if(loadEl) loadEl.textContent='Erreur de chargement.';
