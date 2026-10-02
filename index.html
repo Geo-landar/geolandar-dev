@@ -5157,26 +5157,26 @@ function initGlobe(){
         }
       });
     }
+    var gDragFrameCount=0;
     function redrawLight(){
-      /* Seulement ce qui doit rester rigoureusement synchronisé pendant un
-         déplacement actif : le contour du pays sélectionné et celui des
-         régions, recalculés ensemble dans le même appel, avec la même
-         projection — plus les marqueurs de petites îles, pour la même
-         raison.
-         (Une première optimisation avait tenté de ne recalculer QUE le
-         pays sélectionné tout en laissant les 194 autres visibles —
-         mauvaise idée : dès que l'échelle ou la rotation change, leurs
-         tracés déjà dessinés deviennent faux, pas juste "en retard", et
-         s'affichaient comme des formes aberrantes. Cette fois, quand un
-         pays est zoomé, les 194 autres sont CACHÉS pendant le geste actif
-         (voir le gestionnaire de glissement plus bas, qui s'en charge au
-         début/à la fin du geste, pas ici) — donc on ne paie pas leur
-         recalcul (19ms mesurés) tant qu'ils ne sont de toute façon pas
-         visibles. Ils réapparaissent correctement positionnés via le
-         redraw complet dès que le geste se termine.) */
+      /* Troisième version de cette fonction, après deux essais écartés :
+         1) cacher les 194 autres pays pendant le geste → trop radical,
+            laissait un vide noir inacceptable autour du pays sélectionné.
+         2) ne pas les recalculer du tout → leurs tracés déjà dessinés
+            deviennent faux dès que l'échelle/rotation change, et
+            s'affichaient comme des formes aberrantes.
+         Cette fois : le pays sélectionné, ses régions et les marqueurs
+         sont recalculés à CHAQUE frame (rien ne doit jamais prendre de
+         retard sur ce qui importe le plus). Le reste du monde (195 pays,
+         ~19ms/frame mesurés à lui seul) reste TOUJOURS VISIBLE mais n'est
+         recalculé qu'une frame sur trois pendant un geste actif — un léger
+         flou de mouvement en arrière-plan, sans jamais disparaître ni
+         afficher une forme fausse. */
+      gDragFrameCount++;
       if(gZoomedPays&&gDragSelNode){
         gDragSelNode.attr('d',pathFn);
-      } else {
+      }
+      if(!gZoomedPays||!gDragSelNode||gDragFrameCount%3===0){
         countriesG.selectAll('.cp').attr('d',pathFn);
       }
       regionsG.selectAll('.rp').attr('d',pathFn);
@@ -5219,37 +5219,20 @@ function initGlobe(){
       requestAnimationFrame(function(){ redrawLight(); _rafPending[key]=false; });
     }
     var gDragSelNode=null;
-    /* Si un pays est zoomé, cacher les 194 autres pour tout le temps du
-       geste actif (recherche fraîche à chaque fois, jamais de référence
-       mise en cache qui pourrait pointer sur le mauvais pays après un
-       changement de sélection) — eux seuls coûtaient ~19ms/frame à
-       recalculer, pour un résultat de toute façon invisible à cette
-       échelle. Masqués plutôt que laissés avec un tracé obsolète : jamais
-       de forme aberrante affichée, juste une absence le temps du geste.
-       Utilisé par le glissement souris ET les gestes tactiles. */
-    function hideOtherCountriesForGesture(){
+    /* Recherche fraîche du tracé du pays zoomé, à chaque début de geste —
+       jamais de référence mise en cache qui pourrait pointer sur le
+       mauvais pays après un changement de sélection. N'affecte plus la
+       visibilité de qui que ce soit (voir redrawLight) : sert seulement à
+       recalculer ce pays précis à chaque frame, pour qu'il ne prenne
+       jamais de retard. Utilisé par le glissement souris ET les gestes
+       tactiles. */
+    function findDragSelNode(){
       gDragSelNode=null;
       if(!gZoomedPays) return;
-      /* CORRECTIF : si aucun tracé ne correspond au pays zoomé (certains
-         très petits États insulaires n'existent pas à la résolution de la
-         carte), l'ancienne version cachait quand même tous les autres
-         pays, ne gardant rien de visible — le globe entier disparaissait
-         pendant le geste. On cherche d'abord SANS rien cacher, et on ne
-         cache les autres que si on a réellement trouvé celui à garder. */
-      var foundNode=null;
       countriesG.selectAll('.cp').each(function(d){
         var iso=ISO3[String(d.id).padStart(3,'0')];
-        if(iso===gZoomedPays) foundNode=this;
+        if(iso===gZoomedPays) gDragSelNode=d3.select(this);
       });
-      if(!foundNode) return;
-      gDragSelNode=d3.select(foundNode);
-      countriesG.selectAll('.cp').each(function(){
-        d3.select(this).style('display',this===foundNode?null:'none');
-      });
-    }
-    function restoreCountriesAfterGesture(){
-      countriesG.selectAll('.cp').style('display',null);
-      gDragSelNode=null;
     }
     ds.call(d3.drag()
       .on('start',function(){
@@ -5257,7 +5240,8 @@ function initGlobe(){
         /* Signale à toute animation de zoom en cours (zoomToCountry) de
            s'arrêter net — voir le correctif dans zoomToCountry. */
         window._globeUserDragging=true;
-        hideOtherCountriesForGesture();
+        gDragFrameCount=0;
+        findDragSelNode();
       })
       .on('drag',function(event){
         /* CORRECTIF : la sensibilité était fixe (.35), alors que l'échelle
@@ -5275,9 +5259,7 @@ function initGlobe(){
       })
       .on('end',function(){
         window._globeUserDragging=false;
-        /* Réafficher les pays cachés pendant le geste avant le redraw
-           complet, qui les repositionnera tous correctement. */
-        restoreCountriesAfterGesture();
+        gDragSelNode=null;
         redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
@@ -5326,7 +5308,8 @@ function initGlobe(){
       if(gTimer){gTimer.stop();gTimer=null;}
       window._globeUserDragging=true;
       pinchScale0=proj.scale();
-      hideOtherCountriesForGesture();
+      gDragFrameCount=0;
+      findDragSelNode();
     },{passive:false});
     ds.node().addEventListener('gesturechange',function(e){
       e.preventDefault();
@@ -5337,7 +5320,7 @@ function initGlobe(){
       e.preventDefault();
       window._globeUserDragging=false;
       pinchScale0=proj.scale();
-      restoreCountriesAfterGesture();
+      gDragSelNode=null;
       redraw();
       var open=document.getElementById('panL').classList.contains('open');
       if(!open) startRotation();
@@ -5355,7 +5338,8 @@ function initGlobe(){
           e.touches[0].clientY-e.touches[1].clientY
         );
         lastScalePinch=proj.scale();
-        hideOtherCountriesForGesture();
+        gDragFrameCount=0;
+        findDragSelNode();
         e.preventDefault();
       }
     },{passive:false});
@@ -5374,7 +5358,7 @@ function initGlobe(){
       if(e.touches.length<2){
         lastDist=null;
         window._globeUserDragging=false;
-        restoreCountriesAfterGesture();
+        gDragSelNode=null;
         redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
