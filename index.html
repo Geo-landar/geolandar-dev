@@ -5229,17 +5229,23 @@ function initGlobe(){
        Utilisé par le glissement souris ET les gestes tactiles. */
     function hideOtherCountriesForGesture(){
       gDragSelNode=null;
-      if(gZoomedPays){
-        countriesG.selectAll('.cp').each(function(d){
-          var iso=ISO3[String(d.id).padStart(3,'0')];
-          if(iso===gZoomedPays){
-            gDragSelNode=d3.select(this);
-            d3.select(this).style('display',null);
-          } else {
-            d3.select(this).style('display','none');
-          }
-        });
-      }
+      if(!gZoomedPays) return;
+      /* CORRECTIF : si aucun tracé ne correspond au pays zoomé (certains
+         très petits États insulaires n'existent pas à la résolution de la
+         carte), l'ancienne version cachait quand même tous les autres
+         pays, ne gardant rien de visible — le globe entier disparaissait
+         pendant le geste. On cherche d'abord SANS rien cacher, et on ne
+         cache les autres que si on a réellement trouvé celui à garder. */
+      var foundNode=null;
+      countriesG.selectAll('.cp').each(function(d){
+        var iso=ISO3[String(d.id).padStart(3,'0')];
+        if(iso===gZoomedPays) foundNode=this;
+      });
+      if(!foundNode) return;
+      gDragSelNode=d3.select(foundNode);
+      countriesG.selectAll('.cp').each(function(){
+        d3.select(this).style('display',this===foundNode?null:'none');
+      });
     }
     function restoreCountriesAfterGesture(){
       countriesG.selectAll('.cp').style('display',null);
