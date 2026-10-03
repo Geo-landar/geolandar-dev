@@ -523,7 +523,7 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
       Chargement du globe...
     </div>
     <svg id="globe-svg"></svg>
-    <div id="geoDiag" style="position:fixed;bottom:10px;left:10px;z-index:99998;background:rgba(10,14,26,.92);color:#4ade80;font-family:monospace;font-size:11px;padding:10px 14px;border-radius:8px;border:1px solid rgba(74,222,128,.4);white-space:pre;line-height:1.6;max-width:380px;pointer-events:none;">Diagnostic : sélectionne un pays et fais glisser le globe</div>
+    <div id="geoDiag" style="position:fixed;bottom:10px;left:10px;z-index:99998;background:rgba(10,14,26,.96);color:#4ade80;font-family:monospace;font-size:11px;padding:10px 14px;border-radius:8px;border:1px solid rgba(74,222,128,.4);white-space:pre;line-height:1.6;max-width:460px;pointer-events:none;">Diagnostic : sélectionne un pays et fais glisser le globe</div>
     <button id="gbtn" onclick="closePanels()">← <span id="gbtxt">Retour</span></button>
     <div id="gzoom">
       <button id="gzin" onclick="globeZoom(1)" title="Zoom +">+</button>
@@ -5159,6 +5159,51 @@ function initGlobe(){
       });
     }
     var gDragFrameCount=0;
+    /* Certains pays (France avec la Guyane, mais tout pays ayant des
+       territoires d'outre-mer très éloignés suivrait le même principe) ont
+       une géométrie en plusieurs morceaux dispersés aux quatre coins du
+       globe — confirmé par le calcul : le tracé "France" est un seul
+       MultiPolygon contenant la Guyane (Amérique du Sud), la métropole ET
+       la Corse. En projection orthographique, un point proche de la limite
+       visible de l'hémisphère (à 90° du centre de vue) donne des
+       coordonnées mathématiquement instables qui explosent au moindre
+       changement de rotation.
+       Le filtrage se fait par rapport au centre de vue ACTUEL (recalculé à
+       chaque frame, jamais figé au moment du clic) : si on tourne le globe
+       depuis la métropole vers la Guyane pour l'examiner, c'est elle qui
+       devient le fragment "proche" et reste stable, pendant que la
+       métropole (devenue lointaine) est exclue à son tour — on peut donc
+       naviguer librement vers n'importe quel territoire du pays sans que
+       rien ne se déforme, dans un sens comme dans l'autre. */
+    function filterFeatureNearPoint(feature,refPoint,maxDeg){
+      if(!feature||feature.geometry.type!=='MultiPolygon') return feature;
+      var allCoords=feature.geometry.coordinates;
+      if(allCoords.length<=1) return feature;
+      var maxRad=(maxDeg||50)*Math.PI/180;
+      var kept=allCoords.filter(function(poly){
+        var c=d3.geoCentroid({type:'Feature',geometry:{type:'Polygon',coordinates:poly}});
+        return d3.geoDistance(c,refPoint)<=maxRad;
+      });
+      if(!kept.length){
+        /* Aucun fragment dans le rayon : garder le plus proche de tous,
+           pour que le pays ne disparaisse jamais complètement pendant
+           qu'on navigue d'un territoire à l'autre. */
+        var best=null,bestDist=Infinity;
+        allCoords.forEach(function(poly){
+          var c=d3.geoCentroid({type:'Feature',geometry:{type:'Polygon',coordinates:poly}});
+          var dist=d3.geoDistance(c,refPoint);
+          if(dist<bestDist){bestDist=dist;best=poly;}
+        });
+        kept=[best];
+      }
+      return {type:'Feature',properties:feature.properties,id:feature.id,geometry:{type:'MultiPolygon',coordinates:kept}};
+    }
+    function updateSelectedCountryPath(){
+      if(!gZoomedPays||!gDragSelNode||!gDragSelDatum) return;
+      var rot=proj.rotate();
+      var viewCenter=[-rot[0],-rot[1]];
+      gDragSelNode.attr('d',pathFn(filterFeatureNearPoint(gDragSelDatum,viewCenter,50)));
+    }
     function redrawLight(){
       /* Troisième version de cette fonction, après deux essais écartés :
          1) cacher les 194 autres pays pendant le geste → trop radical,
@@ -5174,11 +5219,14 @@ function initGlobe(){
          flou de mouvement en arrière-plan, sans jamais disparaître ni
          afficher une forme fausse. */
       gDragFrameCount++;
-      if(gZoomedPays&&gDragSelNode){
-        gDragSelNode.attr('d',pathFn);
-      }
+      updateSelectedCountryPath();
       if(!gZoomedPays||!gDragSelNode||gDragFrameCount%3===0){
         countriesG.selectAll('.cp').attr('d',pathFn);
+        /* Le recalcul global ci-dessus vient d'écraser le pays sélectionné
+           avec son MultiPolygon complet — on le redessine aussitôt avec sa
+           version filtrée (par rapport au centre de vue actuel) pour ne
+           pas réintroduire l'instabilité. */
+        updateSelectedCountryPath();
       }
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
@@ -5221,19 +5269,22 @@ function initGlobe(){
       requestAnimationFrame(function(){ redrawLight(); _rafPending[key]=false; });
     }
     var gDragSelNode=null;
-    /* Recherche fraîche du tracé du pays zoomé, à chaque début de geste —
-       jamais de référence mise en cache qui pourrait pointer sur le
-       mauvais pays après un changement de sélection. N'affecte plus la
-       visibilité de qui que ce soit (voir redrawLight) : sert seulement à
-       recalculer ce pays précis à chaque frame, pour qu'il ne prenne
-       jamais de retard. Utilisé par le glissement souris ET les gestes
-       tactiles. */
+    /* Recherche fraîche du tracé du pays zoomé — jamais de référence mise
+       en cache qui pourrait pointer sur le mauvais pays après un
+       changement de sélection. Le filtrage par territoire proche (voir
+       filterFeatureNearPoint plus haut) se recalcule, lui, à chaque frame
+       dans updateSelectedCountryPath — pas ici, une fois pour toutes. */
+    var gDragSelDatum=null;
     function findDragSelNode(){
       gDragSelNode=null;
+      gDragSelDatum=null;
       if(!gZoomedPays) return;
       countriesG.selectAll('.cp').each(function(d){
         var iso=ISO3[String(d.id).padStart(3,'0')];
-        if(iso===gZoomedPays) gDragSelNode=d3.select(this);
+        if(iso===gZoomedPays){
+          gDragSelNode=d3.select(this);
+          gDragSelDatum=d;
+        }
       });
     }
     ds.call(d3.drag()
@@ -5261,7 +5312,11 @@ function initGlobe(){
       })
       .on('end',function(){
         window._globeUserDragging=false;
-        gDragSelNode=null;
+        /* On NE vide plus gDragSelNode ici : la version filtrée doit
+           rester disponible tant que le pays reste zoomé, pas seulement
+           pendant le geste actif — sinon le redraw juste en dessous
+           réintroduirait l'instabilité pour une frame. */
+        findDragSelNode();
         redraw();
         /* Reprendre si aucun panneau ouvert */
         var open=document.getElementById('panL').classList.contains('open');
@@ -5322,7 +5377,7 @@ function initGlobe(){
       e.preventDefault();
       window._globeUserDragging=false;
       pinchScale0=proj.scale();
-      gDragSelNode=null;
+      findDragSelNode();
       redraw();
       var open=document.getElementById('panL').classList.contains('open');
       if(!open) startRotation();
@@ -5360,7 +5415,7 @@ function initGlobe(){
       if(e.touches.length<2){
         lastDist=null;
         window._globeUserDragging=false;
-        gDragSelNode=null;
+        findDragSelNode();
         redraw();
         var open=document.getElementById('panL').classList.contains('open');
         if(!open) startRotation();
@@ -5377,13 +5432,12 @@ function initGlobe(){
     /* Exposer startRotation pour closePanels */
     window._globeStartRotation=startRotation;
     window._globeRedraw=redraw;
+    window._globeFindSelNode=findDragSelNode;
 
     /* PANNEAU DE DIAGNOSTIC TEMPORAIRE — à retirer une fois le bug des
-       régions résolu. Cette fois, comparaison différente de la précédente :
-       pas pays vs régions entre eux, mais le pays sélectionné vs sa VRAIE
-       position calculée par la projection à l'instant présent — pour voir
-       s'il dérive de là où il devrait réellement être, pas seulement de
-       ses régions. */
+       régions définitivement confirmé résolu. Compare la position réelle
+       du tracé affiché (pays sélectionné, filtré par rapport au centre de
+       vue ACTUEL) à sa position correcte recalculée à l'instant présent. */
     function bboxCenterOf(d){
       if(!d) return null;
       var nums=d.match(/-?\d+\.?\d*/g);
@@ -5399,12 +5453,14 @@ function initGlobe(){
       var rot=proj.rotate();
       var txt='PAYS: '+gZoomedPays+'  frame#'+gDragFrameCount+'\n';
       txt+='rotate: ['+rot[0].toFixed(2)+', '+rot[1].toFixed(2)+']  scale: '+proj.scale().toFixed(1)+'\n';
-      if(gDragSelNode){
-        var datum=gDragSelNode.datum();
+      if(gDragSelNode&&gDragSelDatum){
+        var viewCenter=[-rot[0],-rot[1]];
+        var filtered=filterFeatureNearPoint(gDragSelDatum,viewCenter,50);
         var realD=gDragSelNode.attr('d');
         var actualCenter=bboxCenterOf(realD);
-        var trueCentroid=datum?bestCentroid(datum):null;
+        var trueCentroid=bestCentroid(filtered);
         var expectedXY=trueCentroid?proj(trueCentroid):null;
+        txt+='fragments gardés: '+filtered.geometry.coordinates.length+'\n';
         txt+='centre RÉEL du tracé affiché: '+(actualCenter?('x='+actualCenter.x.toFixed(1)+' y='+actualCenter.y.toFixed(1)):'(introuvable)')+'\n';
         txt+='position ATTENDUE (recalculée maintenant): '+(expectedXY?('x='+expectedXY[0].toFixed(1)+' y='+expectedXY[1].toFixed(1)):'(hors vue)')+'\n';
         if(actualCenter&&expectedXY){
@@ -5412,10 +5468,11 @@ function initGlobe(){
           txt+='ÉCART réel vs attendu: dx='+dx.toFixed(1)+' dy='+dy.toFixed(1)+' dist='+Math.hypot(dx,dy).toFixed(1)+'px';
         }
       } else {
-        txt+='(gDragSelNode non trouvé — hors glissement actif)';
+        txt+='(gDragSelNode non trouvé)';
       }
       el.textContent=txt;
     };
+    window._globeFindSelNode=findDragSelNode;
 
   }).catch(function(){
     if(loadEl) loadEl.textContent='Erreur de chargement.';
@@ -5502,6 +5559,11 @@ function showCountry(pays,zoomTarget){
   renderInstitutions(pays);
   // Zoom + découpage régional sur le globe (échantillon de pays test)
   gZoomedPays=pays; gSelectedRegionName=null;
+  /* Calculer tout de suite la version filtrée du tracé (sans les
+     fragments éloignés type Guyane) — valable dès la sélection, pas
+     seulement une fois un glissement commencé. Voir filterFeatureNear
+     Centroid dans initGlobe. */
+  if(typeof window._globeFindSelNode==='function') window._globeFindSelNode();
   var rsrc=REGIONS_SOURCE[pays];
   if(rsrc){
     clearRegionsOnGlobe();
