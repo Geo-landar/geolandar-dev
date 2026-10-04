@@ -4863,6 +4863,7 @@ function bestCentroid(feature){
   });
   return d3.geoCentroid(best);
 }
+window._globeAnimToken=0;
 function zoomToCountry(target,zoomScale,onEnd){
   if(!gProj||!gBaseScale) return;
   var center;
@@ -4873,8 +4874,13 @@ function zoomToCountry(target,zoomScale,onEnd){
   var r1=[-center[0],-center[1]];
   var s1=zoomScale||(gBaseScale*1.8);
   var ir=d3.interpolate(r0,r1), is=d3.interpolate(s0,s1);
+  var myTok=++window._globeAnimToken;
   var tr=d3.transition().duration(850).ease(d3.easeCubicInOut).tween('geolandar-zoomto',function(){
     return function(t){
+      /* Animation annulée (glissement, molette ou nouvelle animation) :
+         elle ne doit plus jamais toucher la rotation, même après le
+         relâchement de la souris. */
+      if(myTok!==window._globeAnimToken) return;
       /* CORRECTIF : si l'utilisateur commence à faire glisser le globe
          pendant que cette animation de zoom (850ms) est encore en cours,
          les deux se disputaient la même rotation — l'animation continuait
@@ -4887,14 +4893,16 @@ function zoomToCountry(target,zoomScale,onEnd){
       if(typeof window._globeRedraw==='function') window._globeRedraw();
     };
   });
-  if(onEnd) tr.on('end',onEnd);
+  if(onEnd) tr.on('end',function(){ onEnd(); });
 }
 function zoomResetGlobeView(){
   if(!gProj||!gBaseScale) return;
   var s0=gProj.scale();
   var is=d3.interpolate(s0,gBaseScale);
+  var myTok=++window._globeAnimToken;
   d3.transition().duration(700).ease(d3.easeCubicInOut).tween('geolandar-zoomout',function(){
     return function(t){
+      if(myTok!==window._globeAnimToken) return;
       gProj.scale(is(t));
       if(typeof window._globeRedraw==='function') window._globeRedraw();
     };
@@ -5205,29 +5213,17 @@ function initGlobe(){
       gDragSelNode.attr('d',pathFn(filterFeatureNearPoint(gDragSelDatum,viewCenter,50)));
     }
     function redrawLight(){
-      /* Troisième version de cette fonction, après deux essais écartés :
-         1) cacher les 194 autres pays pendant le geste → trop radical,
-            laissait un vide noir inacceptable autour du pays sélectionné.
-         2) ne pas les recalculer du tout → leurs tracés déjà dessinés
-            deviennent faux dès que l'échelle/rotation change, et
-            s'affichaient comme des formes aberrantes.
-         Cette fois : le pays sélectionné, ses régions et les marqueurs
-         sont recalculés à CHAQUE frame (rien ne doit jamais prendre de
-         retard sur ce qui importe le plus). Le reste du monde (195 pays,
-         ~19ms/frame mesurés à lui seul) reste TOUJOURS VISIBLE mais n'est
-         recalculé qu'une frame sur trois pendant un geste actif — un léger
-         flou de mouvement en arrière-plan, sans jamais disparaître ni
-         afficher une forme fausse. */
+      /* CORRECTIF DÉFINITIF : tout est recalculé à CHAQUE frame, avec la
+         même rotation — graticule, 195 pays, pays sélectionné, régions.
+         Avant, le pays sélectionné et ses régions étaient redessinés à
+         chaque frame mais le reste du monde seulement une frame sur trois
+         (et le graticule jamais pendant le geste) : le pays avançait donc
+         en avance sur ses voisins puis ceux-ci le rattrapaient, d'où
+         l'impression que le pays bougeait par rapport au globe. */
       gDragFrameCount++;
+      gratPath.attr('d',pathFn(graticuleData));
+      countriesG.selectAll('.cp').attr('d',pathFn);
       updateSelectedCountryPath();
-      if(!gZoomedPays||!gDragSelNode||gDragFrameCount%3===0){
-        countriesG.selectAll('.cp').attr('d',pathFn);
-        /* Le recalcul global ci-dessus vient d'écraser le pays sélectionné
-           avec son MultiPolygon complet — on le redessine aussitôt avec sa
-           version filtrée (par rapport au centre de vue actuel) pour ne
-           pas réintroduire l'instabilité. */
-        updateSelectedCountryPath();
-      }
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
       if(typeof window._geoDiagUpdate==='function') window._geoDiagUpdate();
@@ -5293,6 +5289,7 @@ function initGlobe(){
         /* Signale à toute animation de zoom en cours (zoomToCountry) de
            s'arrêter net — voir le correctif dans zoomToCountry. */
         window._globeUserDragging=true;
+        window._globeAnimToken++; /* annule toute animation de zoom en cours */
         gDragFrameCount=0;
         findDragSelNode();
       })
@@ -5327,6 +5324,7 @@ function initGlobe(){
     /* Zoom molette */
     ds.node().addEventListener('wheel',function(event){
       event.preventDefault();
+      window._globeAnimToken++; /* la molette annule aussi l'animation */
       var s=proj.scale();
       proj.scale(Math.max(80,Math.min(Math.min(W,H)*5,s-event.deltaY*2)));
       redraw();
