@@ -2092,6 +2092,268 @@ function leaderHTML(pays, compact){
    l'affaiblissement des contre-pouvoirs (médias, justice), pas son mode de
    scrutin, donc cette nuance est dans la particularité, pas dans le schéma. */
 var INSTITUTIONS={
+/* ══ MOYEN-ORIENT — fonctionnement institutionnel (Phase 3, vérifié le 7 octobre 2026) ══
+   Les régimes de la région ne rentrent pas tous dans les trois schémas
+   européens (parlementaire, semi-présidentiel, directorial). Chaque fiche
+   peut donc fournir son propre diagramme via « schema » : des cases
+   (noeuds, positions en % du cadre) et des flèches (liens). */
+"Turquie":{archetype:"presidentiel",
+  chambres:[{nom:"Grande Assemblée nationale (TBMM)",sieges:600,mandat:"5 ans",mode:"Proportionnelle (d'Hondt) dans 87 circonscriptions, seuil national de 7 % (ou alliance)"}],
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct à deux tours, le même jour que les législatives",mandat:"5 ans, renouvelable 1 fois (un 3e mandat est possible si l'Assemblée vote des élections anticipées)",pouvoirs:"Chef de l'État ET du gouvernement depuis 2018 : nomme vice-président et ministres sans vote de l'Assemblée, gouverne par décrets présidentiels, peut dissoudre l'Assemblée"},
+  particularite:"Le référendum de 2017 a supprimé le poste de Premier ministre (effectif en 2018) : tout le pouvoir exécutif est concentré dans la présidence. L'Assemblée vote les lois et le budget mais ne peut plus renverser le gouvernement. Président et Assemblée sont élus le même jour, ce qui favorise une majorité alignée.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",ton:'citizen',x:50,y:90,large:true},
+    {id:'pres',titre:"Président",sous:"Chef de l'État et du gouvernement",ton:'power',x:22,y:52},
+    {id:'tbmm',titre:"Grande Assemblée nationale",sous:"600 sièges",ton:'parliament',x:78,y:52},
+    {id:'min',titre:"Vice-président & ministres",sous:"Nommés librement",ton:'default',x:24,y:14}
+  ],liens:[
+    {de:'cit',vers:'pres',l:"vote direct"},{de:'cit',vers:'tbmm',l:"vote"},
+    {de:'pres',vers:'min',l:"nomme"},{de:'tbmm',vers:'pres',l:"vote lois et budget"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"État central",competences:"Défense, diplomatie, justice, éducation nationale, santé, fiscalité : l'État turc est très centralisé."},
+    {niveau:"Régional",instance:"İl (81 provinces)",competences:"Gouverneur (vali) nommé par Ankara, représentant de l'État. À côté, un conseil provincial et, dans les 30 grandes métropoles, un maire métropolitain élus (urbanisme, transports, eau)."},
+    {niveau:"Local",instance:"Belediye / Commune",competences:"Maire et conseil municipal élus tous les 5 ans : voirie, services urbains, marchés, espaces verts."}
+  ]},
+"Israel":{archetype:"parlementaire",
+  chambres:[{nom:"Knesset",sieges:120,mandat:"4 ans",mode:"Proportionnelle intégrale, circonscription nationale unique, seuil de 3,25 %"}],
+  chefEtat:{titre:"Président de l'État",mode:"Élu par la Knesset",mandat:"7 ans, non renouvelable",pouvoirs:"Rôle surtout symbolique ; charge un député de former le gouvernement après les élections, droit de grâce"},
+  chefGouv:{titre:"Premier ministre",mode:"Député capable de réunir une coalition, investi par la Knesset",mandat:"4 ans (durée de la législature)",pouvoirs:"Dirige le gouvernement ; ne peut être renversé que par une motion de défiance constructive (désignant un successeur)"},
+  particularite:"Pas de constitution écrite : une série de Lois fondamentales en tient lieu, et la Cour suprême joue un rôle central de contre-pouvoir. Aucun parti n'a jamais obtenu seul la majorité (61 sièges) : tous les gouvernements sont des coalitions. Élections législatives prévues le 27 octobre 2026.",
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, justice, éducation, santé, fiscalité : l'État est très centralisé."},
+    {niveau:"Régional",instance:"Mehoz (6 districts)",competences:"Simples circonscriptions administratives de l'État, sans assemblée élue ni compétences propres."},
+    {niveau:"Local",instance:"Municipalités et conseils régionaux",competences:"Maires et conseils élus tous les 5 ans : urbanisme, écoles (bâtiments), services sociaux, voirie."}
+  ]},
+"Liban":{archetype:"parlementaire",
+  chambres:[{nom:"Assemblée nationale",sieges:128,mandat:"4 ans (prorogé jusqu'en 2028)",mode:"Proportionnelle avec vote préférentiel dans 15 circonscriptions, sièges réservés par confession"}],
+  chefEtat:{titre:"Président de la République (maronite)",mode:"Élu par l'Assemblée nationale (2/3 au 1er tour, majorité absolue ensuite)",mandat:"6 ans, non renouvelable immédiatement",pouvoirs:"Désigne le Président du Conseil après consultations du Parlement, promulgue les lois, commande les armées ; l'essentiel du pouvoir exécutif appartient au Conseil des ministres depuis Taëf"},
+  chefGouv:{titre:"Président du Conseil des ministres (sunnite)",mode:"Désigné par le Président après consultations parlementaires contraignantes, puis confiance de l'Assemblée",mandat:"Durée de la législature",pouvoirs:"Dirige le Conseil des ministres, qui détient le pouvoir exécutif collectivement"},
+  particularite:"Confessionnalisme politique : les sièges sont partagés à égalité entre chrétiens et musulmans, et les trois présidences sont réservées par usage (Pacte national de 1943, accords de Taëf de 1989) : un maronite à la tête de l'État, un sunnite au gouvernement, un chiite à la présidence du Parlement. Le 9 mars 2026, en pleine guerre, l'Assemblée a prorogé son propre mandat de deux ans et reporté les élections de mai 2026.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",sous:"Votent par circonscription",ton:'citizen',x:50,y:90,large:true},
+    {id:'parl',titre:"Assemblée nationale",sous:"128 sièges : 64 chrétiens / 64 musulmans",ton:'parliament',x:50,y:66,large:true},
+    {id:'pres',titre:"Président",sous:"Maronite · chef de l'État",ton:'symbolic',x:21,y:40},
+    {id:'pm',titre:"Président du Conseil",sous:"Sunnite · exécutif réel",ton:'power',x:50,y:15},
+    {id:'spk',titre:"Président du Parlement",sous:"Chiite",ton:'default',x:79,y:40}
+  ],liens:[
+    {de:'cit',vers:'parl',l:"vote"},{de:'parl',vers:'pres',l:"élit"},
+    {de:'pres',vers:'pm',l:"désigne"},{de:'parl',vers:'pm',l:"confiance"},{de:'parl',vers:'spk',l:"élit"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Défense, diplomatie, justice, fiscalité. Dans les faits, de nombreux services (écoles, santé, aides sociales) sont assurés par les communautés religieuses et les partis."},
+    {niveau:"Régional",instance:"Mohafazat (9 gouvernorats)",competences:"Gouverneur (mohafez) nommé par l'État, sans assemblée élue."},
+    {niveau:"Local",instance:"Municipalités",competences:"Conseils municipaux élus (dernier scrutin en mai 2025) : voirie, propreté, permis de construire, petits équipements."}
+  ]},
+"Syrie":{archetype:"transition",
+  chambres:[{nom:"Assemblée du peuple",sieges:210,mandat:"30 mois, renouvelables",mode:"2/3 désignés par des collèges électoraux régionaux (choisis par un comité nommé par le président), 1/3 nommés directement par le président"}],
+  chefEtat:{titre:"Président de transition",mode:"Désigné en janvier 2025 après la chute du régime Assad",mandat:"Période de transition de 5 ans (jusqu'en 2030)",pouvoirs:"Chef de l'État et seul détenteur de l'exécutif : nomme et révoque les ministres, commande les armées, nomme les juges de la Cour constitutionnelle et 1/3 de l'Assemblée"},
+  particularite:"Depuis la Déclaration constitutionnelle du 13 mars 2025, la Syrie vit un régime présidentiel de transition sans Premier ministre. L'Assemblée du peuple vote les lois mais ne peut ni interroger ni renverser le président ou les ministres. Les premières désignations (octobre 2025) n'ont pas eu lieu à Soueïda, Hassaké et Raqqa ; une constitution définitive et de vraies élections sont prévues au terme de la transition.",
+  schema:{noeuds:[
+    {id:'pres',titre:"Président de transition",sous:"Chef de l'État et du gouvernement",ton:'power',x:50,y:14,large:true},
+    {id:'min',titre:"Ministres",sous:"Responsables devant le président",ton:'default',x:22,y:48},
+    {id:'com',titre:"Comité électoral suprême",sous:"Nommé par le président",ton:'symbolic',x:78,y:46},
+    {id:'ass',titre:"Assemblée du peuple",sous:"210 sièges",ton:'parliament',x:50,y:76}
+  ],liens:[
+    {de:'pres',vers:'min',l:"nomme"},{de:'pres',vers:'com',l:"nomme"},
+    {de:'com',vers:'ass',l:"collèges : 2/3"},{de:'pres',vers:'ass',l:"nomme 1/3"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"État de transition",competences:"Ensemble des fonctions régaliennes, reconstruction, réforme de l'armée et de la justice."},
+    {niveau:"Régional",instance:"Mohafazat (14 gouvernorats)",competences:"Gouverneurs nommés par Damas. Une partie du Nord-Est reste administrée par l'Administration autonome kurde, avec laquelle une intégration est en négociation."},
+    {niveau:"Local",instance:"Conseils locaux",competences:"Services de base et reconstruction, souvent avec l'appui d'organisations internationales."}
+  ]},
+"Jordanie":{archetype:"monarchie_parlement",
+  chambres:[{nom:"Chambre des députés",sieges:138,mandat:"4 ans",mode:"Mixte : 97 sièges dans des circonscriptions locales et 41 sur une liste nationale réservée aux partis ; quotas pour les femmes, les chrétiens et les Tcherkesses"},{nom:"Sénat",sieges:69,mandat:"4 ans",mode:"Nommés par le roi (au plus la moitié de la Chambre des députés)"}],
+  chefEtat:{titre:"Roi",mode:"Héréditaire (dynastie hachémite)",mandat:"À vie",pouvoirs:"Nomme et révoque le Premier ministre, nomme le Sénat, peut dissoudre la Chambre, sanctionne les lois, commande les armées"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le roi, puis confiance de la Chambre des députés",mandat:"Selon la volonté du roi",pouvoirs:"Dirige le gouvernement et l'administration au quotidien"},
+  particularite:"Monarchie où le roi gouverne réellement, avec un Parlement élu dont le poids grandit : la réforme de 2022 réserve désormais une part croissante des sièges aux listes de partis, avec l'objectif à terme de gouvernements issus de majorités parlementaires. Aux élections de 2024, le Front d'action islamique (Frères musulmans) est devenu le premier parti.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",ton:'citizen',x:50,y:91,large:true},
+    {id:'roi',titre:"Roi",sous:"Pouvoir réel",ton:'power',x:50,y:12},
+    {id:'pm',titre:"Premier ministre",sous:"Gouvernement",ton:'default',x:24,y:40},
+    {id:'dep',titre:"Chambre des députés",sous:"138 sièges",ton:'parliament',x:56,y:68},
+    {id:'sen',titre:"Sénat",sous:"69 sièges",ton:'parliament',x:78,y:40}
+  ],liens:[
+    {de:'cit',vers:'dep',l:"vote"},{de:'roi',vers:'pm',l:"nomme"},{de:'roi',vers:'sen',l:"nomme"},
+    {de:'dep',vers:'pm',l:"confiance"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"Royaume",competences:"Ensemble des fonctions régaliennes, éducation, santé, fiscalité."},
+    {niveau:"Régional",instance:"Mouhafaza (12 gouvernorats)",competences:"Gouverneur nommé ; depuis la réforme de décentralisation de 2015, un conseil de gouvernorat en partie élu se prononce sur les priorités d'investissement."},
+    {niveau:"Local",instance:"Municipalités",competences:"Maires et conseils élus : voirie, urbanisme, propreté, marchés."}
+  ]},
+"Irak":{archetype:"parlementaire",
+  chambres:[{nom:"Conseil des représentants",sieges:329,mandat:"4 ans",mode:"Proportionnelle par gouvernorat ; 25 % de sièges réservés aux femmes et 9 sièges aux minorités"}],
+  chefEtat:{titre:"Président de la République (kurde)",mode:"Élu par le Conseil des représentants à la majorité des 2/3",mandat:"4 ans, renouvelable 1 fois",pouvoirs:"Rôle surtout protocolaire ; charge le candidat du plus grand bloc de former le gouvernement"},
+  chefGouv:{titre:"Premier ministre (chiite)",mode:"Désigné par le Président, investi par un vote de confiance du Conseil des représentants",mandat:"4 ans (durée de la législature)",pouvoirs:"Chef de l'exécutif et commandant en chef des forces armées"},
+  particularite:"Partage du pouvoir par usage depuis 2005 (« muhasasa ») : présidence à un Kurde, gouvernement à un chiite, présidence du Parlement à un sunnite. Fédéralisme asymétrique : la Région du Kurdistan a son propre parlement, son président et son gouvernement. Le Conseil de la Fédération, seconde chambre prévue par la Constitution, n'a jamais été créé.",
+  echelons:[
+    {niveau:"Fédéral",instance:"État fédéral",competences:"Défense, diplomatie, monnaie, gestion du pétrole (partagée et très disputée avec le Kurdistan)."},
+    {niveau:"Régional",instance:"Région du Kurdistan et 15 gouvernorats",competences:"Le Kurdistan dispose d'institutions quasi étatiques (parlement, gouvernement, forces peshmergas). Les autres gouvernorats ont un conseil provincial élu qui désigne le gouverneur."},
+    {niveau:"Local",instance:"Districts et sous-districts",competences:"Services de proximité, sous l'autorité du gouvernorat."}
+  ]},
+"Iran":{archetype:"theocratique",
+  chambres:[{nom:"Assemblée consultative islamique (Majlis)",sieges:290,mandat:"4 ans",mode:"Scrutin majoritaire, 5 sièges réservés aux minorités religieuses ; candidats filtrés par le Conseil des gardiens"}],
+  organes:[
+    {nom:"Assemblée des experts",sieges:88,note:"Religieux élus au suffrage direct pour 8 ans ; élit le Guide suprême et peut en théorie le destituer."},
+    {nom:"Conseil des gardiens de la Constitution",sieges:12,note:"6 juristes religieux nommés par le Guide et 6 juristes élus par le Majlis, pour 6 ans ; valide chaque loi et sélectionne les candidats à toutes les élections nationales."},
+    {nom:"Conseil de discernement",sieges:"≈45",note:"Nommé par le Guide ; tranche les conflits entre le Majlis et le Conseil des gardiens et conseille le Guide."}
+  ],
+  chefEtat:{titre:"Guide suprême",mode:"Élu par l'Assemblée des experts",mandat:"À vie",pouvoirs:"Autorité suprême : commande les armées et les Gardiens de la révolution, nomme le chef du pouvoir judiciaire, la moitié du Conseil des gardiens et les dirigeants des médias publics, fixe les grandes orientations"},
+  chefGouv:{titre:"Président de la République",mode:"Suffrage universel direct à deux tours (candidats filtrés)",mandat:"4 ans, renouvelable 1 fois consécutivement",pouvoirs:"Dirige le gouvernement et l'administration (pas de Premier ministre depuis 1989), sous l'autorité du Guide"},
+  particularite:"République islamique fondée sur le « velayat-e faqih » (tutelle du juriste religieux) : des institutions élues (président, Majlis) coexistent avec des institutions religieuses non élues qui ont le dernier mot. Ali Khamenei, Guide depuis 1989, a été tué le 28 février 2026 au début de la guerre avec Israël et les États-Unis ; l'Assemblée des experts a désigné son fils Mojtaba Khamenei en mars 2026.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",ton:'citizen',x:50,y:92,large:true},
+    {id:'guide',titre:"Guide suprême",sous:"Autorité suprême",ton:'power',x:50,y:9},
+    {id:'exp',titre:"Assemblée des experts",sous:"88 religieux",ton:'parliament',x:50,y:52},
+    {id:'pres',titre:"Président",sous:"Gouvernement",ton:'default',x:18,y:64},
+    {id:'maj',titre:"Majlis",sous:"290 sièges",ton:'parliament',x:84,y:64},
+    {id:'gard',titre:"Conseil des gardiens",sous:"12 juristes",ton:'symbolic',x:80,y:28}
+  ],liens:[
+    {de:'cit',vers:'exp',l:"vote"},{de:'cit',vers:'pres',l:"vote"},{de:'cit',vers:'maj',l:"vote"},
+    {de:'exp',vers:'guide',l:"élit"},{de:'guide',vers:'gard',l:"nomme 6/12"},
+    {de:'gard',vers:'maj',l:"valide lois et candidats"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"République islamique",competences:"Pouvoir très centralisé à Téhéran : défense, sécurité, justice, énergie, éducation."},
+    {niveau:"Régional",instance:"Ostan (31 provinces)",competences:"Gouverneur général nommé par le ministère de l'Intérieur. Des conseils provinciaux, issus des conseils locaux, ont un rôle consultatif."},
+    {niveau:"Local",instance:"Conseils islamiques de ville et de village",competences:"Élus au suffrage direct (candidats filtrés) ; élisent le maire et votent le budget municipal."}
+  ]},
+"Arabie Saoudite":{archetype:"monarchie_absolue",
+  chambres:[{nom:"Conseil consultatif (Majlis al-Choura)",sieges:150,mandat:"4 ans",mode:"Tous nommés par le roi (environ 20 % de femmes) ; rôle consultatif"}],
+  chefEtat:{titre:"Roi (Serviteur des deux saintes mosquées)",mode:"Héréditaire au sein de la famille Al Saoud ; le Conseil d'allégeance valide le prince héritier",mandat:"À vie",pouvoirs:"Pouvoir absolu : législatif, exécutif et judiciaire procèdent du roi ; il gouverne par décrets royaux"},
+  chefGouv:{titre:"Président du Conseil des ministres",mode:"Fonction confiée par le roi au prince héritier depuis 2022",mandat:"Selon la volonté du roi",pouvoirs:"Dirige le gouvernement ; en pratique, le prince héritier conduit la politique du royaume"},
+  particularite:"Monarchie absolue sans constitution au sens occidental : la Loi fondamentale de 1992 pose que le Coran et la Sunna tiennent lieu de constitution. Il n'existe ni partis politiques ni élection nationale ; le Conseil consultatif étudie et propose des lois mais ne peut rien imposer.",
+  schema:{noeuds:[
+    {id:'roi',titre:"Roi",sous:"Pouvoir absolu",ton:'power',x:50,y:13},
+    {id:'pm',titre:"Prince héritier",sous:"Président du Conseil des ministres",ton:'power',x:24,y:52},
+    {id:'sh',titre:"Conseil consultatif",sous:"150 membres nommés",ton:'symbolic',x:76,y:52},
+    {id:'cit',titre:"Citoyens",sous:"Aucun scrutin national",ton:'citizen',x:50,y:88,pointille:true,large:true}
+  ],liens:[
+    {de:'roi',vers:'pm',l:"désigne"},{de:'roi',vers:'sh',l:"nomme"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"Royaume",competences:"Ensemble des pouvoirs, dont la gestion des revenus pétroliers et le programme « Vision 2030 »."},
+    {niveau:"Régional",instance:"Mintaqa (13 régions)",competences:"Chaque région est dirigée par un émir, le plus souvent un prince de la famille royale, nommé par le roi."},
+    {niveau:"Local",instance:"Conseils municipaux",competences:"En partie élus depuis 2005 (ouverts au vote des femmes en 2015) ; rôle surtout consultatif sur les services municipaux."}
+  ]},
+"Koweit":{archetype:"monarchie_parlement",
+  chambres:[{nom:"Assemblée nationale (suspendue)",sieges:50,mandat:"4 ans — suspendue depuis le 10 mai 2024",mode:"Vote unique dans 5 circonscriptions ; les ministres y siègent de droit ; pas de partis légaux"}],
+  chefEtat:{titre:"Émir",mode:"Héréditaire (descendants de Moubarak Al-Sabah), le prince héritier est approuvé par l'Assemblée",mandat:"À vie",pouvoirs:"Nomme le Premier ministre, peut dissoudre l'Assemblée ; exerce aujourd'hui le pouvoir législatif par décrets-lois"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par l'émir, toujours issu de la famille régnante",mandat:"Selon la volonté de l'émir",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Le Koweït avait le Parlement le plus puissant du Golfe : élu, il pouvait interroger les ministres et voter leur défiance. Après des années de blocage, l'émir l'a suspendu le 10 mai 2024, avec plusieurs articles de la Constitution, pour une durée pouvant aller jusqu'à quatre ans. Depuis, l'émir et le gouvernement légifèrent seuls par décrets.",
+  schema:{noeuds:[
+    {id:'emir',titre:"Émir",sous:"Gouverne par décrets",ton:'power',x:50,y:13},
+    {id:'pm',titre:"Premier ministre",sous:"Gouvernement",ton:'default',x:24,y:50},
+    {id:'ass',titre:"Assemblée nationale",sous:"50 élus — suspendue",ton:'parliament',x:76,y:56,pointille:true},
+    {id:'cit',titre:"Citoyens",sous:"Vote suspendu",ton:'citizen',x:76,y:89,pointille:true}
+  ],liens:[
+    {de:'emir',vers:'pm',l:"nomme"},{de:'emir',vers:'ass',l:"a suspendu"},{de:'cit',vers:'ass',l:"vote"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Ensemble des pouvoirs, revenus pétroliers, services publics très développés pour les citoyens."},
+    {niveau:"Régional",instance:"Mouhafaza (6 gouvernorats)",competences:"Gouverneurs nommés, rôle essentiellement administratif."},
+    {niveau:"Local",instance:"Conseil municipal",competences:"Conseil municipal national en partie élu ; compétences limitées (urbanisme, permis)."}
+  ]},
+"Bahrein":{archetype:"monarchie_parlement",
+  chambres:[{nom:"Conseil des représentants",sieges:40,mandat:"4 ans",mode:"Scrutin uninominal à deux tours ; partis interdits (seules des « sociétés politiques » existent)"},{nom:"Conseil consultatif (Choura)",sieges:40,mandat:"4 ans",mode:"Nommés par le roi"}],
+  chefEtat:{titre:"Roi",mode:"Héréditaire (famille Al Khalifa)",mandat:"À vie",pouvoirs:"Nomme le Premier ministre, les ministres et le Conseil consultatif, peut dissoudre la chambre élue"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le roi (le prince héritier depuis 2020)",mandat:"Selon la volonté du roi",pouvoirs:"Dirige le gouvernement"},
+  particularite:"Parlement bicaméral à parité : la chambre élue vote les lois, mais la chambre nommée par le roi peut les bloquer. Majorité de la population chiite gouvernée par une dynastie sunnite ; la principale formation d'opposition chiite, Al-Wefaq, a été dissoute en 2016. Élections législatives prévues en novembre 2026.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",ton:'citizen',x:26,y:91},
+    {id:'roi',titre:"Roi",sous:"Pouvoir réel",ton:'power',x:50,y:11},
+    {id:'pm',titre:"Premier ministre",sous:"Prince héritier",ton:'default',x:24,y:36},
+    {id:'rep',titre:"Conseil des représentants",sous:"40 élus",ton:'parliament',x:26,y:66},
+    {id:'sh',titre:"Conseil consultatif",sous:"40 nommés",ton:'parliament',x:76,y:58}
+  ],liens:[
+    {de:'cit',vers:'rep',l:"vote"},{de:'roi',vers:'pm',l:"nomme"},{de:'roi',vers:'sh',l:"nomme"},
+    {de:'sh',vers:'rep',l:"peut bloquer"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"Royaume",competences:"Ensemble des pouvoirs régaliens et économiques."},
+    {niveau:"Régional",instance:"Mouhafaza (4 gouvernorats)",competences:"Gouverneurs nommés, rôle administratif et de sécurité."},
+    {niveau:"Local",instance:"Conseils municipaux",competences:"Élus, sauf dans la capitale où le conseil est nommé ; services municipaux."}
+  ]},
+"Qatar":{archetype:"monarchie_absolue",
+  chambres:[{nom:"Conseil de la Choura",sieges:45,mandat:"Nommés par l'émir",mode:"Tous nommés par l'émir depuis le référendum de novembre 2024 (30 sièges étaient élus en 2021)"}],
+  chefEtat:{titre:"Émir",mode:"Héréditaire (famille Al Thani)",mandat:"À vie",pouvoirs:"Pouvoir exécutif et législatif ; nomme le Premier ministre, les ministres et l'ensemble du Conseil de la Choura"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par l'émir",mandat:"Selon la volonté de l'émir",pouvoirs:"Dirige le gouvernement (souvent cumulé avec les Affaires étrangères)"},
+  particularite:"Seule expérience électorale nationale de son histoire, l'élection de 30 membres du Conseil de la Choura en 2021 a été abandonnée par référendum en novembre 2024, au nom de l'« unité nationale ». Le Conseil, désormais entièrement nommé, examine les lois et le budget proposés par le gouvernement. Il n'existe pas de partis politiques.",
+  schema:{noeuds:[
+    {id:'emir',titre:"Émir",sous:"Pouvoir absolu",ton:'power',x:50,y:13},
+    {id:'pm',titre:"Premier ministre",sous:"Gouvernement",ton:'default',x:24,y:52},
+    {id:'sh',titre:"Conseil de la Choura",sous:"45 membres nommés",ton:'symbolic',x:76,y:52},
+    {id:'cit',titre:"Citoyens",sous:"Aucun scrutin national",ton:'citizen',x:50,y:88,pointille:true,large:true}
+  ],liens:[
+    {de:'emir',vers:'pm',l:"nomme"},{de:'emir',vers:'sh',l:"nomme"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"État",competences:"Ensemble des pouvoirs, gestion des revenus du gaz naturel."},
+    {niveau:"Local",instance:"Baladiya (8 municipalités)",competences:"Un Conseil municipal central de 29 membres élus, consultatif, conseille le ministère des Municipalités."}
+  ]},
+"Emirats arabes":{archetype:"monarchie_absolue",
+  chambres:[{nom:"Conseil national fédéral",sieges:40,mandat:"4 ans",mode:"20 élus par un collège électoral restreint désigné par les émirs, 20 nommés par les émirs ; rôle consultatif, 50 % de femmes"}],
+  organes:[
+    {nom:"Conseil suprême fédéral",sieges:7,note:"Réunit les 7 émirs : organe suprême de la fédération, il élit le président et le vice-président, ratifie les lois fédérales ; Abou Dhabi et Dubaï y disposent d'un droit de veto."}
+  ],
+  chefEtat:{titre:"Président de la Fédération",mode:"Élu par le Conseil suprême fédéral (par usage, l'émir d'Abou Dhabi)",mandat:"5 ans, renouvelable",pouvoirs:"Chef de l'État, commandant des armées"},
+  chefGouv:{titre:"Vice-président et Premier ministre",mode:"Par usage, l'émir de Dubaï",mandat:"5 ans",pouvoirs:"Dirige le Conseil des ministres fédéral"},
+  particularite:"Fédération de sept monarchies absolues (Abou Dhabi, Dubaï, Charjah, Ajman, Oumm al-Qaïwaïn, Ras el-Khaïmah, Fujaïrah). Chaque émir garde un pouvoir considérable sur son émirat. Le Conseil national fédéral, en partie élu par un collège restreint, n'a qu'un rôle consultatif. Prochain renouvellement prévu en 2027.",
+  schema:{noeuds:[
+    {id:'csf',titre:"Conseil suprême fédéral",sous:"Les 7 émirs",ton:'power',x:50,y:42,large:true},
+    {id:'pres',titre:"Président",sous:"Émir d'Abou Dhabi",ton:'power',x:24,y:13},
+    {id:'pm',titre:"Vice-président / PM",sous:"Émir de Dubaï",ton:'default',x:76,y:17},
+    {id:'fnc',titre:"Conseil national fédéral",sous:"40 sièges, consultatif",ton:'parliament',x:28,y:72},
+    {id:'col',titre:"Collège électoral",sous:"Choisi par les émirs",ton:'citizen',x:74,y:84}
+  ],liens:[
+    {de:'csf',vers:'pres',l:"élit"},{de:'csf',vers:'pm',l:"élit"},
+    {de:'csf',vers:'fnc',l:"nomme 20"},{de:'col',vers:'fnc',l:"élit 20"}
+  ]},
+  echelons:[
+    {niveau:"Fédéral",instance:"Fédération",competences:"Défense, diplomatie, monnaie, immigration, éducation et santé fédérales."},
+    {niveau:"Émirat",instance:"7 émirats",competences:"Chaque émir gouverne son émirat : ressources naturelles (pétrole), police locale, développement économique, justice locale (Dubaï et Abou Dhabi ont leurs propres tribunaux)."},
+    {niveau:"Local",instance:"Municipalités",competences:"Services urbains, gérés par chaque émirat (pas d'élus municipaux)."}
+  ]},
+"Oman":{archetype:"monarchie_absolue",
+  chambres:[{nom:"Majlis al-Choura",sieges:90,mandat:"4 ans",mode:"Élus au suffrage universel (vote électronique), un ou deux sièges par wilayat ; pas de partis"},{nom:"Majlis al-Dawla (Conseil d'État)",sieges:"≈85",mandat:"4 ans",mode:"Nommés par le sultan, au plus autant que les membres élus"}],
+  chefEtat:{titre:"Sultan",mode:"Héréditaire (famille Al Saïd) ; depuis 2021, le fils aîné du sultan est prince héritier",mandat:"À vie",pouvoirs:"Chef de l'État ET du gouvernement : il préside lui-même le Conseil des ministres et gouverne par décrets royaux"},
+  particularite:"Le sultan cumule toutes les fonctions (Premier ministre, et traditionnellement Défense, Affaires étrangères ou Finances). Les deux chambres forment le Conseil d'Oman : la chambre élue peut examiner les projets de loi et interroger les ministres sur les services, mais pas sur la défense ni la politique étrangère.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",ton:'citizen',x:26,y:91},
+    {id:'sul',titre:"Sultan",sous:"Chef de l'État et du gouvernement",ton:'power',x:50,y:12,large:true},
+    {id:'min',titre:"Conseil des ministres",sous:"Présidé par le sultan",ton:'default',x:78,y:40},
+    {id:'sh',titre:"Majlis al-Choura",sous:"90 élus",ton:'parliament',x:26,y:62},
+    {id:'dw',titre:"Majlis al-Dawla",sous:"≈85 nommés",ton:'symbolic',x:72,y:74}
+  ],liens:[
+    {de:'cit',vers:'sh',l:"vote"},{de:'sul',vers:'min',l:"préside / nomme"},{de:'sul',vers:'dw',l:"nomme"},
+    {de:'sh',vers:'sul',l:"avis consultatif"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"Sultanat",competences:"Ensemble des pouvoirs régaliens et économiques."},
+    {niveau:"Régional",instance:"Mouhafaza (11 gouvernorats)",competences:"Gouverneurs nommés ; depuis 2022, chaque gouvernorat gère un budget de développement propre."},
+    {niveau:"Local",instance:"Wilayat et conseils municipaux",competences:"Conseils municipaux en partie élus, rôle consultatif sur les services locaux."}
+  ]},
+"Yemen":{archetype:"transition",
+  chambres:[{nom:"Chambre des représentants",sieges:301,mandat:"Élue en 2003, prorogée faute d'élections",mode:"Scrutin majoritaire uninominal (dernière élection en 2003)"},{nom:"Conseil de la Choura",sieges:111,mandat:"Nommés",mode:"Nommés par le président (aujourd'hui par le Conseil présidentiel)"}],
+  chefEtat:{titre:"Conseil présidentiel de direction",mode:"Créé en avril 2022 par transfert des pouvoirs du président, sous l'égide de l'Arabie saoudite",mandat:"Jusqu'à la fin de la transition",pouvoirs:"Exerce collectivement les pouvoirs de chef de l'État ; nomme le Premier ministre"},
+  chefGouv:{titre:"Premier ministre",mode:"Nommé par le Conseil présidentiel",mandat:"Selon le Conseil présidentiel",pouvoirs:"Dirige le gouvernement reconnu internationalement, installé à Aden"},
+  particularite:"Pays divisé par la guerre depuis 2014 : le gouvernement reconnu internationalement siège à Aden, tandis que les Houthis contrôlent Sanaa et le nord-ouest avec leurs propres institutions (Conseil politique suprême). En janvier 2026, le chef du Conseil de transition du Sud a été exclu du Conseil présidentiel. Aucune élection nationale depuis 2012.",
+  schema:{noeuds:[
+    {id:'cpd',titre:"Conseil présidentiel de direction",sous:"Pouvoir de chef de l'État",ton:'power',x:50,y:13,large:true},
+    {id:'pm',titre:"Premier ministre",sous:"Gouvernement (Aden)",ton:'default',x:24,y:48},
+    {id:'rep',titre:"Chambre des représentants",sous:"301 sièges, élue en 2003",ton:'parliament',x:28,y:80,pointille:true},
+    {id:'sh',titre:"Conseil de la Choura",sous:"111 nommés",ton:'symbolic',x:76,y:48},
+    {id:'hou',titre:"Houthis (Sanaa)",sous:"Autorité rivale de fait",ton:'default',x:76,y:82,pointille:true}
+  ],liens:[
+    {de:'cpd',vers:'pm',l:"nomme"},{de:'cpd',vers:'sh',l:"nomme"}
+  ]},
+  echelons:[
+    {niveau:"National",instance:"Gouvernement reconnu (Aden)",competences:"Diplomatie, gestion de l'aide internationale, forces gouvernementales ; contrôle territorial partiel."},
+    {niveau:"Régional",instance:"Mouhafaza (22 gouvernorats)",competences:"Gouverneurs nommés, mais le contrôle réel dépend de la situation militaire : une partie des gouvernorats est tenue par les Houthis."},
+    {niveau:"Local",instance:"Districts",competences:"Conseils locaux élus en 2006, jamais renouvelés ; services assurés en grande partie par les organisations humanitaires."}
+  ]},
 "France":{archetype:"semipresidentiel",
   chambres:[{nom:"Assemblée nationale",sieges:577,mandat:"5 ans",mode:"Scrutin majoritaire à 2 tours"},{nom:"Sénat",sieges:348,mandat:"6 ans",mode:"Suffrage indirect (grands électeurs)"}],
   chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct",mandat:"5 ans, renouvelable 1 fois",pouvoirs:"Chef des armées, dissout l'Assemblée, nomme le Premier ministre, politique étrangère"},
@@ -2496,7 +2758,12 @@ var INSTITUTIONS={
 var INSTITUTIONS_ARCHETYPE_LABEL={
   semipresidentiel:{fr:"Régime semi-présidentiel",en:"Semi-presidential system"},
   parlementaire:{fr:"Régime parlementaire",en:"Parliamentary system"},
-  directorial:{fr:"Régime directorial collégial",en:"Collegial directorial system"}
+  directorial:{fr:"Régime directorial collégial",en:"Collegial directorial system"},
+  presidentiel:{fr:"Régime présidentiel",en:"Presidential system"},
+  monarchie_absolue:{fr:"Monarchie absolue",en:"Absolute monarchy"},
+  monarchie_parlement:{fr:"Monarchie à parlement élu (le roi gouverne)",en:"Monarchy with an elected parliament (the monarch rules)"},
+  theocratique:{fr:"République islamique (théocratie élective)",en:"Islamic republic (elective theocracy)"},
+  transition:{fr:"Régime de transition",en:"Transitional regime"}
 };
 /* ══ SCHÉMA INSTITUTIONNEL — diagramme libre (nœuds + flèches SVG) ══
    Remplace l'ancien schéma en colonne stricte : chaque institution est
@@ -2534,6 +2801,13 @@ function institDiagramRender(nodes,edges){
 }
 function institSchema(c){
   var fr=lang==='fr';
+  /* Fiche avec son propre diagramme (régimes hors des 3 modèles européens) */
+  if(c.schema){
+    return institDiagramRender(
+      c.schema.noeuds.map(function(n){return institNode(n.id,n.titre,n.sous||'',n.ton,n.x,n.y,n.pointille,n.large);}),
+      c.schema.liens.map(function(l){return {from:l.de,to:l.vers,label:l.l};})
+    );
+  }
   var citoyens=fr?'Citoyens':'Citizens';
   var vote=fr?'vote':'vote';
   var nodes=[],edges=[];
@@ -3426,6 +3700,111 @@ function showRegion(pays,nomRegion){
    renseignée pour l'instant — à étendre pays par pays, avec la même
    automatisation Supabase que pour les dirigeants une fois ce format validé. */
 var CHAMBRES_COMPOSITION={
+  /* ══ MOYEN-ORIENT (vérifié le 7 octobre 2026) ══ */
+  "Turquie":{
+    verifie:"7 octobre 2026 (répartition indicative de la législature élue en mai 2023 ; les changements d'étiquette sont fréquents)",
+    chambres:{
+      "Grande Assemblée nationale":{
+        total:600,
+        groupes:[
+          {n:"DEM Parti",s:56,c:"#7c3aed"},
+          {n:"CHP",s:136,c:"#dc2626"},
+          {n:"İYİ Parti",s:29,c:"#38bdf8"},
+          {n:"Yeni Yol",s:20,c:"#2f9e44"},
+          {n:"Autres et indépendants",s:36,c:"#64748b"},
+          {n:"AKP",s:277,c:"#f59e0b"},
+          {n:"MHP",s:46,c:"#1e3a5f"}
+        ]
+      }
+    }
+  },
+  "Israel":{
+    verifie:"7 octobre 2026 (25e Knesset, élue en novembre 2022)",
+    chambres:{
+      "Knesset":{
+        total:120,
+        perime:true,
+        groupes:[
+          {n:"Hadash-Ta'al",s:5,c:"#dc2626"},
+          {n:"Ra'am (Liste arabe unie)",s:5,c:"#2f9e44"},
+          {n:"Les Démocrates",s:4,c:"#f472b6"},
+          {n:"Yesh Atid",s:24,c:"#38bdf8"},
+          {n:"Unité nationale",s:8,c:"#1e5ba8"},
+          {n:"Yisrael Beiteinu",s:6,c:"#0ea5e9"},
+          {n:"Tikva Hadasha",s:4,c:"#94a3b8"},
+          {n:"Likoud",s:32,c:"#1e3a8a"},
+          {n:"Shas",s:11,c:"#0f172a"},
+          {n:"Judaïsme unifié de la Torah",s:7,c:"#334155"},
+          {n:"Parti sioniste religieux",s:6,c:"#a16207"},
+          {n:"Otzma Yehudit",s:7,c:"#f59e0b"},
+          {n:"Noam",s:1,c:"#78350f"}
+        ]
+      }
+    }
+  },
+  "Liban":{
+    verifie:"7 octobre 2026 (répartition constitutionnelle des sièges par confession, accords de Taëf)",
+    chambres:{
+      "Assemblée nationale — sièges par confession":{
+        total:128,
+        groupes:[
+          {n:"Maronites",s:34,c:"#1e5ba8"},
+          {n:"Grecs-orthodoxes",s:14,c:"#38bdf8"},
+          {n:"Grecs-catholiques",s:8,c:"#7dd3fc"},
+          {n:"Arméniens orthodoxes",s:5,c:"#a855f7"},
+          {n:"Arméniens catholiques",s:1,c:"#c084fc"},
+          {n:"Protestants",s:1,c:"#e9d5ff"},
+          {n:"Minorités chrétiennes",s:1,c:"#94a3b8"},
+          {n:"Druzes",s:8,c:"#f2c200"},
+          {n:"Alaouites",s:2,c:"#f59e0b"},
+          {n:"Chiites",s:27,c:"#2f9e44"},
+          {n:"Sunnites",s:27,c:"#16a34a"}
+        ]
+      }
+    }
+  },
+  "Jordanie":{
+    verifie:"7 octobre 2026 (élection du 10 septembre 2024)",
+    chambres:{
+      "Chambre des députés":{
+        total:138,
+        groupes:[
+          {n:"Front d'action islamique",s:31,c:"#2f9e44"},
+          {n:"Parti islamique national",s:7,c:"#86efac"},
+          {n:"Petits partis (Travail, Namaa, Démocrate civil, Jeunesse, Terre bénie)",s:8,c:"#f472b6"},
+          {n:"Azem",s:5,c:"#a855f7"},
+          {n:"Union nationale",s:5,c:"#38bdf8"},
+          {n:"Progrès (Taqaddum)",s:8,c:"#0ea5e9"},
+          {n:"Charte nationale (Mithaq)",s:21,c:"#1e5ba8"},
+          {n:"Eradah",s:19,c:"#1e3a5f"},
+          {n:"Listes locales (indépendants, tribus)",s:34,c:"#64748b"}
+        ]
+      }
+    }
+  },
+  "Irak":{
+    verifie:"7 octobre 2026 (élection du 11 novembre 2025, sièges par liste)",
+    chambres:{
+      "Conseil des représentants":{
+        total:329,
+        groupes:[
+          {n:"Reconstruction et développement",s:46,c:"#1e5ba8"},
+          {n:"État de droit",s:29,c:"#1e3a5f"},
+          {n:"Sadiqoun",s:27,c:"#166534"},
+          {n:"Badr",s:18,c:"#2f9e44"},
+          {n:"Forces de l'État national",s:18,c:"#0ea5e9"},
+          {n:"Listes de 4 à 8 sièges",s:51,c:"#94a3b8"},
+          {n:"Petites listes (1 à 3 sièges)",s:36,c:"#64748b"},
+          {n:"Taqaddum",s:27,c:"#f59e0b"},
+          {n:"Azm",s:15,c:"#f2c200"},
+          {n:"Souveraineté nationale",s:9,c:"#fde68a"},
+          {n:"PDK (Kurdistan)",s:26,c:"#ea580c"},
+          {n:"UPK (Kurdistan)",s:18,c:"#16a34a"},
+          {n:"Quotas minorités",s:9,c:"#a855f7"}
+        ]
+      }
+    }
+  },
   "France":{
     verifie:"22 septembre 2026",
     chambres:{
@@ -4230,6 +4609,7 @@ function renderInstitutions(pays){
   data.chambres.forEach(function(ch){
     b+=institInfoRow(ch.nom+' — '+ch.sieges+(fr?' sièges':' seats'),(fr?'Mandat : ':'Term: ')+ch.mandat+' · '+ch.mode);
   });
+  if(data.organes)data.organes.forEach(function(o){b+=institInfoRow(o.nom+' — '+o.sieges+(fr?' membres':' members'),o.note);});
   if(data.chambreNonElue)b+=institInfoRow(data.chambreNonElue.nom+' — '+data.chambreNonElue.sieges+(fr?' sièges':' seats'),data.chambreNonElue.note);
   if(data.chefEtat)b+=institInfoRow(data.chefEtat.titre,data.chefEtat.mode+' · '+(fr?'Mandat : ':'Term: ')+data.chefEtat.mandat+' · '+data.chefEtat.pouvoirs);
   if(data.chefGouv)b+=institInfoRow(data.chefGouv.titre,data.chefGouv.mode+' · '+(fr?'Mandat : ':'Term: ')+data.chefGouv.mandat+' · '+data.chefGouv.pouvoirs);
@@ -5361,7 +5741,7 @@ function initGlobe(){
     ds.node().addEventListener('gesturestart',function(e){
       e.preventDefault();
       if(gTimer){gTimer.stop();gTimer=null;}
-      window._globeUserDragging=true;
+      window._globeUserDragging=true; window._globeAnimToken++;
       pinchScale0=proj.scale();
       gDragFrameCount=0;
       findDragSelNode();
@@ -5387,7 +5767,7 @@ function initGlobe(){
     ds.node().addEventListener('touchstart',function(e){
       if(e.touches.length===2){
         if(gTimer){gTimer.stop();gTimer=null;}
-        window._globeUserDragging=true;
+        window._globeUserDragging=true; window._globeAnimToken++;
         lastDist=Math.hypot(
           e.touches[0].clientX-e.touches[1].clientX,
           e.touches[0].clientY-e.touches[1].clientY
@@ -6381,13 +6761,19 @@ function renderSpotlight(){
      ex: Zambie si c'est bien la prochaine échéance connue) */
   var ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   var partielles=E.filter(function(e){return e.partial===true && e.d && e.d.slice(0,7)===ym;});
-  var electionVedette=null;
+  /* CORRECTIF : quand plusieurs élections tombent le même jour (ex.
+     Lettonie et Brésil), on n'en affichait qu'une seule. On garde
+     désormais TOUTES celles de la date la plus proche, une case chacune. */
+  var electionsVedette=[];
   if(partielles.length){
-    electionVedette=partielles[0];
+    electionsVedette=partielles.slice();
   } else {
     var candidates=E.filter(function(e){ var d=daysTo(e.d); return !e.done && d!==null && d>=0; });
     candidates.sort(function(a,b){ return daysTo(a.d)-daysTo(b.d); });
-    if(candidates.length) electionVedette=candidates[0];
+    if(candidates.length){
+      var dMin=daysTo(candidates[0].d);
+      electionsVedette=candidates.filter(function(e){ return daysTo(e.d)===dMin; });
+    }
   }
 
   function renderPaysSlide(){
@@ -6411,8 +6797,7 @@ function renderSpotlight(){
     renderFlagInto('spotlightFlagBox',paysMois.p,88,66);
   }
 
-  function renderElectionSlide(){
-    var e=electionVedette;
+  function renderElectionSlide(e){
     if(eyebrow) eyebrow.textContent=(partielles.length?(fr?'🗳️ Élection partielle ce mois-ci':'🗳️ By-election this month'):(fr?'🗳️ Élection à la une':'🗳️ Featured election'));
     var html='<div class="spotlight-top centered"><div class="spotlight-flag" id="spotlightFlagBox"></div><div class="spotlight-country">'+e.p+'</div></div>';
     html+='<div class="spotlight-facts"><div class="spotlight-fact"><span>📅</span>'+fmtDate(e.d,e.cert)+'</div><div class="spotlight-fact"><span>🗳️</span>'+btlbl(e.t)+'</div></div>';
@@ -6431,7 +6816,9 @@ function renderSpotlight(){
   }
 
   _spotlightSlides=[renderPaysSlide];
-  if(electionVedette) _spotlightSlides.push(renderElectionSlide);
+  electionsVedette.forEach(function(ev){
+    _spotlightSlides.push(function(){ renderElectionSlide(ev); });
+  });
 
   /* Fixer la hauteur de la carte à la plus grande des variantes réellement
      rendues (pas une estimation) : chaque slide est rendu tour à tour, sa
