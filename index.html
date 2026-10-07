@@ -523,7 +523,7 @@ footer{border-top:1px solid var(--bd);padding:18px 28px;display:flex;justify-con
       Chargement du globe...
     </div>
     <svg id="globe-svg"></svg>
-    <div id="geoDiag" style="position:fixed;bottom:10px;left:10px;z-index:99998;background:rgba(10,14,26,.96);color:#4ade80;font-family:monospace;font-size:11px;padding:10px 14px;border-radius:8px;border:1px solid rgba(74,222,128,.4);white-space:pre;line-height:1.6;max-width:460px;pointer-events:none;">Diagnostic : sélectionne un pays et fais glisser le globe</div>
+    
     <button id="gbtn" onclick="closePanels()">← <span id="gbtxt">Retour</span></button>
     <div id="gzoom">
       <button id="gzin" onclick="globeZoom(1)" title="Zoom +">+</button>
@@ -2160,7 +2160,7 @@ var INSTITUTIONS={
   ]},
   echelons:[
     {niveau:"National",instance:"État de transition",competences:"Ensemble des fonctions régaliennes, reconstruction, réforme de l'armée et de la justice."},
-    {niveau:"Régional",instance:"Mohafazat (14 gouvernorats)",competences:"Gouverneurs nommés par Damas. Une partie du Nord-Est reste administrée par l'Administration autonome kurde, avec laquelle une intégration est en négociation."},
+    {niveau:"Régional",instance:"Mohafazat (14 gouvernorats)",competences:"Gouverneurs nommés par Damas. Le Nord-Est, longtemps administré par l'Administration autonome kurde, a été intégré aux institutions de l'État en 2026 (accord du 29 janvier)."},
     {niveau:"Local",instance:"Conseils locaux",competences:"Services de base et reconstruction, souvent avec l'appui d'organisations internationales."}
   ]},
 "Jordanie":{archetype:"monarchie_parlement",
@@ -2937,6 +2937,30 @@ var REGIONS_SOURCE={
   "Moldavie":{nameProp:"name",type:"Région autonome",noDim:true}
 };
 var REGIONS_LEADERS={
+  "Emirats arabes":{
+    type:"Émirat",
+    prerogatives:"Chaque émir gouverne son émirat : ressources naturelles (pétrole et gaz), police, développement économique, justice locale. Les sept émirs forment le Conseil suprême fédéral, organe suprême de la fédération.",
+    disclaimer:"Monarchies héréditaires : pas d'élection, pas de partis. Situation vérifiée le 7 octobre 2026.",
+    liste:{
+      "Abou Dhabi":{n:"Mohammed ben Zayed Al Nahyane",t:"Émir (depuis 2022) · Président de la Fédération",parti:"Famille Al Nahyane",pos:null},
+      "Dubaï":{n:"Mohammed ben Rachid Al Maktoum",t:"Émir (depuis 2006) · Vice-président et Premier ministre",parti:"Famille Al Maktoum",pos:null},
+      "Charjah":{n:"Sultan ben Mohammed Al Qasimi",t:"Émir (depuis 1972)",parti:"Famille Al Qasimi",pos:null},
+      "Ajman":{n:"Humaid ben Rachid Al Nuaimi",t:"Émir (depuis 1981)",parti:"Famille Al Nuaimi",pos:null},
+      "Oumm al-Qaïwaïn":{n:"Saoud ben Rachid Al Mualla",t:"Émir (depuis 2009)",parti:"Famille Al Mualla",pos:null},
+      "Ras el-Khaïmah":{n:"Saoud ben Saqr Al Qasimi",t:"Émir (depuis 2010)",parti:"Famille Al Qasimi",pos:null},
+      "Fujaïrah":{n:"Hamad ben Mohammed Al Sharqi",t:"Émir (depuis 1974)",parti:"Famille Al Sharqi",pos:null}
+    }
+  },
+  "Irak":{
+    type:"Région fédérée",
+    typePluriel:"Région du Kurdistan",
+    prerogatives:"La Région du Kurdistan (Erbil, Souleimaniye, Dohuk, Halabja) a son propre parlement, son gouvernement et ses forces armées (peshmergas) ; elle gère éducation, santé, sécurité intérieure et une partie de ses ressources pétrolières, source de conflits récurrents avec Bagdad. Les 15 autres gouvernorats ont un conseil provincial élu (décembre 2023) qui désigne le gouverneur.",
+    disclaimer:"Le parlement du Kurdistan a été élu en octobre 2024, mais le 10e gouvernement régional n'était toujours pas formé à l'été 2026 : le gouvernement sortant reste en fonction. Les 15 gouverneurs, très souvent remplacés depuis les législatives de novembre 2025, seront affichés par l'automatisation plutôt qu'approximés ici. Situation vérifiée le 7 octobre 2026.",
+    liste:{
+      "Kurdistan — Présidence":{n:"Nechirvan Barzani",t:"Président de la Région du Kurdistan",parti:"PDK",pos:null},
+      "Kurdistan — Gouvernement":{n:"Masrour Barzani",t:"Premier ministre (gouvernement sortant)",parti:"PDK",pos:null}
+    }
+  },
   "Norvege":{
     type:"Fylke",
     prerogatives:"Lycées, routes régionales, transports collectifs, développement régional, culture — le fylkesordfører (maire de comté) est élu par le fylkesting, lui-même élu au suffrage direct.",
@@ -3545,13 +3569,28 @@ var STRUCTURE_REGIONALE={
   "Lituanie":"centralise","Lettonie":"centralise","Estonie":"centralise",
   "Malte":"centralise","Chypre":"centralise","Serbie":"federal","Bosnie":"federal",
   "Albanie":"centralise","Macedoine":"centralise","Montenegro":"centralise",
-  "Kosovo":"centralise","Ukraine":"centralise","Moldavie":"federal","Bielorussie":"centralise"
+  "Kosovo":"centralise","Ukraine":"centralise","Moldavie":"federal","Bielorussie":"centralise",
+  /* Moyen-Orient (octobre 2026) */
+  "Turquie":"centralise","Israel":"centralise","Liban":"centralise","Syrie":"centralise",
+  "Jordanie":"centralise","Irak":"federal","Iran":"centralise","Arabie Saoudite":"centralise",
+  "Koweit":"centralise","Bahrein":"centralise","Qatar":"centralise","Emirats arabes":"federal",
+  "Oman":"centralise","Yemen":"centralise"
+};
+var REGIONS_NOTE={
+  "Turquie":"État unitaire : les 81 provinces sont dirigées par des gouverneurs nommés par Ankara. Les seuls exécutifs locaux élus de poids sont les maires des 30 grandes métropoles (dont Istanbul et Ankara) ; plusieurs ont été destitués ou incarcérés depuis 2025 et remplacés par des administrateurs nommés, ce qui rend un suivi manuel peu fiable — ils seront affichés par l'automatisation.",
+  "Syrie":"État unitaire en transition : les 14 gouverneurs sont nommés par Damas. Les institutions du Nord-Est, longtemps administré par l'Administration autonome kurde, ont été intégrées à l'État en 2026 (accord du 29 janvier, intégration annoncée comme achevée en août).",
+  "Yemen":"Pas d'échelon régional unifié : selon qui contrôle le territoire, les gouverneurs sont nommés par le gouvernement reconnu (Aden) ou par les Houthis (Sanaa)."
 };
 function renderRegionsList(pays){
   var fr=lang==='fr';
   var rl=REGIONS_LEADERS[pays];
-  var b='<div class="gpb-regions"><div class="l">'+(fr?'Dirigeants régionaux':'Regional leaders')+(rl?' — '+rl.type+'s':'')+'</div>';
+  var b='<div class="gpb-regions"><div class="l">'+(fr?'Dirigeants régionaux':'Regional leaders')+(rl?' — '+(rl.typePluriel||rl.type+'s'):'')+'</div>';
   if(!rl){
+    /* Note sur mesure (pays en transition, cas particuliers) */
+    if(typeof REGIONS_NOTE!=='undefined'&&REGIONS_NOTE[pays]){
+      b+='<div class="gpb-regions-neutre">'+REGIONS_NOTE[pays]+'</div></div>';
+      return b;
+    }
     var structure=STRUCTURE_REGIONALE[pays];
     if(structure==='centralise'){
       b+='<div class="gpb-regions-neutre">'+(fr?"État unitaire et centralisé — pas d'échelon régional disposant d'un dirigeant élu propre à afficher ici.":"Unitary, centralized state — no regional tier with its own elected leader to show here.")+'</div></div>';
@@ -5606,7 +5645,6 @@ function initGlobe(){
       updateSelectedCountryPath();
       regionsG.selectAll('.rp').attr('d',pathFn);
       redrawMarkers();
-      if(typeof window._geoDiagUpdate==='function') window._geoDiagUpdate();
     }
     function redraw(){
       sphBack.attr('d',pathFn({type:'Sphere'}));
@@ -5812,44 +5850,6 @@ function initGlobe(){
     window._globeRedraw=redraw;
     window._globeFindSelNode=findDragSelNode;
 
-    /* PANNEAU DE DIAGNOSTIC TEMPORAIRE — à retirer une fois le bug des
-       régions définitivement confirmé résolu. Compare la position réelle
-       du tracé affiché (pays sélectionné, filtré par rapport au centre de
-       vue ACTUEL) à sa position correcte recalculée à l'instant présent. */
-    function bboxCenterOf(d){
-      if(!d) return null;
-      var nums=d.match(/-?\d+\.?\d*/g);
-      if(!nums) return null;
-      var n=nums.map(Number);
-      var xs=n.filter(function(_,i){return i%2===0;}), ys=n.filter(function(_,i){return i%2===1;});
-      return {x:(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2, y:(Math.min.apply(null,ys)+Math.max.apply(null,ys))/2};
-    }
-    window._geoDiagUpdate=function(){
-      var el=document.getElementById('geoDiag');
-      if(!el) return;
-      if(!gZoomedPays){ el.textContent='Diagnostic : sélectionne un pays et fais glisser le globe'; return; }
-      var rot=proj.rotate();
-      var txt='PAYS: '+gZoomedPays+'  frame#'+gDragFrameCount+'\n';
-      txt+='rotate: ['+rot[0].toFixed(2)+', '+rot[1].toFixed(2)+']  scale: '+proj.scale().toFixed(1)+'\n';
-      if(gDragSelNode&&gDragSelDatum){
-        var viewCenter=[-rot[0],-rot[1]];
-        var filtered=filterFeatureNearPoint(gDragSelDatum,viewCenter,50);
-        var realD=gDragSelNode.attr('d');
-        var actualCenter=bboxCenterOf(realD);
-        var trueCentroid=bestCentroid(filtered);
-        var expectedXY=trueCentroid?proj(trueCentroid):null;
-        txt+='fragments gardés: '+filtered.geometry.coordinates.length+'\n';
-        txt+='centre RÉEL du tracé affiché: '+(actualCenter?('x='+actualCenter.x.toFixed(1)+' y='+actualCenter.y.toFixed(1)):'(introuvable)')+'\n';
-        txt+='position ATTENDUE (recalculée maintenant): '+(expectedXY?('x='+expectedXY[0].toFixed(1)+' y='+expectedXY[1].toFixed(1)):'(hors vue)')+'\n';
-        if(actualCenter&&expectedXY){
-          var dx=actualCenter.x-expectedXY[0], dy=actualCenter.y-expectedXY[1];
-          txt+='ÉCART réel vs attendu: dx='+dx.toFixed(1)+' dy='+dy.toFixed(1)+' dist='+Math.hypot(dx,dy).toFixed(1)+'px';
-        }
-      } else {
-        txt+='(gDragSelNode non trouvé)';
-      }
-      el.textContent=txt;
-    };
     window._globeFindSelNode=findDragSelNode;
 
   }).catch(function(){
