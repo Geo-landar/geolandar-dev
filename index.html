@@ -8815,10 +8815,44 @@ function hemicycleDots(groupes,total){
     return {x:cx+s.r*Math.cos(s.angle),y:cy-s.r*Math.sin(s.angle),color:colorSeq[i]||'#64748b',r:dotR};
   });
 }
+/* Pourquoi la composition par parti n'est pas affichée pour un pays.
+   source  : pas de source fiable et à jour — sera remplie par l'automatisation
+   nommes  : assemblée nommée ou non élue, pas de répartition partisane réelle
+   sans_partis : élus sans étiquette, pas de partis organisés
+   unique  : parti unique ou front sans opposition
+   Un texte libre peut remplacer la catégorie. Pays absent de la liste =
+   message « source » par défaut. */
+var COMPOSITION_ABSENTE={
+  "Kenya":"source","Centrafrique":"source","Zambie":"source","Iran":"source","Soudan du Sud":"source",
+  "Libye":"Pays divisé : la Chambre des représentants (Est) et le Haut Conseil d'État (Tripoli) siègent avec des élus de 2012 et 2014, sans répartition partisane fiable.",
+  "Haiti":"Plus aucun parlementaire élu en fonction depuis janvier 2023 : il n'y a pas d'hémicycle à afficher.",
+  "Syrie":"Assemblée de transition désignée en partie par des collèges électoraux et en partie par le président : pas de répartition partisane.",
+  "Yemen":"Parlement élu en 2003, divisé depuis la guerre entre le gouvernement reconnu et les Houthis : pas de composition fiable.",
+  "Somalie":"Députés désignés par les anciens des clans (formule « 4,5 ») et non par partis : pas d'hémicycle partisan.",
+  "Afghanistan":"Aucune assemblée depuis la prise du pouvoir par les talibans en août 2021.",
+  "Koweit":"L'Assemblée nationale est suspendue par l'émir depuis mai 2024.",
+  "Soudan":"nommes","Mali":"nommes","Burkina Faso":"nommes","Niger":"nommes","Guinee-Bissau":"nommes",
+  "Arabie Saoudite":"nommes","Qatar":"nommes","Brunei":"nommes","Emirats arabes":"nommes","Erythree":"nommes",
+  "Palau":"sans_partis","Micronesie":"sans_partis","Nauru":"sans_partis","Eswatini":"sans_partis","Oman":"sans_partis","Bahrein":"sans_partis",
+  "Coree du Nord":"unique","Chine":"unique","Cuba":"unique"
+};
+var COMPOSITION_ABSENTE_TXT={
+  source:["Composition non affichée : aucune source fiable et à jour n'a pu être vérifiée pour ce pays. Elle sera ajoutée lors de la mise à jour automatique.","Composition not shown: no reliable, up-to-date source could be verified. It will be added by the automatic update."],
+  nommes:["Pas d'hémicycle par parti : l'assemblée est nommée par le pouvoir (ou n'est pas élue), sans répartition partisane significative.","No party breakdown: the assembly is appointed (or not elected)."],
+  sans_partis:["Pas d'hémicycle par parti : les membres siègent sans étiquette, il n'y a pas de partis politiques organisés.","No party breakdown: members sit without party labels."],
+  unique:["Pas d'hémicycle par parti : il n'existe pas d'opposition, tous les membres appartiennent au parti au pouvoir ou à ses alliés.","No party breakdown: there is no opposition; all members belong to the ruling party or its allies."]
+};
 function renderComposition(pays){
   var fr=lang==='fr';
   var comp=CHAMBRES_COMPOSITION[pays];
-  if(!comp) return '';
+  if(!comp){
+    if(!INSTITUTIONS[pays]) return '';
+    var raison=COMPOSITION_ABSENTE[pays]||'source';
+    var txt=COMPOSITION_ABSENTE_TXT[raison]?COMPOSITION_ABSENTE_TXT[raison][fr?0:1]:raison;
+    return '<div class="gpb-composition"><div class="l">'+(fr?'Composition des chambres':'Chamber composition')+'</div>'
+      +'<div class="gpb-hemi-note" style="font-style:normal;padding:8px 10px;border:1px dashed var(--bd);border-radius:8px">'+(raison==='source'?'⚠️ ':'ℹ️ ')+txt+'</div></div>';
+  }
+  var approx=/approx|indicati|estim/i.test(comp.verifie||'');
   var b='<div class="gpb-composition"><div class="l">'+(fr?'Composition des chambres':'Chamber composition')+'</div>';
   Object.keys(comp.chambres).forEach(function(nomChambre){
     var ch=comp.chambres[nomChambre];
@@ -8834,6 +8868,7 @@ function renderComposition(pays){
     });
     b+='</div></div>';
   });
+  if(approx)b+='<div class="gpb-hemi-note" style="font-style:normal;color:#f59e0b">⚠️ '+(fr?"Répartition approximative : aucune source ne donne le détail exact et à jour. Elle sera affinée par la mise à jour automatique.":"Approximate breakdown: no source gives exact, up-to-date figures.")+'</div>';
   b+='<div class="gpb-hemi-note">'+(fr?'Vérifié le ':'Verified on ')+comp.verifie+(fr?' — à reconfirmer après tout scrutin ou changement de groupe.':' — to reconfirm after any election or group change.')+'</div>';
   b+='</div>';
   return b;
@@ -9169,7 +9204,7 @@ function renderCal(){
       +'<div class="ecdate">'+fmtDate(e.d,e.cert)+' · '+regLbl(e.r)+'</div>'
       +cdown(e)
       +(e.done&&e.result?'<div class="wcard"><div class="wlbl">🏆 '+(lang==='fr'?'Élu(e) / Vainqueur':'Winner / Elected')+'</div><div class="wname">'+e.result.winner+'</div><div class="wdet">'+e.result.party+'</div></div>':'')
-      +(e.done&&e.fiabilite?fiabiliteHTML(e.fiabilite, true):'')
+      +(e.done&&e.fiabilite&&!e.avantScrutin?fiabiliteHTML(e.fiabilite, true):'')
       +'</div>';
   }).join('');
 }
@@ -9221,19 +9256,20 @@ function openModal(id){
     // plutôt que de laisser un badge "contesté" sans contexte
     b+='<div class="msec"><h3>⏳ '+(lang==='fr'?'Résultat en attente':'Result pending')+'</h3>';
     b+='<div class="ctxbox">'+(lang==='fr'
-      ?"Le scrutin a eu lieu, mais aucune source fiable (Wikidata, Wikipedia, commission électorale) n'a encore publié de vainqueur officiel. Ce n'est pas une erreur du site : les résultats définitifs prennent parfois plusieurs jours à être proclamés après le dépouillement. Cette fiche se mettra à jour automatiquement dès qu'un résultat officiel sera disponible."
+      ?((daysTo(e.d)!==null&&daysTo(e.d)<-14)?"Le scrutin a eu lieu, mais son résultat officiel n'a pas encore été intégré au site. Il sera ajouté lors d'une prochaine mise à jour automatique.":"Le scrutin a eu lieu, mais aucune source fiable (Wikidata, Wikipedia, commission électorale) n'a encore publié de vainqueur officiel. Ce n'est pas une erreur du site : les résultats définitifs prennent parfois plusieurs jours à être proclamés après le dépouillement. Cette fiche se mettra à jour automatiquement dès qu'un résultat officiel sera disponible.")
       :"The vote has taken place, but no reliable source (Wikidata, Wikipedia, electoral commission) has published an official winner yet. This isn't a site error: final results can take several days to be declared after counting. This page will update automatically as soon as an official result is available.")+'</div>';
     if(src)b+='<a href="'+src.url+'" target="_blank" rel="noopener" class="srcbtn" style="margin-top:8px">🔗 '+(lang==='fr'?'Suivre les résultats en direct — ':'Follow live results — ')+src.n+'</a>';
     b+='</div>';
   }
   // FIABILITE ÉLECTORALE — seulement si résultats disponibles
-  if(e.done&&e.fiabilite){
+  if(e.done&&e.fiabilite&&!e.avantScrutin){
     b+='<div class="msec"><h3>'+(lang==='fr'?'Fiabilité électorale':'Electoral integrity')+'</h3>';
     b+=fiabiliteHTML(e.fiabilite, false);
     b+='</div>';
   }
   // CONTEXTE
-  if(e.ctx)b+='<div class="msec"><h3>'+(lang==='fr'?'Contexte':'Context')+'</h3><div class="ctxbox">'+e.ctx+'</div></div>';
+  if(avantScrutinPasse(e))b+='<div class="msec"><div class="ctxbox" style="font-style:italic;color:var(--mu)">'+(lang==='fr'?"L'analyse de ce scrutin (contexte, enjeux, déroulement) sera ajoutée prochainement.":"An analysis of this election (context, issues, conduct) will be added soon.")+'</div></div>';
+  else if(e.ctx)b+='<div class="msec"><h3>'+(lang==='fr'?'Contexte':'Context')+'</h3><div class="ctxbox">'+e.ctx+'</div></div>';
   // SONDAGES (uniquement si élection à venir)
   if(!e.done&&typeof POLLS!=='undefined'&&POLLS[e.p]){
     var polls=POLLS[e.p];
@@ -9261,7 +9297,7 @@ function openModal(id){
     b+='</div>';
   }
   // ENJEUX
-  if(e.enjeux&&e.enjeux.length){
+  if(e.enjeux&&e.enjeux.length&&!avantScrutinPasse(e)){
     b+='<div class="msec"><h3>'+(lang==='fr'?'Enjeux clés':'Key issues')+'</h3>';
     b+='<div class="enjbox"><div class="enjtitle">'+e.enjeux.length+' '+(lang==='fr'?'enjeux principaux':'main issues')+'</div>';
     e.enjeux.forEach(function(enj){
@@ -9451,6 +9487,13 @@ var _RESULTATS={
    CORRECTIF 2: les élections à date imprécise -00 (cert:2), ex: Montenegro "2026-03-00",
    ont daysTo()===null donc ne passaient jamais isPast même si done:true était déjà fixé
    en dur dans les données — on couvre ce cas avec "|| e.done") */
+/* Élections codées « à venir » (done:false) : leur contexte, leurs enjeux et
+   leur fiabilité ont été rédigés AVANT le vote. Une fois la date passée (ou le
+   résultat reçu de Supabase), ces textes ne doivent plus s'afficher — ils
+   annonceraient une élection qui a déjà eu lieu. Règle générique, aucune date
+   codée en dur : voir avantScrutinPasse(). */
+E.forEach(function(e){ if(!e.done) e.avantScrutin=true; });
+function avantScrutinPasse(e){ return !!(e && e.done && e.avantScrutin); }
 E.forEach(function(e){
   var dt = daysTo(e.d);
   var isPast = (dt !== null && dt < 0) || e.done;
@@ -10127,8 +10170,8 @@ function showCountry(pays,zoomTarget){
         var _ep=(eByP[pays]||[]).find(function(x){return x.done&&x.result;});
         if(_ep) r=_ep.result;
       }
-      var cc=e.cert===1?'gc1b':'gc2b';
-      var ct=e.cert===1?'✓ '+(lang==='fr'?'Date confirmée':'Confirmed date'):'📅 '+(lang==='fr'?'En ':'In ')+e.d.substring(0,4);
+      var cc=(e.done||e.cert===1)?'gc1b':'gc2b';
+      var ct=e.done?'✓ '+(lang==='fr'?'Scrutin tenu':'Vote held'):(e.cert===1?'✓ '+(lang==='fr'?'Date confirmée':'Confirmed date'):'📅 '+(lang==='fr'?'En ':'In ')+e.d.substring(0,4));
       bR+='<div class="gelec'+(e.done?' done':'')+'">';
       bR+='<div class="geltop"><span class="geltype '+bcls(e.t)+'">'+btlbl(e.t)+'</span><span class="geldate">'+fmtDate(e.d,e.cert)+'</span></div>';
       bR+='<div class="gelcert '+cc+'">'+ct+'</div>';
@@ -10138,7 +10181,8 @@ function showCountry(pays,zoomTarget){
         if(r.bars)r.bars.slice(0,3).forEach(function(b){bR+='<div class="gelbr"><span class="gbrnm">'+b.n+'</span><div class="gbrwrap"><div class="gbrfill" style="width:'+b.pct+'%;background:'+(b.won?'#10b981':'#3b82f6')+'"></div></div><span class="gbrpct">'+b.pct+'%</span></div>';});
         if(src)bR+='<a href="'+src.url+'" target="_blank" rel="noopener" class="gsrc">🔗 '+(lang==='fr'?lang==='en'?'Official results':'Résultats officiels':'Official results')+'</a>';
       }else{
-        if(e.ctx)bR+='<div class="gctx">'+e.ctx.substring(0,180)+(e.ctx.length>180?'...':'')+'</div>';
+        if(e.done)bR+='<div class="gctx">⏳ '+(lang==='fr'?'Vote clos — le résultat officiel sera affiché dès sa publication.':'Vote closed — the official result will appear once published.')+'</div>';
+        else if(e.ctx)bR+='<div class="gctx">'+e.ctx.substring(0,180)+(e.ctx.length>180?'...':'')+'</div>';
       }
       bR+='</div>';
     });
