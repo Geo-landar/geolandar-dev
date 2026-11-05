@@ -2660,11 +2660,11 @@ var INSTITUTIONS={
   particularite:"Une des démocraties les plus solides d'Afrique, avec des alternances régulières depuis 1991. Aux législatives du 17 mai 2026, le PAICV (centre gauche) a battu le MpD au pouvoir depuis dix ans et obtenu la majorité absolue : Francisco Carvalho est Premier ministre depuis le 19 juin 2026. Le président José Maria Neves, élu en 2021, est issu du même parti.",
   schema:{noeuds:[
     {id:'cit',titre:"Citoyens",ton:'citizen',x:50,y:91,large:true},
-    {id:'hd',titre:"Président",sous:"Rôle cérémoniel",ton:'symbolic',x:78,y:15},
+    {id:'hd',titre:"Président",sous:"Élu au suffrage direct",ton:'symbolic',x:78,y:15},
     {id:'parl',titre:"Assemblée nationale",sous:"72 sièges",ton:'parliament',x:28,y:58},
     {id:'pm',titre:"Premier ministre",sous:"Pouvoir exécutif réel",ton:'power',x:26,y:15}
   ],liens:[
-    {de:'cit',vers:'parl',l:"vote"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
+    {de:'cit',vers:'parl',l:"vote"},{de:'cit',vers:'hd',l:"vote direct"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
   ]},
   echelons:[
     {niveau:"National",instance:"État",competences:"L'essentiel des politiques publiques."},
@@ -2808,7 +2808,7 @@ var INSTITUTIONS={
     {id:'parl',titre:"Assemblée nationale",sous:"55 sièges",ton:'parliament',x:28,y:58},
     {id:'pm',titre:"Premier ministre",sous:"Pouvoir exécutif réel",ton:'power',x:26,y:15}
   ],liens:[
-    {de:'cit',vers:'parl',l:"vote"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
+    {de:'cit',vers:'parl',l:"vote"},{de:'cit',vers:'hd',l:"vote direct"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
   ]},
   echelons:[
     {niveau:"National",instance:"Gouvernement",competences:"L'essentiel des politiques publiques."},
@@ -2948,7 +2948,7 @@ var INSTITUTIONS={
     {id:'parl',titre:"Chambre du peuple",sous:"275 sièges",ton:'parliament',x:28,y:58},
     {id:'pm',titre:"Premier ministre",sous:"Pouvoir exécutif réel",ton:'power',x:26,y:15}
   ],liens:[
-    {de:'cit',vers:'parl',l:"vote"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
+    {de:'cit',vers:'parl',l:"désignés par les anciens des clans"},{de:'parl',vers:'hd',l:"élit"},{de:'parl',vers:'pm',l:"confiance"},{de:'hd',vers:'pm',l:"nomme"}
   ]},
   echelons:[
     {niveau:"Fédéral",instance:"Gouvernement fédéral (Mogadiscio)",competences:"Défense, diplomatie, monnaie, lutte contre les Chabab."},
@@ -3092,7 +3092,7 @@ var INSTITUTIONS={
   ]},
 "Zimbabwe":{archetype:"presidentiel",
   chambres:[{nom:"Assemblée nationale",sieges:280,mandat:"7 ans depuis la révision de 2026",mode:"210 élus au scrutin majoritaire, 60 sièges réservés aux femmes, 10 aux jeunes"},{nom:"Sénat",sieges:80,mandat:"7 ans",mode:"Élus à la proportionnelle par province, chefs traditionnels et représentants des handicapés"}],
-  chefEtat:{titre:"Président de la République",mode:"Élu par le Parlement à partir de 2030 (révision de 2026)",mandat:"7 ans",pouvoirs:"Chef de l'État et du gouvernement"},
+  chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct (la révision constitutionnelle de 2026 prévoit une élection par le Parlement à partir de 2030)",mandat:"7 ans",pouvoirs:"Chef de l'État et du gouvernement"},
   particularite:"La ZANU-PF gouverne depuis l'indépendance (1980). Emmerson Mnangagwa a succédé à Robert Mugabe après le coup de force de 2017. En juin-juillet 2026, une révision constitutionnelle a porté les mandats à 7 ans, repoussant les élections de 2028 à 2030, et prévu l'élection du président par le Parlement ; l'opposition et les juristes contestent l'absence de référendum devant la Cour constitutionnelle. L'opposition (CCC) est profondément divisée.",
   schema:{noeuds:[
     {id:'cit',titre:"Citoyens",ton:'citizen',x:50,y:91,large:true},
@@ -5241,7 +5241,7 @@ var INSTITUTIONS={
   ]},
 "Bosnie":{archetype:"parlementaire",
   chambres:[{nom:"Chambre des représentants",sieges:42,mandat:"4 ans",mode:"Scrutin proportionnel par entité (28 sièges Fédération + 14 Republika Srpska)"}],
-  chefEtat:{titre:"Présidence tripartite",mode:"3 membres élus séparément (1 bosniaque, 1 croate, 1 serbe), présidence tournante tous les 8 mois",mandat:"4 ans",pouvoirs:"Politique étrangère, chef des armées collégial"},
+  chefEtat:{titre:"Présidence tripartite",mode:"3 membres élus au suffrage direct, séparément (1 bosniaque, 1 croate, 1 serbe), présidence tournante tous les 8 mois",mandat:"4 ans",pouvoirs:"Politique étrangère, chef des armées collégial"},
   chefGouv:{titre:"Président du Conseil des ministres",mode:"Nommé par la Présidence, confirmé par la Chambre",mandat:"Sans durée fixe",pouvoirs:"Dirige l'administration fédérale, pouvoirs limités face aux entités"},
   particularite:"Système de partage du pouvoir unique né des accords de Dayton (1995) : le pays est divisé en deux entités quasi autonomes (Fédération de Bosnie-Herzégovine et Republika Srpska) et la présidence tripartite reflète les trois communautés constitutives — un dirigeant de la Republika Srpska a réitéré à plusieurs reprises des velléités séparatistes.",
   echelons:[
@@ -5309,11 +5309,19 @@ var INSTITUTIONS={
     {niveau:"Régional",instance:"Gagaouzie (région autonome) + Transnistrie (de facto hors contrôle de Chișinău)",competences:"La Gagaouzie a une assemblée et un gouverneur (Başkan) élus avec une large autonomie culturelle et fiscale ; la Transnistrie, séparatiste depuis 1992 et soutenue par la Russie, échappe en pratique totalement à l'autorité moldave."},
     {niveau:"Local",instance:"Primar / Commune",competences:"Urbanisme local, services municipaux."}
   ]},
-"Bielorussie":{archetype:"parlementaire",
+"Bielorussie":{archetype:"presidentiel",
   chambres:[{nom:"Chambre des représentants",sieges:110,mandat:"4 ans",mode:"Scrutin majoritaire par circonscription"}],
   chefEtat:{titre:"Président de la République",mode:"Suffrage universel direct (élections jugées ni libres ni équitables par les observateurs internationaux)",mandat:"5 ans, sans limite depuis un référendum contesté de 2004",pouvoirs:"Concentre l'essentiel du pouvoir exécutif, chef des armées, peut dissoudre le Parlement"},
   chefGouv:{titre:"Premier ministre",mode:"Nommé directement par le Président",mandat:"Sans durée fixe",pouvoirs:"Rôle d'exécution, sans autonomie politique réelle"},
   particularite:"Aucun candidat d'opposition n'a été autorisé à se présenter à l'élection législative de 2024 — les 4 partis en lice sont tous pro-gouvernementaux, l'OSCE n'a pas été invitée à observer le scrutin, et l'opposition réelle est en exil depuis la répression des manifestations de 2020.",
+  schema:{noeuds:[
+    {id:'cit',titre:"Citoyens",sous:"Scrutins jugés non libres",ton:'citizen',x:50,y:91,large:true},
+    {id:'pres',titre:"Président",sous:"Concentre le pouvoir",ton:'power',x:22,y:44},
+    {id:'parl',titre:"Chambre des représentants",sous:"110 sièges",ton:'parliament',x:76,y:56},
+    {id:'pm',titre:"Premier ministre",sous:"Nommé par le président",ton:'default',x:26,y:14}
+  ],liens:[
+    {de:'cit',vers:'pres',l:"vote direct"},{de:'cit',vers:'parl',l:"vote"},{de:'pres',vers:'pm',l:"nomme"}
+  ]},
   echelons:[
     {niveau:"National",instance:"État",competences:"Défense, diplomatie, fiscalité, justice — pouvoir très concentré autour du Président Loukachenko, au pouvoir depuis 1994."},
     {niveau:"Régional",instance:"Voblasts (6 régions + Minsk)",competences:"Administration déconcentrée de l'État central plutôt que gouvernement autonome — les gouverneurs de région sont nommés par le Président, pas élus."},
@@ -5383,6 +5391,37 @@ function institDiagramRender(nodes,edges){
     +svgLines+'</svg>';
   return '<div class="gpb-diagram">'+svg+boxesHtml+'</div>';
 }
+/* Mode d'accès du chef de l'État : 'dir' (suffrage direct), 'ind' (élu par
+   le Parlement ou un collège), 'her' (monarque / héréditaire), '' (inconnu). */
+function institModeChefEtat(e){
+  if(!e) return '';
+  var t=(e.titre||'').toLowerCase(), m=(e.mode||'').toLowerCase();
+  if(/héréditaire|hérédit|dynast|conseil du trône/.test(m)||/^(roi|reine|monarque|grand-duc|prince|émir|sultan)/.test(t)) return 'her';
+  if(/indirect/.test(m)) return 'ind';
+  if(/suffrage universel|suffrage direct|vote direct|élus? directement/.test(m)) return 'dir';
+  if(/élue? par|élus par|parlement|assemblée|collège|knesset|kuvendi|saeima|riigikogu|chambre|fono/.test(m)) return 'ind';
+  return '';
+}
+/* Mode d'élection d'une chambre : 'dir', 'mixte' ou 'ind'. */
+function institModeChambre(ch){
+  var m=(ch&&ch.mode||'').toLowerCase();
+  var ind=/indirect|nommé|désigné|hérit|élue? par |élus par |délégués|coopté|sélection/.test(m);
+  var dir=/scrutin|proportionnel|majoritaire|suffrage universel|suffrage direct|vote direct|par district|par canton|circonscription|mixte|vote unique/.test(m);
+  return ind&&dir?'mixte':(ind?'ind':(dir?'dir':'dir'));
+}
+function institSousChambre(ch,fr){
+  var s=ch.sieges+(fr?' sièges':' seats'), md=institModeChambre(ch);
+  if(md==='ind'){
+    var mm=(ch.mode||'').toLowerCase();
+    s+=/élue? par|élus par|indirect|délégués|sélection|électeurs/.test(mm)?(fr?' · élection indirecte':' · indirect election'):(fr?' · membres désignés':' · appointed members');
+  }
+  return s;
+}
+function institLienChambre(edges,ch,id,fr,label){
+  var md=institModeChambre(ch);
+  if(md==='ind') return;
+  edges.push({from:'cit',to:id,label:md==='mixte'?(fr?'vote (en partie)':'vote (partly)'):label});
+}
 function institSchema(c){
   var fr=lang==='fr';
   /* Fiche avec son propre diagramme (régimes hors des 3 modèles européens) */
@@ -5398,20 +5437,23 @@ function institSchema(c){
   if(c.archetype==='parlementaire'){
     nodes.push(institNode('cit',citoyens,'',"citizen",50,90,false,true));
     if(c.chambres.length>1){
-      nodes.push(institNode('ch0',c.chambres[0].nom,c.chambres[0].sieges+(fr?' sièges':' seats'),"parliament",30,58));
-      nodes.push(institNode('ch1',c.chambres[1].nom,c.chambres[1].sieges+(fr?' sièges':' seats'),"parliament",70,58));
-      edges.push({from:'cit',to:'ch0',label:vote});
-      edges.push({from:'cit',to:'ch1'});
+      nodes.push(institNode('ch0',c.chambres[0].nom,institSousChambre(c.chambres[0],fr),"parliament",30,58));
+      nodes.push(institNode('ch1',c.chambres[1].nom,institSousChambre(c.chambres[1],fr),"parliament",70,58));
+      institLienChambre(edges,c.chambres[0],'ch0',fr,vote);
+      institLienChambre(edges,c.chambres[1],'ch1',fr,undefined);
     } else {
-      nodes.push(institNode('ch0',c.chambres[0].nom,c.chambres[0].sieges+(fr?' sièges':' seats'),"parliament",50,58));
-      edges.push({from:'cit',to:'ch0',label:vote});
+      nodes.push(institNode('ch0',c.chambres[0].nom,institSousChambre(c.chambres[0],fr),"parliament",50,58));
+      institLienChambre(edges,c.chambres[0],'ch0',fr,vote);
     }
     nodes.push(institNode('gouv',c.chefGouv.titre,fr?'Pouvoir exécutif réel':'Real executive power',"power",42,20));
     edges.push({from:'ch0',to:'gouv',label:fr?'désigne / soutient':'appoints / supports'});
     if(c.chambres.length>1)edges.push({from:'ch1',to:'gouv'});
     if(c.chefEtat){
-      nodes.push(institNode('etat',c.chefEtat.titre,fr?'Rôle cérémoniel':'Ceremonial role',"symbolic",82,20,true));
-      edges.push({from:'ch0',to:'etat',label:fr?'élit (indirect)':'elects (indirect)'});
+      var me=institModeChefEtat(c.chefEtat);
+      var sousEtat=me==='dir'?(fr?'Élu au suffrage direct':'Directly elected'):(me==='her'?(fr?'Monarque · rôle cérémoniel':'Monarch · ceremonial role'):(fr?'Rôle cérémoniel':'Ceremonial role'));
+      nodes.push(institNode('etat',c.chefEtat.titre,sousEtat,"symbolic",82,20,true));
+      if(me==='dir') edges.push({from:'cit',to:'etat',label:fr?'vote direct':'direct vote'});
+      else if(me==='ind') edges.push({from:'ch0',to:'etat',label:fr?'élit (indirect)':'elects (indirect)'});
     }
   } else if(c.archetype==='semipresidentiel'){
     nodes.push(institNode('cit',citoyens,'',"citizen",50,90,false,true));
@@ -5420,8 +5462,8 @@ function institSchema(c){
     var chamX=c.chambres.length>1?[55,82]:[62];
     c.chambres.forEach(function(ch,i){
       var id='ch'+i;
-      nodes.push(institNode(id,ch.nom,ch.sieges+(fr?' sièges':' seats'),"parliament",chamX[i],55));
-      edges.push({from:'cit',to:id,label:i===0?(fr?'vote législatif':'legislative vote'):undefined});
+      nodes.push(institNode(id,ch.nom,institSousChambre(ch,fr),"parliament",chamX[i],55));
+      institLienChambre(edges,ch,id,fr,i===0?(fr?'vote législatif':'legislative vote'):undefined);
     });
     /* Cas rare (ex. Chypre) : pas de Premier ministre distinct, le président
        cumule les deux fonctions — on ne dessine alors pas de case séparée. */
